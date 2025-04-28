@@ -1,34 +1,72 @@
 import "./App.css";
+const apiKey = "";
 import { useState, useRef } from "react";
 function App() {
   //user inputs
   const [locationInput, setLocationInput] = useState("");
-  const [radiusInput, setRadiusInput] = useState(1);
+  const [radiusInput, setRadiusInput] = useState(0.13);
   const inputCoords = useRef("");
+  const [mapData, setMapData] = useState(false);
 
   const circleSettings = {
-    gap: radiusInput, //coordinate distance between circles, 1 == 100km or so
+    gap: radiusInput, //coordinate distance between circles, 1 == 111km
     radius: 5, //amount of circles to calculate
   };
 
-  const toRadians = (deg) => (deg * Math.PI) / 180;
+  const toRad = (deg) => (deg * Math.PI) / 180;
+  const toDeg = (rad) => (rad * 180) / Math.PI;
 
-  //creates array of coordinate points in radius for weather fetching
+  function destinationPoint(lat, lng, distanceKm, bearingDegrees) {
+    const R = 6371; // Radius of Earth in km
+    const bearingRad = toRad(bearingDegrees);
+    const latRad = toRad(lat);
+    const lngRad = toRad(lng);
+
+    const newLatRad = Math.asin(
+      Math.sin(latRad) * Math.cos(distanceKm / R) +
+        Math.cos(latRad) * Math.sin(distanceKm / R) * Math.cos(bearingRad)
+    );
+
+    const newLngRad =
+      lngRad +
+      Math.atan2(
+        Math.sin(bearingRad) * Math.sin(distanceKm / R) * Math.cos(latRad),
+        Math.cos(distanceKm / R) - Math.sin(latRad) * Math.sin(newLatRad)
+      );
+
+    const newLat = toDeg(newLatRad);
+    const newLng = toDeg(newLngRad);
+
+    return [newLat, newLng];
+  }
+
+  //creates array of coordinate points in radius around user input
   function createPoints() {
-    const pointHolder = [[inputCoords.current.lat, inputCoords.current.lng]];
+    //user inputted location
+    const centerLat = inputCoords.current.lat;
+    const centerLng = inputCoords.current.lng;
+
+    const pointHolder = [[centerLat, centerLng]];
+    const baseSpacingKm = 50;
+
     for (let radius = 1; radius <= circleSettings.radius; radius++) {
-      const pointCount = radius * 4; //amount of points for current circle
-      const distance = radius * radiusInput; //hypotenuse distance
-      const angleSlice = 360 / pointCount; //angle interval in degrees
+      const distance = radius * radiusInput * 100; //distance in km
+      const circumference = 2 * Math.PI * distance; //circumfrence of the circle
+      const pointCount = Math.max(4, Math.round(circumference / baseSpacingKm));
+
+      const angleSlice = 360 / pointCount;
       for (let point = 0; point < pointCount; point++) {
-        const angle = toRadians(angleSlice * point); //angle in radians
-
-        const x = Math.cos(angle) * distance + inputCoords.current.lat;
-        const y = Math.sin(angle) * distance + inputCoords.current.lng;
-
-        pointHolder.push([x, y]);
+        const angle = angleSlice * point; // angle in degrees
+        const [lat, lng] = destinationPoint(
+          centerLat,
+          centerLng,
+          distance,
+          angle
+        );
+        pointHolder.push([lat, lng]);
       }
     }
+
     return pointHolder;
   }
 
@@ -69,7 +107,6 @@ function App() {
   }
 
   function buildSuburbUrl(lat, lng) {
-    const apiKey = "";
     const url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
     url.search = new URLSearchParams({
       latlng: lat + "," + lng,
@@ -107,16 +144,7 @@ function App() {
     }
   }
 
-  function updateLocationInput(e) {
-    setLocationInput(e.target.value);
-  }
-
-  function updateRadiusInput(e) {
-    setRadiusInput(e.target.value);
-  }
-
   function buildCoordUrl() {
-    const apiKey = "";
     const url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
     url.search = new URLSearchParams({
       address: locationInput,
@@ -136,9 +164,10 @@ function App() {
         return r.json();
       })
       .then((result) => {
-        console.log(result.results[0].geometry.location);
+        if (!result.results.length) {
+          throw new Error("No results found for this location.");
+        }
         inputCoords.current = result.results[0].geometry.location;
-        console.log(inputCoords);
         const weatherCoords = createPoints();
         initialFetch(weatherCoords);
       });
@@ -239,6 +268,8 @@ function App() {
     const parsedData = parseData(finalData);
     console.log(parsedData);
     getStats(parsedData);
+    setMapData(parsedData);
+    console.log(parsedData);
   }
 
   return (
@@ -256,7 +287,7 @@ function App() {
           <input
             type="text"
             id="userLocation"
-            onChange={updateLocationInput}
+            onChange={(e) => setLocationInput(e.target.value)}
           ></input>
         </form>
         <div
@@ -266,15 +297,17 @@ function App() {
             width: 300,
           }}
         >
-          <label htmlFor="searchRadius">Search radius: {`${radiusInput * 100} km`}</label>
+          <label htmlFor="searchRadius">
+            Search radius: {`${Math.round(radiusInput * 1111)} km`}
+          </label>
           <input
             type="range"
             id="searchRadius"
-            min="0.1"
-            max="2"
-            step="0.1"
+            min="0.05"
+            max="0.3"
+            step="0.01"
             value={radiusInput}
-            onChange={updateRadiusInput}
+            onChange={(e) => setRadiusInput(e.target.value)}
           ></input>
         </div>
       </div>
