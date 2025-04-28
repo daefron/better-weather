@@ -44,27 +44,69 @@ function App() {
 
   //fetches weather data in weatherCoords points
   async function fetchWeather(weatherCoords) {
-    const promises = weatherCoords.map((weather) => {
-      const url =
-        "https://api.open-meteo.com/v1/forecast?latitude=" +
-        weather[0] +
-        "&longitude=" +
-        weather[1] +
-        "&hourly=temperature_2m,precipitation,precipitation_probability,cloud_cover,wind_speed_10m&timezone=auto";
-      return fetch(url);
+    const promises = weatherCoords.map((coords) => {
+      const url = buildWeatherUrl(coords[0], coords[1]);
+      return fetch(url, { method: "GET" });
     });
+
+    function buildWeatherUrl(lat, lon) {
+      const url = new URL("https://api.open-meteo.com/v1/forecast");
+      url.search = new URLSearchParams({
+        latitude: lat,
+        longitude: lon,
+        daily:
+          "temperature_2m_max,temperature_2m_min,precipitation_hours,precipitation_probability_max,weather_code,wind_speed_10m_max",
+        timezone: "auto",
+      }).toString();
+      return url.toString();
+    }
 
     try {
       const responses = await Promise.all(promises);
-      const data = await Promise.all(responses.map((r) => r.json()));
-      console.log(data);
+      const data = await Promise.all(
+        responses.map(async (r) => {
+          if (!r.ok) {
+            throw new Error(`HTTP error! Status: ${r.status}`);
+          }
+          return r.json();
+        })
+      );
+      console.log("Weather data fetched successfully.");
       return data;
     } catch (error) {
       console.error("Failed to fetch weather data:", error);
     }
   }
 
-  fetchWeather(weatherCoords);
+  class Weather {
+    constructor(dailyData, index) {
+      this.date = dailyData.time[index];
+      this.tempMax = dailyData.temperature_2m_max[index];
+      this.tempMin = dailyData.temperature_2m_min[index];
+      this.rainChance = dailyData.precipitation_probability_max[index];
+      this.rainHours = dailyData.precipitation_hours[index];
+      this.windMax = dailyData.wind_speed_10m_max[index];
+    }
+  }
+
+  class Location {
+    constructor(data) {
+      this.latitude = data.latitude;
+      this.longitude = data.longitude;
+      this.dates = data.daily.time.map(
+        (_, index) => new Weather(data.daily, index)
+      );
+    }
+  }
+
+  function parseWeather(weatherData) {
+    return weatherData.map((dataPoint) => new Location(dataPoint));
+  }
+
+  fetchWeather(weatherCoords).then((weatherData) => {
+    const parsedWeather = parseWeather(weatherData);
+    console.log(parsedWeather);
+  });
 
   return (
     <>
