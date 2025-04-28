@@ -78,6 +78,45 @@ function App() {
     }
   }
 
+  async function fetchSuburb(weatherData) {
+    const promises = weatherData.map((data) => {
+      const url = buildSuburbUrl(data.latitude, data.longitude);
+      return fetch(url, { method: "GET" });
+    });
+
+    function buildSuburbUrl(lat, lon) {
+      const apiKey = "";
+      const url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
+      url.search = new URLSearchParams({
+        latlng: lat + "," + lon,
+        result_type: "locality",
+        key: apiKey,
+      }).toString();
+      return url.toString();
+    }
+
+    try {
+      const responses = await Promise.all(promises);
+      const data = await Promise.all(
+        responses.map(async (r) => {
+          if (!r.ok) {
+            throw new Error(`HTTP error! Status: ${r.status}`);
+          }
+          return r.json();
+        })
+      );
+      weatherData.forEach((point, i) => {
+        if (data[i].results[0]) {
+          point.suburb = data[i].results[0].formatted_address;
+        }
+      });
+      console.log("Suburb data fetched successfully.");
+      return weatherData;
+    } catch (error) {
+      console.error("Failed to fetch suburb data:", error);
+    }
+  }
+
   class Weather {
     constructor(dailyData, index) {
       this.date = dailyData.time[index];
@@ -91,22 +130,29 @@ function App() {
 
   class Location {
     constructor(data) {
-      this.latitude = data.latitude;
+      this.suburb = data.suburb || "Unknown suburb";
       this.longitude = data.longitude;
+      this.latitude = data.latitude;
       this.dates = data.daily.time.map(
         (_, index) => new Weather(data.daily, index)
       );
     }
   }
 
-  function parseWeather(weatherData) {
+  function parseData(weatherData) {
     return weatherData.map((dataPoint) => new Location(dataPoint));
   }
 
-  fetchWeather(weatherCoords).then((weatherData) => {
-    const parsedWeather = parseWeather(weatherData);
-    console.log(parsedWeather);
-  });
+  async function initialFetch() {
+    const weatherData = await fetchWeather(weatherCoords);
+    if (!weatherData) return;
+    const finalData = await fetchSuburb(weatherData);
+    if (!finalData) return;
+    const parsedData  = parseData(finalData);
+    console.log(parsedData);
+  }
+
+  initialFetch();
 
   return (
     <>
