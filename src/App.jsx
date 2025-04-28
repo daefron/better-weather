@@ -14,21 +14,21 @@ function App() {
   };
 
   const circleSettings = {
-    gap: 0.1, //coordinate distance between circles, 1 == 100km or so
-    radius: 3, //amount of circles to calculate
+    gap: 1, //coordinate distance between circles, 1 == 100km or so
+    radius: 5, //amount of circles to calculate
   };
 
-  const toRadians = Math.PI / 180;
+  const toRadians = (deg) => deg * Math.PI / 180;
 
   //creates array of coordinate points in radius for weather fetching
   function createPoints() {
-    const pointHolder = [];
+    const pointHolder = [[input.lat, input.long]];
     for (let radius = 1; radius <= circleSettings.radius; radius++) {
       const pointCount = radius * 4; //amount of points for current circle
       const distance = radius * circleSettings.gap; //hypotenuse distance
       const angleSlice = 360 / pointCount; //angle interval in degrees
       for (let point = 0; point < pointCount; point++) {
-        const angle = angleSlice * point * toRadians; //angle in radians
+        const angle = toRadians(angleSlice * point); //angle in radians
 
         const x = Math.cos(angle) * distance + input.lat;
         const y = Math.sin(angle) * distance + input.long;
@@ -42,24 +42,24 @@ function App() {
   const weatherCoords = createPoints();
   console.log(weatherCoords);
 
+  function buildWeatherUrl(lat, lon) {
+    const url = new URL("https://api.open-meteo.com/v1/forecast");
+    url.search = new URLSearchParams({
+      latitude: lat,
+      longitude: lon,
+      daily:
+        "temperature_2m_max,temperature_2m_min,precipitation_hours,precipitation_probability_max,weather_code,wind_speed_10m_max",
+      timezone: "auto",
+    }).toString();
+    return url.toString();
+  }
+
   //fetches weather data in weatherCoords points
   async function fetchWeather(weatherCoords) {
     const promises = weatherCoords.map((coords) => {
       const url = buildWeatherUrl(coords[0], coords[1]);
       return fetch(url, { method: "GET" });
     });
-
-    function buildWeatherUrl(lat, lon) {
-      const url = new URL("https://api.open-meteo.com/v1/forecast");
-      url.search = new URLSearchParams({
-        latitude: lat,
-        longitude: lon,
-        daily:
-          "temperature_2m_max,temperature_2m_min,precipitation_hours,precipitation_probability_max,weather_code,wind_speed_10m_max",
-        timezone: "auto",
-      }).toString();
-      return url.toString();
-    }
 
     try {
       const responses = await Promise.all(promises);
@@ -78,22 +78,22 @@ function App() {
     }
   }
 
+  function buildSuburbUrl(lat, lon) {
+    const apiKey = "";
+    const url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
+    url.search = new URLSearchParams({
+      latlng: lat + "," + lon,
+      result_type: "locality",
+      key: apiKey,
+    }).toString();
+    return url.toString();
+  }
+
   async function fetchSuburb(weatherData) {
     const promises = weatherData.map((data) => {
       const url = buildSuburbUrl(data.latitude, data.longitude);
       return fetch(url, { method: "GET" });
     });
-
-    function buildSuburbUrl(lat, lon) {
-      const apiKey = "";
-      const url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
-      url.search = new URLSearchParams({
-        latlng: lat + "," + lon,
-        result_type: "locality",
-        key: apiKey,
-      }).toString();
-      return url.toString();
-    }
 
     try {
       const responses = await Promise.all(promises);
@@ -143,13 +143,75 @@ function App() {
     return weatherData.map((dataPoint) => new Location(dataPoint));
   }
 
+  function getHighest(type, data, date) {
+    let highest = {
+      name: data[0].suburb,
+      [type]: data[0].dates[date][type],
+      index: 0,
+    };
+    data.forEach((location, index) => {
+      if (location.dates[date][type] > highest[type]) {
+        highest = {
+          name: location.suburb,
+          [type]: location.dates[date][type],
+          index: index,
+        };
+      }
+    });
+    return [data[highest.index], highest[type]];
+  }
+
+  function getLowest(type, data, date) {
+    let lowest = {
+      name: data[0].suburb,
+      [type]: data[0].dates[date][type],
+      index: 0,
+    };
+    data.forEach((location, index) => {
+      if (location.dates[date][type] < lowest[type]) {
+        lowest = {
+          name: location.suburb,
+          [type]: location.dates[date][type],
+          index: index,
+        };
+      }
+    });
+    return [data[lowest.index], lowest[type]];
+  }
+
+  function getStats(data) {
+    for (let i = 0; i < 7; i++) {
+      const date = data[0].dates[i].date;
+      const userLocation = data[0].dates[i];
+      const hottestTemp = getHighest("tempMax", data, i);
+      const lowestTemp = getLowest("tempMax", data, i);
+      const lowestRain = getLowest("rainChance", data, i);
+      const lowestWind = getLowest("windMax", data, i);
+
+      console.log(`${date} DATA:`);
+      console.log(
+        `Hottest temp: ${hottestTemp[0].suburb} ${hottestTemp[1]}C vs ${userLocation.tempMax}C`
+      );
+      console.log(
+        `Coldest temp: ${lowestTemp[0].suburb} ${lowestTemp[1]}C vs ${userLocation.tempMax}C`
+      );
+      console.log(
+        `Least rain: ${lowestRain[0].suburb} ${lowestRain[1]}% vs ${userLocation.rainChance}%`
+      );
+      console.log(
+        `Lowest wind: ${lowestWind[0].suburb} ${lowestWind[1]}km/h vs ${userLocation.windMax}km/h`
+      );
+    }
+  }
+
   async function initialFetch() {
     const weatherData = await fetchWeather(weatherCoords);
     if (!weatherData) return;
     const finalData = await fetchSuburb(weatherData);
     if (!finalData) return;
-    const parsedData  = parseData(finalData);
+    const parsedData = parseData(finalData);
     console.log(parsedData);
+    getStats(parsedData);
   }
 
   initialFetch();
