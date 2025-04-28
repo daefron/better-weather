@@ -1,12 +1,14 @@
 import "./App.css";
-const apiKey = "";
+const APIKEY = "";
 import { useState, useRef } from "react";
+import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
 function App() {
   //user inputs
   const [locationInput, setLocationInput] = useState("");
   const [radiusInput, setRadiusInput] = useState(0.13);
   const inputCoords = useRef("");
-  const [mapData, setMapData] = useState(false);
+  const [mapData, setMapData] = useState([]);
+  const [mapCoords, setMapCoords] = useState();
 
   const circleSettings = {
     gap: radiusInput, //coordinate distance between circles, 1 == 111km
@@ -111,7 +113,7 @@ function App() {
     url.search = new URLSearchParams({
       latlng: lat + "," + lng,
       result_type: "locality",
-      key: apiKey,
+      key: APIKEY,
     }).toString();
     return url.toString();
   }
@@ -148,7 +150,7 @@ function App() {
     const url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
     url.search = new URLSearchParams({
       address: locationInput,
-      key: apiKey,
+      key: APIKEY,
     }).toString();
     return url.toString();
   }
@@ -269,6 +271,7 @@ function App() {
     console.log(parsedData);
     getStats(parsedData);
     setMapData(parsedData);
+    setMapCoords(inputCoords.current);
     console.log(parsedData);
   }
 
@@ -309,6 +312,28 @@ function App() {
             value={radiusInput}
             onChange={(e) => setRadiusInput(e.target.value)}
           ></input>
+        </div>
+        <APIProvider apiKey={APIKEY}>
+          <Map
+            defaultCenter={{ lat: 0, lng: 0 }}
+            center={mapCoords}
+            defaultZoom={9}
+            mapId="mainMap"
+            style={{ height: 500, width: 800 }}
+          >
+            {mapData.map((data, i) => {
+              return (
+                <AdvancedMarker
+                  position={{ lat: data.latitude, lng: data.longitude }}
+                >
+                  <p key={i + "markerKey"}>{data.dates[0].tempMax}</p>
+                </AdvancedMarker>
+              );
+            })}
+          </Map>
+        </APIProvider>
+        <div>
+          <p>Date: </p>
         </div>
       </div>
     </>
