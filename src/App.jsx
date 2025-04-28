@@ -42,6 +42,30 @@ function App() {
   const weatherCoords = createPoints();
   console.log(weatherCoords);
 
+  //fetches weather data in weatherCoords points
+  async function fetchWeather(weatherCoords) {
+    const promises = weatherCoords.map((weather) => {
+      const url =
+        "https://api.open-meteo.com/v1/forecast?latitude=" +
+        weather[0] +
+        "&longitude=" +
+        weather[1] +
+        "&hourly=temperature_2m,precipitation,precipitation_probability,cloud_cover,wind_speed_10m&timezone=auto";
+      return fetch(url);
+    });
+
+    try {
+      const responses = await Promise.all(promises);
+      const data = await Promise.all(responses.map((r) => r.json()));
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error("Failed to fetch weather data:", error);
+    }
+  }
+
+  fetchWeather(weatherCoords);
+
   return (
     <>
       <div>hi</div>
