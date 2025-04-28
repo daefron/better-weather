@@ -1,37 +1,30 @@
 import "./App.css";
-
+import { useState, useRef } from "react";
 function App() {
-  //testing coordinates
-  const melbourneTestCoords = {
-    lat: -37.8136,
-    long: 144.9631,
-  };
-
   //user inputs
-  const input = {
-    lat: melbourneTestCoords.lat,
-    long: melbourneTestCoords.long,
-  };
+  const [locationInput, setLocationInput] = useState("");
+  const [radiusInput, setRadiusInput] = useState(1);
+  const inputCoords = useRef("");
 
   const circleSettings = {
-    gap: 1, //coordinate distance between circles, 1 == 100km or so
+    gap: radiusInput, //coordinate distance between circles, 1 == 100km or so
     radius: 5, //amount of circles to calculate
   };
 
-  const toRadians = (deg) => deg * Math.PI / 180;
+  const toRadians = (deg) => (deg * Math.PI) / 180;
 
   //creates array of coordinate points in radius for weather fetching
   function createPoints() {
-    const pointHolder = [[input.lat, input.long]];
+    const pointHolder = [[inputCoords.current.lat, inputCoords.current.lng]];
     for (let radius = 1; radius <= circleSettings.radius; radius++) {
       const pointCount = radius * 4; //amount of points for current circle
-      const distance = radius * circleSettings.gap; //hypotenuse distance
+      const distance = radius * radiusInput; //hypotenuse distance
       const angleSlice = 360 / pointCount; //angle interval in degrees
       for (let point = 0; point < pointCount; point++) {
         const angle = toRadians(angleSlice * point); //angle in radians
 
-        const x = Math.cos(angle) * distance + input.lat;
-        const y = Math.sin(angle) * distance + input.long;
+        const x = Math.cos(angle) * distance + inputCoords.current.lat;
+        const y = Math.sin(angle) * distance + inputCoords.current.lng;
 
         pointHolder.push([x, y]);
       }
@@ -39,14 +32,11 @@ function App() {
     return pointHolder;
   }
 
-  const weatherCoords = createPoints();
-  console.log(weatherCoords);
-
-  function buildWeatherUrl(lat, lon) {
+  function buildWeatherUrl(lat, lng) {
     const url = new URL("https://api.open-meteo.com/v1/forecast");
     url.search = new URLSearchParams({
       latitude: lat,
-      longitude: lon,
+      longitude: lng,
       daily:
         "temperature_2m_max,temperature_2m_min,precipitation_hours,precipitation_probability_max,weather_code,wind_speed_10m_max",
       timezone: "auto",
@@ -78,11 +68,11 @@ function App() {
     }
   }
 
-  function buildSuburbUrl(lat, lon) {
+  function buildSuburbUrl(lat, lng) {
     const apiKey = "";
     const url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
     url.search = new URLSearchParams({
-      latlng: lat + "," + lon,
+      latlng: lat + "," + lng,
       result_type: "locality",
       key: apiKey,
     }).toString();
@@ -115,6 +105,43 @@ function App() {
     } catch (error) {
       console.error("Failed to fetch suburb data:", error);
     }
+  }
+
+  function updateLocationInput(e) {
+    setLocationInput(e.target.value);
+  }
+
+  function updateRadiusInput(e) {
+    setRadiusInput(e.target.value);
+  }
+
+  function buildCoordUrl() {
+    const apiKey = "";
+    const url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
+    url.search = new URLSearchParams({
+      address: locationInput,
+      key: apiKey,
+    }).toString();
+    return url.toString();
+  }
+
+  async function fetchCoords(e) {
+    e.preventDefault();
+    const url = buildCoordUrl();
+    fetch(url, { method: "GET" })
+      .then((r) => {
+        if (!r.ok) {
+          throw new Error(`HTTP error! Status: ${r.status}`);
+        }
+        return r.json();
+      })
+      .then((result) => {
+        console.log(result.results[0].geometry.location);
+        inputCoords.current = result.results[0].geometry.location;
+        console.log(inputCoords);
+        const weatherCoords = createPoints();
+        initialFetch(weatherCoords);
+      });
   }
 
   class Weather {
@@ -204,7 +231,7 @@ function App() {
     }
   }
 
-  async function initialFetch() {
+  async function initialFetch(weatherCoords) {
     const weatherData = await fetchWeather(weatherCoords);
     if (!weatherData) return;
     const finalData = await fetchSuburb(weatherData);
@@ -214,11 +241,43 @@ function App() {
     getStats(parsedData);
   }
 
-  initialFetch();
-
   return (
     <>
-      <div>hi</div>
+      <div>
+        <form
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: 300,
+          }}
+          onSubmit={fetchCoords}
+        >
+          <label htmlFor="userLocation">Enter a location: </label>
+          <input
+            type="text"
+            id="userLocation"
+            onChange={updateLocationInput}
+          ></input>
+        </form>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: 300,
+          }}
+        >
+          <label htmlFor="searchRadius">Search radius: {`${radiusInput * 100} km`}</label>
+          <input
+            type="range"
+            id="searchRadius"
+            min="0.1"
+            max="2"
+            step="0.1"
+            value={radiusInput}
+            onChange={updateRadiusInput}
+          ></input>
+        </div>
+      </div>
     </>
   );
 }
