@@ -3,6 +3,9 @@ import { useState, useRef } from "react";
 import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
 import { coordinateMaker } from "./CoordinateMaker";
 import { fetchWeather, fetchSuburb, fetchCoords } from "./ApiCalls";
+import { parseData } from "./WeatherParser";
+import { getStats } from "./DataProcessing";
+
 const googleApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 if (!googleApiKey) {
   throw new Error("Google Maps Api key is missing.");
@@ -15,93 +18,6 @@ function App() {
   const inputCoords = useRef("");
   const [mapData, setMapData] = useState([]);
   const [mapCoords, setMapCoords] = useState();
-
-  class Weather {
-    constructor(dailyData, index) {
-      this.date = dailyData.time[index];
-      this.tempMax = dailyData.temperature_2m_max[index];
-      this.tempMin = dailyData.temperature_2m_min[index];
-      this.rainChance = dailyData.precipitation_probability_max[index];
-      this.rainHours = dailyData.precipitation_hours[index];
-      this.windMax = dailyData.wind_speed_10m_max[index];
-    }
-  }
-
-  class Location {
-    constructor(data) {
-      this.suburb = data.suburb || "Unknown suburb";
-      this.longitude = data.longitude;
-      this.latitude = data.latitude;
-      this.dates = data.daily.time.map(
-        (_, index) => new Weather(data.daily, index)
-      );
-    }
-  }
-
-  function parseData(weatherData) {
-    return weatherData.map((dataPoint) => new Location(dataPoint));
-  }
-
-  function getHighest(type, data, date) {
-    let highest = {
-      name: data[0].suburb,
-      [type]: data[0].dates[date][type],
-      index: 0,
-    };
-    data.forEach((location, index) => {
-      if (location.dates[date][type] > highest[type]) {
-        highest = {
-          name: location.suburb,
-          [type]: location.dates[date][type],
-          index: index,
-        };
-      }
-    });
-    return [data[highest.index], highest[type]];
-  }
-
-  function getLowest(type, data, date) {
-    let lowest = {
-      name: data[0].suburb,
-      [type]: data[0].dates[date][type],
-      index: 0,
-    };
-    data.forEach((location, index) => {
-      if (location.dates[date][type] < lowest[type]) {
-        lowest = {
-          name: location.suburb,
-          [type]: location.dates[date][type],
-          index: index,
-        };
-      }
-    });
-    return [data[lowest.index], lowest[type]];
-  }
-
-  function getStats(data) {
-    for (let i = 0; i < 7; i++) {
-      const date = data[0].dates[i].date;
-      const userLocation = data[0].dates[i];
-      const hottestTemp = getHighest("tempMax", data, i);
-      const lowestTemp = getLowest("tempMax", data, i);
-      const lowestRain = getLowest("rainChance", data, i);
-      const lowestWind = getLowest("windMax", data, i);
-
-      console.log(`${date} DATA:`);
-      console.log(
-        `Hottest temp: ${hottestTemp[0].suburb} ${hottestTemp[1]}C vs ${userLocation.tempMax}C`
-      );
-      console.log(
-        `Coldest temp: ${lowestTemp[0].suburb} ${lowestTemp[1]}C vs ${userLocation.tempMax}C`
-      );
-      console.log(
-        `Least rain: ${lowestRain[0].suburb} ${lowestRain[1]}% vs ${userLocation.rainChance}%`
-      );
-      console.log(
-        `Lowest wind: ${lowestWind[0].suburb} ${lowestWind[1]}km/h vs ${userLocation.windMax}km/h`
-      );
-    }
-  }
 
   async function initialFetch(e) {
     e.preventDefault();
