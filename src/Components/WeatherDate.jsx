@@ -14,6 +14,7 @@ export default function WeatherDate({
     flexDirection: "column",
     alignItems: "center",
     gap: 5,
+    flexGrow:1,
     padding: 5,
     fontSize: 13,
     borderRight: "2px solid RGBA(0,0,0,0.1)",
