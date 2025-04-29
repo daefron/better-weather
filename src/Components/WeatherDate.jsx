@@ -14,8 +14,13 @@ export default function WeatherDate({
     flexDirection: "column",
     alignItems: "center",
     gap: 5,
-    padding: 10,
+    padding: 5,
+    fontSize: 13,
+    borderRight: "2px solid RGBA(0,0,0,0.1)",
   };
+  if (index === 6) {
+    style.borderRight = "none";
+  }
   if (index === activeDate) {
     style.backgroundColor = "RGBA(255,255,255,0.2)";
   }

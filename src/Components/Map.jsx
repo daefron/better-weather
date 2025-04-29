@@ -27,7 +27,7 @@ export default function GoogleMap({
     <APIProvider apiKey={googleApiKey}>
       <Map
         mapId="mainMap"
-        style={{ height: 700, width: 500 }}
+        style={{ height: "min(50vh, 700px)", width: "min(100vw, 500px)" }}
         defaultCenter={{ lat: centerPoint.lat, lng: centerPoint.lng }}
         defaultBounds={bounds}
         onClick={() => setActiveMarker()}

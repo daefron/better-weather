@@ -29,7 +29,11 @@ function App() {
       if (!inputData) return;
       inputCoords.current = inputData.geometry.location;
 
-      const weatherCoords = coordinateMaker(inputCoords, radiusInput, radiusRings);
+      const weatherCoords = coordinateMaker(
+        inputCoords,
+        radiusInput,
+        radiusRings
+      );
       const weatherData = await fetchWeather(weatherCoords);
       if (!weatherData) return;
 
@@ -61,7 +65,8 @@ function App() {
     <>
       <div
         style={{
-          width: 500,
+          width: "min(100vw, 500px)",
+          height: "100vh",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -83,9 +88,9 @@ function App() {
             />
             <div
               style={{
-                width: "100%",
                 display: "flex",
                 justifyContent: "space-between",
+                borderBottom:"2px solid RGBA(0,0,0,0.1)"
               }}
             >
               {mapData[0].dates.map((date, i) => {
@@ -106,6 +111,7 @@ function App() {
                 justifyContent: "space-between",
                 gap: 10,
                 padding: 10,
+                borderBottom:"2px solid RGBA(0,0,0,0.1)"
               }}
             >
               <p style={{ flexGrow: 0 }}>
@@ -122,7 +128,7 @@ function App() {
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                width: 300,
+                width: "min(100vw, 500px)",
               }}
               onSubmit={initialFetch}
             >
@@ -138,7 +144,7 @@ function App() {
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                width: 300,
+                width: "min(100vw, 500px)",
               }}
             >
               <label htmlFor="searchRadius">
