@@ -40,6 +40,7 @@ function App() {
         lat: inputCoords.current.lat,
         lng: inputCoords.current.lng,
         suburb: inputData.address_components[0].long_name,
+        dates: parsedData[0].dates,
       });
       getStats(parsedData);
       setMapData(parsedData);
@@ -94,7 +95,10 @@ function App() {
                 padding: 10,
               }}
             >
-              <p style={{ flexGrow: 0 }}>{centerPoint.suburb} - {`${Math.round((radiusInput * 1111) / 2)} km`}</p>
+              <p style={{ flexGrow: 0 }}>
+                {centerPoint.suburb} -{" "}
+                {`${Math.round((radiusInput * 1111) / 2)} km`}
+              </p>
               <button onClick={editButton}>Edit</button>
             </div>
           </main>

@@ -31,6 +31,18 @@ export default function GoogleMap({ mapData, centerPoint }) {
           ></div>
         </AdvancedMarker>
         {mapData.map((data, i) => {
+          let positiveValue;
+          let negativeValue;
+          const colorRatio =
+            data.dates[0].tempMax / centerPoint.dates[0].tempMax;
+          if (colorRatio < 1) {
+            negativeValue = 255;
+            positiveValue = 255 * colorRatio;
+          } else {
+            positiveValue = 255;
+            negativeValue = 255 * (2 - colorRatio) * 0.8;
+          }
+          const color = `RGBA(${negativeValue}, ${positiveValue}, 0, 1)`;
           return (
             <AdvancedMarker
               key={i + "markerKey"}
@@ -38,7 +50,7 @@ export default function GoogleMap({ mapData, centerPoint }) {
             >
               <p
                 style={{
-                  backgroundColor: "RGBA(255,255,255,0.8)",
+                  backgroundColor: color,
                   border: "solid 2px RGBA(0,0,0,0.5)",
                   borderRadius: 4,
                   padding: 2,
