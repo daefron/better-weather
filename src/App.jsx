@@ -68,8 +68,18 @@ function App() {
               renderMap={renderMap}
               centerPoint={centerPoint}
             />
-            <div style={{ display: "flex" }}>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
               <p>{centerPoint.suburb}</p>
+              <p>{`${Math.round((radiusInput * 1111) / 2)} km`}</p>
+            </div>
+            <div>
+              
             </div>
           </main>
         ) : (

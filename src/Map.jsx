@@ -17,6 +17,7 @@ export default function GoogleMap({ mapData, centerPoint }) {
         <AdvancedMarker
           key="centerPointMarker"
           position={{ lat: centerPoint.lat, lng: centerPoint.lng }}
+          zIndex={10}
         >
           <div
             style={{
@@ -34,7 +35,16 @@ export default function GoogleMap({ mapData, centerPoint }) {
               key={i + "markerKey"}
               position={{ lat: data.latitude, lng: data.longitude }}
             >
-              <p>{data.dates[0].tempMax}</p>
+              <p
+                style={{
+                  backgroundColor: "RGBA(255,255,255,0.8)",
+                  border: "solid 2px RGBA(0,0,0,0.5)",
+                  borderRadius: 4,
+                  padding: 2,
+                }}
+              >
+                {data.dates[0].tempMax}°
+              </p>
             </AdvancedMarker>
           );
         })}
