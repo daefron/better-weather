@@ -1,5 +1,5 @@
 const googleApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-if (!googleApiKey){
+if (!googleApiKey) {
   throw new Error("Google Maps Api key is missing.");
 }
 
@@ -10,6 +10,7 @@ function buildWeatherUrl(lat, lng) {
     longitude: lng,
     daily:
       "temperature_2m_max,temperature_2m_min,precipitation_hours,precipitation_probability_max,weather_code,wind_speed_10m_max",
+    hourly: "temperature_2m,precipitation_probability,wind_speed_10m",
     timezone: "auto",
   }).toString();
   return url.toString();

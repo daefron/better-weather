@@ -18,7 +18,12 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [centerPoint, setCenterPoint] = useState();
   const [activeDate, setActiveDate] = useState(0);
+  const [activeHour, setActiveHour] = useState(12);
   const [currentType, setCurrentType] = useState("temp");
+  let hours = [];
+  for (let i = 0; i < 24; i++) {
+    hours.push(i % 12);
+  }
 
   async function initialFetch(e) {
     e.preventDefault();
@@ -42,7 +47,7 @@ function App() {
       if (!finalData) return;
 
       const parsedData = parseData(finalData);
-
+      console.log(parsedData);
       setCenterPoint({
         lat: inputCoords.current.lat,
         lng: inputCoords.current.lng,
@@ -99,6 +104,36 @@ function App() {
               radiusRings={radiusRings}
               currentType={currentType}
             />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                borderBottom: "2px solid RGBA(0,0,0,0.1)",
+              }}
+            >
+              {hours.map((hour, i) => {
+                const style = {
+                  padding: 4,
+                  borderRight: "1px solid RGBA(0,0,0,0.1)",
+                  userSelect: "none"
+                };
+                if (i === 23) {
+                  style.borderRight = "none";
+                }
+                if (i === activeHour) {
+                  style.backgroundColor = "RGBA(255,255,255,0.2)";
+                }
+                return (
+                  <div
+                    key={i + "hour"}
+                    style={style}
+                    onClick={() => setActiveHour(i)}
+                  >
+                    {hour + 1}
+                  </div>
+                );
+              })}
+            </div>
             <div
               style={{
                 display: "flex",
