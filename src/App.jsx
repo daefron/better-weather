@@ -1,8 +1,9 @@
 import "./App.css";
-const APIKEY = "";
 import { useState, useRef } from "react";
 import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
-import { createPoints } from "./CoordinateMaker";
+import { coordinateMaker } from "./CoordinateMaker";
+import { fetchWeather, fetchSuburb, fetchCoords } from "./ApiCalls";
+const googleApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 function App() {
   //user inputs
   const [locationInput, setLocationInput] = useState("");
@@ -10,109 +11,6 @@ function App() {
   const inputCoords = useRef("");
   const [mapData, setMapData] = useState([]);
   const [mapCoords, setMapCoords] = useState();
-
-  function buildWeatherUrl(lat, lng) {
-    const url = new URL("https://api.open-meteo.com/v1/forecast");
-    url.search = new URLSearchParams({
-      latitude: lat,
-      longitude: lng,
-      daily:
-        "temperature_2m_max,temperature_2m_min,precipitation_hours,precipitation_probability_max,weather_code,wind_speed_10m_max",
-      timezone: "auto",
-    }).toString();
-    return url.toString();
-  }
-
-  //fetches weather data in weatherCoords points
-  async function fetchWeather(weatherCoords) {
-    const promises = weatherCoords.map((coords) => {
-      const url = buildWeatherUrl(coords[0], coords[1]);
-      return fetch(url, { method: "GET" });
-    });
-
-    try {
-      const responses = await Promise.all(promises);
-      const data = await Promise.all(
-        responses.map(async (r) => {
-          if (!r.ok) {
-            throw new Error(`HTTP error! Status: ${r.status}`);
-          }
-          return r.json();
-        })
-      );
-      console.log("Weather data fetched successfully.");
-      return data;
-    } catch (error) {
-      console.error("Failed to fetch weather data:", error);
-    }
-  }
-
-  function buildSuburbUrl(lat, lng) {
-    const url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
-    url.search = new URLSearchParams({
-      latlng: lat + "," + lng,
-      result_type: "locality",
-      key: APIKEY,
-    }).toString();
-    return url.toString();
-  }
-
-  async function fetchSuburb(weatherData) {
-    const promises = weatherData.map((data) => {
-      const url = buildSuburbUrl(data.latitude, data.longitude);
-      return fetch(url, { method: "GET" });
-    });
-
-    try {
-      const responses = await Promise.all(promises);
-      const data = await Promise.all(
-        responses.map(async (r) => {
-          if (!r.ok) {
-            throw new Error(`HTTP error! Status: ${r.status}`);
-          }
-          return r.json();
-        })
-      );
-      weatherData.forEach((point, i) => {
-        if (data[i].results[0]) {
-          point.suburb = data[i].results[0].formatted_address;
-        }
-      });
-      console.log("Suburb data fetched successfully.");
-      return weatherData;
-    } catch (error) {
-      console.error("Failed to fetch suburb data:", error);
-    }
-  }
-
-  function buildCoordUrl() {
-    const url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
-    url.search = new URLSearchParams({
-      address: locationInput,
-      key: APIKEY,
-    }).toString();
-    return url.toString();
-  }
-
-  async function fetchCoords(e) {
-    e.preventDefault();
-    const url = buildCoordUrl();
-    fetch(url, { method: "GET" })
-      .then((r) => {
-        if (!r.ok) {
-          throw new Error(`HTTP error! Status: ${r.status}`);
-        }
-        return r.json();
-      })
-      .then((result) => {
-        if (!result.results.length) {
-          throw new Error("No results found for this location.");
-        }
-        inputCoords.current = result.results[0].geometry.location;
-        const weatherCoords = createPoints(inputCoords, radiusInput);
-        initialFetch(weatherCoords);
-      });
-  }
 
   class Weather {
     constructor(dailyData, index) {
@@ -201,11 +99,20 @@ function App() {
     }
   }
 
-  async function initialFetch(weatherCoords) {
+  async function initialFetch(e) {
+    e.preventDefault();
+
+    inputCoords.current = await fetchCoords(locationInput);
+    console.log(inputCoords.current);
+    if (!inputCoords.current) return;
+    const weatherCoords = coordinateMaker(inputCoords, radiusInput);
+    console.log(weatherCoords);
     const weatherData = await fetchWeather(weatherCoords);
     if (!weatherData) return;
+
     const finalData = await fetchSuburb(weatherData);
     if (!finalData) return;
+
     const parsedData = parseData(finalData);
     console.log(parsedData);
     getStats(parsedData);
@@ -223,7 +130,7 @@ function App() {
             justifyContent: "space-between",
             width: 300,
           }}
-          onSubmit={fetchCoords}
+          onSubmit={initialFetch}
         >
           <label htmlFor="userLocation">Enter a location: </label>
           <input
@@ -252,7 +159,7 @@ function App() {
             onChange={(e) => setRadiusInput(e.target.value)}
           ></input>
         </div>
-        <APIProvider apiKey={APIKEY}>
+        <APIProvider apiKey={googleApiKey}>
           <Map
             defaultCenter={{ lat: 0, lng: 0 }}
             center={mapCoords}
