@@ -19,6 +19,7 @@ function App() {
   async function initialFetch(e) {
     e.preventDefault();
     setLoading(true);
+    setRenderMap(false);
 
     try {
       inputCoords.current = await fetchCoords(locationInput);
@@ -44,13 +45,19 @@ function App() {
 
   return (
     <>
-      <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <header>
           <h2>Better Weather</h2>
         </header>
         <main>
           {loading ? <div>loading</div> : null}
-          <Map mapCoords={mapCoords} mapData={mapData} renderMap={renderMap}/>
+          <Map mapCoords={mapCoords} mapData={mapData} renderMap={renderMap} />
           <form
             style={{
               display: "flex",
