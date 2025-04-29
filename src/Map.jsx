@@ -15,6 +15,24 @@ export default function GoogleMap({ mapCoords, mapData, renderMap }) {
         defaultCenter={mapCoords}
       >
         {mapData.map((data, i) => {
+          if (i === 0) {
+            return (
+              <AdvancedMarker
+                key={i + "markerKey"}
+                position={{ lat: data.latitude, lng: data.longitude }}
+              >
+                <div
+                  style={{
+                    width: 10,
+                    height: 10,
+                    backgroundColor: "white",
+                    border: "solid black",
+                    borderRadius: 10,
+                  }}
+                ></div>
+              </AdvancedMarker>
+            );
+          }
           return (
             <AdvancedMarker
               key={i + "markerKey"}
