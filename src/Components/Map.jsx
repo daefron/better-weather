@@ -5,7 +5,7 @@ if (!googleApiKey) {
   throw new Error("Google Maps Api key is missing.");
 }
 
-export default function GoogleMap({ mapData, centerPoint }) {
+export default function GoogleMap({ mapData, centerPoint, activeDate }) {
   return (
     <APIProvider apiKey={googleApiKey}>
       <Map
@@ -34,7 +34,8 @@ export default function GoogleMap({ mapData, centerPoint }) {
           let positiveValue;
           let negativeValue;
           const colorRatio =
-            data.dates[0].tempMax / centerPoint.dates[0].tempMax;
+            data.dates[activeDate].tempMax /
+            centerPoint.dates[activeDate].tempMax;
           if (colorRatio < 1) {
             negativeValue = 255;
             positiveValue = 255 * colorRatio;
@@ -56,7 +57,7 @@ export default function GoogleMap({ mapData, centerPoint }) {
                   padding: 2,
                 }}
               >
-                {data.dates[0].tempMax}°
+                {data.dates[activeDate].tempMax}°
               </p>
             </AdvancedMarker>
           );

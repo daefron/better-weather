@@ -16,6 +16,7 @@ function App() {
   const [renderMap, setRenderMap] = useState(false);
   const [loading, setLoading] = useState(false);
   const [centerPoint, setCenterPoint] = useState();
+  const [activeDate, setActiveDate] = useState(0);
 
   async function initialFetch(e) {
     e.preventDefault();
@@ -75,6 +76,7 @@ function App() {
               mapData={mapData}
               renderMap={renderMap}
               centerPoint={centerPoint}
+              activeDate={activeDate}
             />
             <div
               style={{
@@ -84,7 +86,15 @@ function App() {
               }}
             >
               {mapData[0].dates.map((date, i) => {
-                return <WeatherDate key={"weatherDate" + i} date={date} />;
+                return (
+                  <WeatherDate
+                    key={"weatherDate" + i}
+                    date={date}
+                    index={i}
+                    activeDate={activeDate}
+                    setActiveDate={setActiveDate}
+                  />
+                );
               })}
             </div>
             <div
