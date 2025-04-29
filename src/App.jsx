@@ -18,6 +18,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [centerPoint, setCenterPoint] = useState();
   const [activeDate, setActiveDate] = useState(0);
+  const [currentType, setCurrentType] = useState("temp");
 
   async function initialFetch(e) {
     e.preventDefault();
@@ -61,6 +62,17 @@ function App() {
     setRenderMap(false);
   }
 
+  function tempRainSwitch() {
+    switch (currentType) {
+      case "temp":
+        setCurrentType("rain");
+        break;
+      case "rain":
+        setCurrentType("temp");
+        break;
+    }
+  }
+
   return (
     <>
       <div
@@ -85,12 +97,13 @@ function App() {
               activeDate={activeDate}
               radiusInput={radiusInput}
               radiusRings={radiusRings}
+              currentType={currentType}
             />
             <div
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                borderBottom:"2px solid RGBA(0,0,0,0.1)"
+                borderBottom: "2px solid RGBA(0,0,0,0.1)",
               }}
             >
               {mapData[0].dates.map((date, i) => {
@@ -101,6 +114,7 @@ function App() {
                     index={i}
                     activeDate={activeDate}
                     setActiveDate={setActiveDate}
+                    currentType={currentType}
                   />
                 );
               })}
@@ -111,13 +125,14 @@ function App() {
                 justifyContent: "space-between",
                 gap: 10,
                 padding: 10,
-                borderBottom:"2px solid RGBA(0,0,0,0.1)"
+                borderBottom: "2px solid RGBA(0,0,0,0.1)",
               }}
             >
               <p style={{ flexGrow: 0 }}>
                 {centerPoint.suburb} -{" "}
                 {`${Math.round((radiusInput * 1111) / 2)} km`}
               </p>
+              <button onClick={tempRainSwitch}>Switch</button>
               <button onClick={editButton}>Edit</button>
             </div>
           </main>

@@ -3,8 +3,8 @@ export default function WeatherDate({
   index,
   activeDate,
   setActiveDate,
+  currentType,
 }) {
-  const temp = date.tempMax;
   const options = { weekday: "short" };
   const renderDate = new Intl.DateTimeFormat("en-US", options).format(
     new Date(date.date)
@@ -14,7 +14,7 @@ export default function WeatherDate({
     flexDirection: "column",
     alignItems: "center",
     gap: 5,
-    flexGrow:1,
+    flexGrow: 1,
     padding: 5,
     fontSize: 13,
     borderRight: "2px solid RGBA(0,0,0,0.1)",
@@ -25,9 +25,20 @@ export default function WeatherDate({
   if (index === activeDate) {
     style.backgroundColor = "RGBA(255,255,255,0.2)";
   }
+
+  let content;
+  switch (currentType) {
+    case "temp":
+      content = `${date.tempMax}°C`
+      break;
+    case "rain":
+      content = `${date.rainChance}%`
+      break;
+  }
+
   return (
     <div style={style} onClick={() => setActiveDate(index)}>
-      <p>{temp}°C</p>
+      <p>{content}</p>
       <p>{renderDate}</p>
     </div>
   );

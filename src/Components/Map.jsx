@@ -12,6 +12,7 @@ export default function GoogleMap({
   activeDate,
   radiusInput,
   radiusRings,
+  currentType,
 }) {
   const [activeMarker, setActiveMarker] = useState();
 
@@ -49,34 +50,64 @@ export default function GoogleMap({
           ></div>
         </AdvancedMarker>
         {mapData.map((data, i) => {
-          let positiveValue;
-          let negativeValue;
-          const colorRatio =
-            data.dates[activeDate].tempMax /
-            centerPoint.dates[activeDate].tempMax;
-          if (colorRatio < 1) {
-            negativeValue = 255;
-            positiveValue = 255 * colorRatio;
-          } else {
-            positiveValue = 255;
-            negativeValue = 255 * (2 - colorRatio) * 0.8;
-          }
-          const color = `RGBA(${negativeValue}, ${positiveValue}, 0, 1)`;
           const style = {
-            backgroundColor: color,
             borderRadius: 4,
             padding: 3,
-            fontSize: 13
+            fontSize: 13,
           };
-          let content;
+          let content, positiveValue, negativeValue, colorRatio;
+          switch (currentType) {
+            case "temp":
+              if (activeMarker === i) {
+                content = `${data.suburb} - ${data.dates[activeDate].tempMax}°`;
+              } else {
+                content = `${data.dates[activeDate].tempMax}°`;
+              }
+
+              colorRatio =
+                data.dates[activeDate].tempMax /
+                centerPoint.dates[activeDate].tempMax;
+              if (colorRatio < 1) {
+                negativeValue = 255;
+                positiveValue = 255 * colorRatio;
+              } else {
+                positiveValue = 255;
+                negativeValue = 255 * (2 - colorRatio) * 0.8;
+              }
+              break;
+            case "rain":
+              if (activeMarker === i) {
+                content = `${data.suburb} - ${data.dates[activeDate].rainChance}%`;
+              } else {
+                content = `${data.dates[activeDate].rainChance}%`;
+              }
+
+              colorRatio =
+                data.dates[activeDate].rainChance /
+                centerPoint.dates[activeDate].rainChance;
+                
+              //sets to same color if same value
+              if (colorRatio === Infinity || isNaN(colorRatio)) {
+                negativeValue = 255;
+                positiveValue = 255;
+                break;
+              }
+              if (colorRatio < 1) {
+                negativeValue = 255 * colorRatio;
+                positiveValue = 255;
+              } else {
+                positiveValue = 255 * (2 - colorRatio);
+                negativeValue = 255;
+              }
+              break;
+          }
+          style.backgroundColor = `RGBA(${negativeValue}, ${positiveValue}, 0, 1)`;
           let zIndex = 1;
           if (activeMarker === i) {
-            content = `${data.suburb} - ${data.dates[activeDate].tempMax}°`;
-            style.textDecoration = "underline"
+            style.textDecoration = "underline";
             zIndex = 20;
           } else {
-            content = `${data.dates[activeDate].tempMax}°`;
-            style.textDecoration = ""
+            style.textDecoration = "";
             zIndex = 1;
           }
           return (
