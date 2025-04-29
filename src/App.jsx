@@ -4,7 +4,8 @@ import { coordinateMaker } from "./CoordinateMaker";
 import { fetchWeather, fetchSuburb, fetchCoords } from "./ApiCalls";
 import { parseData } from "./WeatherParser";
 import { getStats } from "./DataProcessing";
-import Map from "./Map";
+import Map from "./Components/Map";
+import WeatherDate from "./Components/WeatherDate";
 
 function App() {
   //user inputs
@@ -53,12 +54,14 @@ function App() {
     <>
       <div
         style={{
+          width: 500,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          backgroundColor: "RGBA(130,145,255,0.5)",
         }}
       >
-        <header>
+        <header style={{ margin: 10 }}>
           <h2>Better Weather</h2>
         </header>
         {renderMap ? (
@@ -75,11 +78,20 @@ function App() {
                 justifyContent: "space-between",
               }}
             >
-              <p>{centerPoint.suburb}</p>
-              <p>{`${Math.round((radiusInput * 1111) / 2)} km`}</p>
+              {mapData[0].dates.map((date, i) => {
+                return <WeatherDate key={"weatherDate" + i} date={date} />;
+              })}
             </div>
-            <div>
-              
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: 10,
+                padding: 10,
+              }}
+            >
+              <p style={{ flexGrow: 0 }}>{centerPoint.suburb} - {`${Math.round((radiusInput * 1111) / 2)} km`}</p>
+              <button onClick={editButton}>Edit</button>
             </div>
           </main>
         ) : (
