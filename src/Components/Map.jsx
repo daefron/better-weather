@@ -28,7 +28,10 @@ export default function GoogleMap({
     <APIProvider apiKey={googleApiKey}>
       <Map
         mapId="mainMap"
-        style={{ height: "min(50vh, 700px)", width: "min(100vw, 500px)" }}
+        style={{
+          width: "min(100vw, 500px)",
+          flexGrow: 1,
+        }}
         defaultCenter={{ lat: centerPoint.lat, lng: centerPoint.lng }}
         defaultBounds={bounds}
         onClick={() => setActiveMarker()}
@@ -85,7 +88,7 @@ export default function GoogleMap({
               colorRatio =
                 data.dates[activeDate].rainChance /
                 centerPoint.dates[activeDate].rainChance;
-                
+
               //sets to same color if same value
               if (colorRatio === Infinity || isNaN(colorRatio)) {
                 negativeValue = 255;

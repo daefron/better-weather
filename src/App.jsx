@@ -90,87 +90,112 @@ function App() {
           backgroundColor: "RGBA(130,145,255,0.5)",
         }}
       >
-        <header style={{ margin: 10 }}>
+        <header
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            padding: 10,
+            zIndex: 50,
+            boxShadow: renderMap ? "0px 1px 5px rgba(0,0,0,0.3)" : null,
+          }}
+        >
           <h2>Better Weather</h2>
         </header>
         {renderMap ? (
-          <main style={{ display: "flex", flexDirection: "column" }}>
-            <Map
-              mapData={mapData}
-              renderMap={renderMap}
-              centerPoint={centerPoint}
-              activeDate={activeDate}
-              radiusInput={radiusInput}
-              radiusRings={radiusRings}
-              currentType={currentType}
-            />
-            <div
+          <>
+            <main style={{ flexGrow: 1 }}>
+              <Map
+                mapData={mapData}
+                renderMap={renderMap}
+                centerPoint={centerPoint}
+                activeDate={activeDate}
+                radiusInput={radiusInput}
+                radiusRings={radiusRings}
+                currentType={currentType}
+              />
+            </main>
+            <footer
               style={{
+                width: "100%",
                 display: "flex",
-                justifyContent: "space-between",
-                borderBottom: "2px solid RGBA(0,0,0,0.1)",
+                flexDirection: "column",
+                zIndex: 50,
+                boxShadow: renderMap ? "0px 1px 3px rgba(0,0,0,0.3)" : null,
               }}
             >
-              {hours.map((hour, i) => {
-                const style = {
-                  padding: 4,
-                  borderRight: "1px solid RGBA(0,0,0,0.1)",
-                  userSelect: "none"
-                };
-                if (i === 23) {
-                  style.borderRight = "none";
-                }
-                if (i === activeHour) {
-                  style.backgroundColor = "RGBA(255,255,255,0.2)";
-                }
-                return (
-                  <div
-                    key={i + "hour"}
-                    style={style}
-                    onClick={() => setActiveHour(i)}
-                  >
-                    {hour + 1}
-                  </div>
-                );
-              })}
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                borderBottom: "2px solid RGBA(0,0,0,0.1)",
-              }}
-            >
-              {mapData[0].dates.map((date, i) => {
-                return (
-                  <WeatherDate
-                    key={"weatherDate" + i}
-                    date={date}
-                    index={i}
-                    activeDate={activeDate}
-                    setActiveDate={setActiveDate}
-                    currentType={currentType}
-                  />
-                );
-              })}
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                gap: 10,
-                padding: 10,
-                borderBottom: "2px solid RGBA(0,0,0,0.1)",
-              }}
-            >
-              <p style={{ flexGrow: 0 }}>
-                {centerPoint.suburb} -{" "}
-                {`${Math.round((radiusInput * 1111) / 2)} km`}
-              </p>
-              <button onClick={tempRainSwitch}>Switch</button>
-              <button onClick={editButton}>Edit</button>
-            </div>
-          </main>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  borderBottom: "2px solid RGBA(0,0,0,0.1)",
+                }}
+              >
+                {hours.map((hour, i) => {
+                  const style = {
+                    // padding: 4,
+                    flexGrow: 1,
+                    height: 18,
+                    fontSize: 13,
+                    textAlign: "center",
+                    borderRight: "1px solid RGBA(0,0,0,0.1)",
+                    userSelect: "none",
+                  };
+                  if (i === 23) {
+                    style.borderRight = "none";
+                  }
+                  if (i === activeHour) {
+                    style.backgroundColor = "RGBA(255,255,255,0.2)";
+                  }
+                  return (
+                    <div
+                      key={i + "hour"}
+                      style={style}
+                      onClick={() => setActiveHour(i)}
+                    >
+                      <p style={{ height: "100%" }}>{hour + 1}</p>
+                    </div>
+                  );
+                })}
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  borderBottom: "2px solid RGBA(0,0,0,0.1)",
+                }}
+              >
+                {mapData[0].dates.map((date, i) => {
+                  return (
+                    <WeatherDate
+                      key={"weatherDate" + i}
+                      date={date}
+                      index={i}
+                      activeDate={activeDate}
+                      setActiveDate={setActiveDate}
+                      currentType={currentType}
+                    />
+                  );
+                })}
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  gap: 10,
+                  padding: 10,
+                  borderBottom: "2px solid RGBA(0,0,0,0.1)",
+                }}
+              >
+                <p style={{ flexGrow: 0 }}>
+                  {centerPoint.suburb} -{" "}
+                  {`${Math.round((radiusInput * 1111) / 2)} km`}
+                </p>
+                <button onClick={tempRainSwitch}>Switch</button>
+                <button onClick={editButton}>Edit</button>
+              </div>
+            </footer>
+          </>
         ) : (
           <main>
             {loading ? <div>loading</div> : null}
