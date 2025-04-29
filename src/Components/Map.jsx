@@ -5,14 +5,28 @@ if (!googleApiKey) {
   throw new Error("Google Maps Api key is missing.");
 }
 
-export default function GoogleMap({ mapData, centerPoint, activeDate }) {
+export default function GoogleMap({
+  mapData,
+  centerPoint,
+  activeDate,
+  radiusInput,
+  radiusRings,
+}) {
+  //zooms map to show all found weather points
+  const boundDist = radiusInput * radiusRings * 0.7;
+  const bounds = {
+    east: centerPoint.lng + boundDist,
+    north: centerPoint.lat + boundDist,
+    south: centerPoint.lat - boundDist,
+    west: centerPoint.lng - boundDist,
+  };
   return (
     <APIProvider apiKey={googleApiKey}>
       <Map
         mapId="mainMap"
-        defaultZoom={9}
         style={{ height: 700, width: 500 }}
         defaultCenter={{ lat: centerPoint.lat, lng: centerPoint.lng }}
+        defaultBounds={bounds}
         disableDefaultUI
       >
         <AdvancedMarker

@@ -11,6 +11,7 @@ function App() {
   //user inputs
   const [locationInput, setLocationInput] = useState("");
   const [radiusInput, setRadiusInput] = useState(0.13); //coordinate distance between circles, 1 == 111km
+  const radiusRings = 5;
   const inputCoords = useRef("");
   const [mapData, setMapData] = useState([]);
   const [renderMap, setRenderMap] = useState(false);
@@ -28,7 +29,7 @@ function App() {
       if (!inputData) return;
       inputCoords.current = inputData.geometry.location;
 
-      const weatherCoords = coordinateMaker(inputCoords, radiusInput);
+      const weatherCoords = coordinateMaker(inputCoords, radiusInput, radiusRings);
       const weatherData = await fetchWeather(weatherCoords);
       if (!weatherData) return;
 
@@ -77,6 +78,8 @@ function App() {
               renderMap={renderMap}
               centerPoint={centerPoint}
               activeDate={activeDate}
+              radiusInput={radiusInput}
+              radiusRings={radiusRings}
             />
             <div
               style={{

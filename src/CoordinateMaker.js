@@ -1,7 +1,3 @@
-const circleSettings = {
-  radius: 5, //amount of circles to calculate
-};
-
 const toRad = (deg) => (deg * Math.PI) / 180;
 const toDeg = (rad) => (rad * 180) / Math.PI;
 
@@ -30,7 +26,7 @@ function destinationPoint(lat, lng, distanceKm, bearingDegrees) {
 }
 
 //creates array of coordinate points in radius around user input
-export function coordinateMaker(inputCoords, radiusInput) {
+export function coordinateMaker(inputCoords, radiusInput, radiusRings) {
   //user inputted location
   const centerLat = inputCoords.current.lat;
   const centerLng = inputCoords.current.lng;
@@ -38,7 +34,7 @@ export function coordinateMaker(inputCoords, radiusInput) {
   const pointHolder = [[centerLat, centerLng]];
   const baseSpacingKm = 50;
 
-  for (let radius = 1; radius <= circleSettings.radius; radius++) {
+  for (let radius = 1; radius <= radiusRings; radius++) {
     const distance = radius * radiusInput * 100; //distance in km
     const circumference = 2 * Math.PI * distance; //circumfrence of the circle
     const pointCount = Math.max(4, Math.round(circumference / baseSpacingKm));
