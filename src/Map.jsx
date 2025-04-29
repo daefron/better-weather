@@ -5,15 +5,14 @@ if (!googleApiKey) {
   throw new Error("Google Maps Api key is missing.");
 }
 
-export default function googleMap({mapCoords, mapData}) {
-  return (
+export default function GoogleMap({ mapCoords, mapData, renderMap }) {
+  return renderMap ? (
     <APIProvider apiKey={googleApiKey}>
       <Map
-        defaultCenter={{ lat: 0, lng: 0 }}
-        center={mapCoords}
-        defaultZoom={9}
         mapId="mainMap"
+        defaultZoom={9}
         style={{ height: 500, width: 800 }}
+        defaultCenter={mapCoords}
       >
         {mapData.map((data, i) => {
           return (
@@ -27,5 +26,5 @@ export default function googleMap({mapCoords, mapData}) {
         })}
       </Map>
     </APIProvider>
-  );
+  ) : null;
 }

@@ -50,7 +50,7 @@ function App() {
         </header>
         <main>
           {loading ? <div>loading</div> : null}
-          {renderMap ? <Map mapCoords={mapCoords} mapData={mapData} /> : null}
+          <Map mapCoords={mapCoords} mapData={mapData} renderMap={renderMap}/>
           <form
             style={{
               display: "flex",
