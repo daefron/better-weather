@@ -11,8 +11,9 @@ export default function GoogleMap({ mapData, centerPoint }) {
       <Map
         mapId="mainMap"
         defaultZoom={9}
-        style={{ height: 500, width: 800 }}
+        style={{ height: 700, width: 500 }}
         defaultCenter={{ lat: centerPoint.lat, lng: centerPoint.lng }}
+        disableDefaultUI
       >
         <AdvancedMarker
           key="centerPointMarker"
