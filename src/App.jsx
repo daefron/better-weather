@@ -1,15 +1,10 @@
 import "./App.css";
 import { useState, useRef } from "react";
-import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
 import { coordinateMaker } from "./CoordinateMaker";
 import { fetchWeather, fetchSuburb, fetchCoords } from "./ApiCalls";
 import { parseData } from "./WeatherParser";
 import { getStats } from "./DataProcessing";
-
-const googleApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-if (!googleApiKey) {
-  throw new Error("Google Maps Api key is missing.");
-}
+import Map from "./Map";
 
 function App() {
   //user inputs
@@ -50,64 +45,48 @@ function App() {
   return (
     <>
       <div>
-        <form
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            width: 300,
-          }}
-          onSubmit={initialFetch}
-        >
-          <label htmlFor="userLocation">Enter a location: </label>
-          <input
-            type="text"
-            id="userLocation"
-            onChange={(e) => setLocationInput(e.target.value)}
-          ></input>
-        </form>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            width: 300,
-          }}
-        >
-          <label htmlFor="searchRadius">
-            Search radius: {`${Math.round((radiusInput * 1111) / 2)} km`}
-          </label>
-          <input
-            type="range"
-            id="searchRadius"
-            min="0.05"
-            max="0.3"
-            step="0.01"
-            value={radiusInput}
-            onChange={(e) => setRadiusInput(e.target.value)}
-          ></input>
-        </div>
-        {loading ? <div>loading</div> : null}
-        {renderMap ? (
-          <APIProvider apiKey={googleApiKey}>
-            <Map
-              defaultCenter={{ lat: 0, lng: 0 }}
-              center={mapCoords}
-              defaultZoom={9}
-              mapId="mainMap"
-              style={{ height: 500, width: 800 }}
-            >
-              {mapData.map((data, i) => {
-                return (
-                  <AdvancedMarker
-                    key={i + "markerKey"}
-                    position={{ lat: data.latitude, lng: data.longitude }}
-                  >
-                    <p>{data.dates[0].tempMax}</p>
-                  </AdvancedMarker>
-                );
-              })}
-            </Map>
-          </APIProvider>
-        ) : null}
+        <header>
+          <h2>Better Weather</h2>
+        </header>
+        <main>
+          {loading ? <div>loading</div> : null}
+          {renderMap ? <Map mapCoords={mapCoords} mapData={mapData} /> : null}
+          <form
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: 300,
+            }}
+            onSubmit={initialFetch}
+          >
+            <label htmlFor="userLocation">Enter a location: </label>
+            <input
+              type="text"
+              id="userLocation"
+              onChange={(e) => setLocationInput(e.target.value)}
+            ></input>
+          </form>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: 300,
+            }}
+          >
+            <label htmlFor="searchRadius">
+              Search radius: {`${Math.round((radiusInput * 1111) / 2)} km`}
+            </label>
+            <input
+              type="range"
+              id="searchRadius"
+              min="0.05"
+              max="0.3"
+              step="0.01"
+              value={radiusInput}
+              onChange={(e) => setRadiusInput(e.target.value)}
+            ></input>
+          </div>
+        </main>
       </div>
     </>
   );
