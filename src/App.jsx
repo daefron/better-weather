@@ -18,9 +18,12 @@ function App() {
   const inputCoords = useRef("");
   const [mapData, setMapData] = useState([]);
   const [mapCoords, setMapCoords] = useState();
+  const [renderMap, setRenderMap] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   async function initialFetch(e) {
     e.preventDefault();
+    setLoading(true);
 
     try {
       inputCoords.current = await fetchCoords(locationInput);
@@ -37,6 +40,8 @@ function App() {
       getStats(parsedData);
       setMapData(parsedData);
       setMapCoords(inputCoords.current);
+      setLoading(false);
+      setRenderMap(true);
     } catch (error) {
       console.error("Initial fetch failed:", error);
     }
@@ -80,29 +85,29 @@ function App() {
             onChange={(e) => setRadiusInput(e.target.value)}
           ></input>
         </div>
-        <APIProvider apiKey={googleApiKey}>
-          <Map
-            defaultCenter={{ lat: 0, lng: 0 }}
-            center={mapCoords}
-            defaultZoom={9}
-            mapId="mainMap"
-            style={{ height: 500, width: 800 }}
-          >
-            {mapData.map((data, i) => {
-              return (
-                <AdvancedMarker
-                  key={i + "markerKey"}
-                  position={{ lat: data.latitude, lng: data.longitude }}
-                >
-                  <p>{data.dates[0].tempMax}</p>
-                </AdvancedMarker>
-              );
-            })}
-          </Map>
-        </APIProvider>
-        <div>
-          <p>Date: </p>
-        </div>
+        {loading ? <div>loading</div> : null}
+        {renderMap ? (
+          <APIProvider apiKey={googleApiKey}>
+            <Map
+              defaultCenter={{ lat: 0, lng: 0 }}
+              center={mapCoords}
+              defaultZoom={9}
+              mapId="mainMap"
+              style={{ height: 500, width: 800 }}
+            >
+              {mapData.map((data, i) => {
+                return (
+                  <AdvancedMarker
+                    key={i + "markerKey"}
+                    position={{ lat: data.latitude, lng: data.longitude }}
+                  >
+                    <p>{data.dates[0].tempMax}</p>
+                  </AdvancedMarker>
+                );
+              })}
+            </Map>
+          </APIProvider>
+        ) : null}
       </div>
     </>
   );
