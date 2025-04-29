@@ -50,6 +50,10 @@ function App() {
     }
   }
 
+  function editButton() {
+    setRenderMap(false);
+  }
+
   return (
     <>
       <div
@@ -110,6 +114,7 @@ function App() {
                 type="text"
                 id="userLocation"
                 onChange={(e) => setLocationInput(e.target.value)}
+                defaultValue={locationInput}
               ></input>
             </form>
             <div
