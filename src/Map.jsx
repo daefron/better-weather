@@ -5,34 +5,30 @@ if (!googleApiKey) {
   throw new Error("Google Maps Api key is missing.");
 }
 
-export default function GoogleMap({ mapCoords, mapData, renderMap }) {
-  return renderMap ? (
+export default function GoogleMap({ mapData, centerPoint }) {
+  return (
     <APIProvider apiKey={googleApiKey}>
       <Map
         mapId="mainMap"
         defaultZoom={9}
         style={{ height: 500, width: 800 }}
-        defaultCenter={mapCoords}
+        defaultCenter={{ lat: centerPoint.lat, lng: centerPoint.lng }}
       >
+        <AdvancedMarker
+          key="centerPointMarker"
+          position={{ lat: centerPoint.lat, lng: centerPoint.lng }}
+        >
+          <div
+            style={{
+              width: 10,
+              height: 10,
+              backgroundColor: "white",
+              border: "solid black",
+              borderRadius: 10,
+            }}
+          ></div>
+        </AdvancedMarker>
         {mapData.map((data, i) => {
-          if (i === 0) {
-            return (
-              <AdvancedMarker
-                key={i + "markerKey"}
-                position={{ lat: data.latitude, lng: data.longitude }}
-              >
-                <div
-                  style={{
-                    width: 10,
-                    height: 10,
-                    backgroundColor: "white",
-                    border: "solid black",
-                    borderRadius: 10,
-                  }}
-                ></div>
-              </AdvancedMarker>
-            );
-          }
           return (
             <AdvancedMarker
               key={i + "markerKey"}
@@ -44,5 +40,5 @@ export default function GoogleMap({ mapCoords, mapData, renderMap }) {
         })}
       </Map>
     </APIProvider>
-  ) : null;
+  );
 }

@@ -101,7 +101,6 @@ export async function fetchCoords(locationInput) {
   if (!result.results.length) {
     throw new Error("No results found for this location.");
   }
-
   console.log("Center-point geometry data fetched successfully.");
-  return result.results[0].geometry.location;
+  return result.results[0];
 }
