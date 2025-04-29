@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
 
 const googleApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -12,6 +13,8 @@ export default function GoogleMap({
   radiusInput,
   radiusRings,
 }) {
+  const [activeMarker, setActiveMarker] = useState();
+
   //zooms map to show all found weather points
   const boundDist = radiusInput * radiusRings * 0.7;
   const bounds = {
@@ -27,6 +30,7 @@ export default function GoogleMap({
         style={{ height: 700, width: 500 }}
         defaultCenter={{ lat: centerPoint.lat, lng: centerPoint.lng }}
         defaultBounds={bounds}
+        onClick={() => setActiveMarker()}
         disableDefaultUI
       >
         <AdvancedMarker
@@ -36,11 +40,11 @@ export default function GoogleMap({
         >
           <div
             style={{
-              width: 10,
-              height: 10,
+              width: 13,
+              height: 13,
               backgroundColor: "white",
               border: "solid black",
-              borderRadius: 10,
+              borderRadius: 13,
             }}
           ></div>
         </AdvancedMarker>
@@ -58,21 +62,31 @@ export default function GoogleMap({
             negativeValue = 255 * (2 - colorRatio) * 0.8;
           }
           const color = `RGBA(${negativeValue}, ${positiveValue}, 0, 1)`;
+          const style = {
+            backgroundColor: color,
+            borderRadius: 4,
+            padding: 3,
+            fontSize: 13
+          };
+          let content;
+          let zIndex = 1;
+          if (activeMarker === i) {
+            content = `${data.suburb} - ${data.dates[activeDate].tempMax}°`;
+            style.textDecoration = "underline"
+            zIndex = 20;
+          } else {
+            content = `${data.dates[activeDate].tempMax}°`;
+            style.textDecoration = ""
+            zIndex = 1;
+          }
           return (
             <AdvancedMarker
               key={i + "markerKey"}
               position={{ lat: data.latitude, lng: data.longitude }}
+              zIndex={zIndex}
+              onClick={() => setActiveMarker(i)}
             >
-              <p
-                style={{
-                  backgroundColor: color,
-                  border: "solid 2px RGBA(0,0,0,0.5)",
-                  borderRadius: 4,
-                  padding: 2,
-                }}
-              >
-                {data.dates[activeDate].tempMax}°
-              </p>
+              <p style={style}>{content}</p>
             </AdvancedMarker>
           );
         })}
