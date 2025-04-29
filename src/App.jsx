@@ -23,20 +23,20 @@ function App() {
     e.preventDefault();
 
     try {
-    inputCoords.current = await fetchCoords(locationInput);
-    if (!inputCoords.current) return;
+      inputCoords.current = await fetchCoords(locationInput);
+      if (!inputCoords.current) return;
 
-    const weatherCoords = coordinateMaker(inputCoords, radiusInput);
-    const weatherData = await fetchWeather(weatherCoords);
-    if (!weatherData) return;
+      const weatherCoords = coordinateMaker(inputCoords, radiusInput);
+      const weatherData = await fetchWeather(weatherCoords);
+      if (!weatherData) return;
 
-    const finalData = await fetchSuburb(weatherData);
-    if (!finalData) return;
+      const finalData = await fetchSuburb(weatherData);
+      if (!finalData) return;
 
-    const parsedData = parseData(finalData);
-    getStats(parsedData);
-    setMapData(parsedData);
-    setMapCoords(inputCoords.current);
+      const parsedData = parseData(finalData);
+      getStats(parsedData);
+      setMapData(parsedData);
+      setMapCoords(inputCoords.current);
     } catch (error) {
       console.error("Initial fetch failed:", error);
     }
@@ -91,9 +91,10 @@ function App() {
             {mapData.map((data, i) => {
               return (
                 <AdvancedMarker
+                  key={i + "markerKey"}
                   position={{ lat: data.latitude, lng: data.longitude }}
                 >
-                  <p key={i + "markerKey"}>{data.dates[0].tempMax}</p>
+                  <p>{data.dates[0].tempMax}</p>
                 </AdvancedMarker>
               );
             })}
