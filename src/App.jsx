@@ -4,6 +4,10 @@ import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
 import { coordinateMaker } from "./CoordinateMaker";
 import { fetchWeather, fetchSuburb, fetchCoords } from "./ApiCalls";
 const googleApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+if (!googleApiKey) {
+  throw new Error("Google Maps Api key is missing.");
+}
+
 function App() {
   //user inputs
   const [locationInput, setLocationInput] = useState("");
@@ -102,11 +106,11 @@ function App() {
   async function initialFetch(e) {
     e.preventDefault();
 
+    try {
     inputCoords.current = await fetchCoords(locationInput);
-    console.log(inputCoords.current);
     if (!inputCoords.current) return;
+
     const weatherCoords = coordinateMaker(inputCoords, radiusInput);
-    console.log(weatherCoords);
     const weatherData = await fetchWeather(weatherCoords);
     if (!weatherData) return;
 
@@ -114,11 +118,12 @@ function App() {
     if (!finalData) return;
 
     const parsedData = parseData(finalData);
-    console.log(parsedData);
     getStats(parsedData);
     setMapData(parsedData);
     setMapCoords(inputCoords.current);
-    console.log(parsedData);
+    } catch (error) {
+      console.error("Initial fetch failed:", error);
+    }
   }
 
   return (

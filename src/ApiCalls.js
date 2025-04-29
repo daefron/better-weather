@@ -1,4 +1,8 @@
 const googleApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+if (!googleApiKey){
+  throw new Error("Google Maps Api key is missing.");
+}
+
 function buildWeatherUrl(lat, lng) {
   const url = new URL("https://api.open-meteo.com/v1/forecast");
   url.search = new URLSearchParams({
@@ -32,6 +36,7 @@ export async function fetchWeather(weatherCoords) {
     return data;
   } catch (error) {
     console.error("Failed to fetch weather data:", error);
+    throw error;
   }
 }
 
@@ -70,6 +75,7 @@ export async function fetchSuburb(weatherData) {
     return weatherData;
   } catch (error) {
     console.error("Failed to fetch suburb data:", error);
+    throw error;
   }
 }
 
