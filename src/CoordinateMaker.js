@@ -30,7 +30,7 @@ function destinationPoint(lat, lng, distanceKm, bearingDegrees) {
 }
 
 //creates array of coordinate points in radius around user input
-export function createPoints(inputCoords, radiusInput) {
+export function coordinateMaker(inputCoords, radiusInput) {
   //user inputted location
   const centerLat = inputCoords.current.lat;
   const centerLng = inputCoords.current.lng;
