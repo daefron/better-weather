@@ -95,7 +95,7 @@ function App() {
           flexDirection: "column",
           alignItems: "center",
           backgroundColor: "RGBA(130,145,255,0.5)",
-          justifyContent: "center",
+          justifyContent: changeLayout ? "space-between" : "center",
           transition: "flex-grow 1s ease",
         }}
       >
@@ -111,6 +111,7 @@ function App() {
             boxShadow: changeLayout ? "0px 5px 5px 0px rgba(0,0,0,0.3)" : null,
             transition: "flex-grow 1s ease",
             flexGrow: changeLayout ? 0 : 1,
+            flexShrink: changeLayout ? 1 : 0,
           }}
         >
           <h1 style={{ height: "fit-content" }}>Better Weather</h1>
@@ -144,6 +145,7 @@ function App() {
             boxShadow: changeLayout ? "0px -3px 3px rgba(0,0,0,0.05)" : null,
             transition: "flex-grow 1s ease",
             flexGrow: changeLayout ? 0 : 1,
+            flexShrink: changeLayout ? 1 : 0,
           }}
         >
           {changeLayout ? (
