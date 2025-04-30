@@ -19,7 +19,7 @@ function App() {
   const [renderMap, setRenderMap] = useState(false);
   const [loading, setLoading] = useState(false);
   const [centerPoint, setCenterPoint] = useState();
-  const [activeHour, setActiveHour] = useState(62);
+  const [activeHour, setActiveHour] = useState(12);
   const [currentType, setCurrentType] = useState("temp");
   const inputRef = useRef();
   const radiusKM = useMemo(() => radiusInput / 554, [radiusInput]);
