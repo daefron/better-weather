@@ -1,6 +1,10 @@
 import "./App.css";
 import { useState, useRef, useMemo } from "react";
 import { BarLoader } from "react-spinners";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { coordinateMaker } from "./CoordinateMaker";
 import { fetchWeather, fetchSuburb, fetchCoords } from "./ApiCalls";
 import { parseData } from "./WeatherParser";
@@ -284,25 +288,46 @@ function App() {
           >
             <form
               onSubmit={initialFetch}
-              style={{ width: "100%", display: "flex" }}
+              style={{
+                width: changeLayout ? 0 : "100%",
+                flexGrow: 8,
+                position: "relative",
+              }}
             >
               <input
                 type="text"
                 id="userLocation"
-                style={{ flexGrow: 1, fontSize: 18, padding: 4 }}
+                style={{ width: "100%", fontSize: 18, padding: 4 }}
                 onChange={(e) => {
                   setLocationInput(e.target.value);
                 }}
                 ref={inputRef}
                 placeholder="Search for a location"
               ></input>
+              <FontAwesomeIcon
+                icon={faSearch}
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  pointerEvents: "none",
+                  color: "#888",
+                }}
+              />
             </form>
             {changeLayout ? (
               <>
-                <button style={{ fontSize: 14 }} onClick={tempRainSwitch}>
+                <button
+                  style={{ fontSize: 16, flexGrow: 1 }}
+                  onClick={tempRainSwitch}
+                >
                   Temp/Rain
                 </button>
-                <button style={{ fontSize: 14 }} onClick={editButton}>
+                <button
+                  style={{ fontSize: 16, flexGrow: 1 }}
+                  onClick={editButton}
+                >
                   Settings
                 </button>
               </>
