@@ -10,13 +10,12 @@ export default function GoogleMap({
   mapData,
   renderMap,
   centerPoint,
-  activeDate,
+  activeHour,
   radiusInput,
   radiusRings,
   currentType,
 }) {
   const [activeMarker, setActiveMarker] = useState();
-
   //zooms map to show all found weather points
   const boundDist = radiusInput * radiusRings * 0.7;
   const bounds = {
@@ -63,14 +62,14 @@ export default function GoogleMap({
           switch (currentType) {
             case "temp":
               if (activeMarker === i) {
-                content = `${data.suburb} - ${data.dates[activeDate].tempMax}°`;
+                content = `${data.suburb} - ${data.hours[activeHour].temp}°`;
               } else {
-                content = `${data.dates[activeDate].tempMax}°`;
+                content = `${data.hours[activeHour].temp}°`;
               }
 
               colorRatio =
-                data.dates[activeDate].tempMax /
-                centerPoint.dates[activeDate].tempMax;
+                data.hours[activeHour].temp /
+                centerPoint.hours[activeHour].temp;
               if (colorRatio < 1) {
                 negativeValue = 255;
                 positiveValue = 255 * colorRatio;
@@ -81,14 +80,14 @@ export default function GoogleMap({
               break;
             case "rain":
               if (activeMarker === i) {
-                content = `${data.suburb} - ${data.dates[activeDate].rainChance}%`;
+                content = `${data.suburb} - ${data.hours[activeHour].rainChance}%`;
               } else {
-                content = `${data.dates[activeDate].rainChance}%`;
+                content = `${data.hours[activeHour].rainChance}%`;
               }
 
               colorRatio =
-                data.dates[activeDate].rainChance /
-                centerPoint.dates[activeDate].rainChance;
+                data.hours[activeHour].rainChance /
+                centerPoint.hours[activeHour].rainChance;
 
               //sets to same color if same value
               if (colorRatio === Infinity || isNaN(colorRatio)) {

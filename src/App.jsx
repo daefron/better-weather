@@ -19,13 +19,12 @@ function App() {
   const [renderMap, setRenderMap] = useState(false);
   const [loading, setLoading] = useState(false);
   const [centerPoint, setCenterPoint] = useState();
-  const [activeDate, setActiveDate] = useState(0);
-  const [activeHour, setActiveHour] = useState(12);
+  const [activeHour, setActiveHour] = useState(62);
   const [currentType, setCurrentType] = useState("temp");
 
   let hours = [];
   for (let i = 0; i < 24; i++) {
-    hours.push(i % 12);
+    hours.push((i % 12) + 1);
   }
 
   async function initialFetch(e) {
@@ -56,6 +55,7 @@ function App() {
         lng: inputCoords.current.lng,
         suburb: inputData.address_components[0].long_name,
         dates: parsedData[0].dates,
+        hours: parsedData[0].hours,
       });
       getStats(parsedData);
       setMapData(parsedData);
@@ -126,7 +126,7 @@ function App() {
               mapData={mapData}
               renderMap={renderMap}
               centerPoint={centerPoint}
-              activeDate={activeDate}
+              activeHour={activeHour}
               radiusInput={radiusInput / 554}
               radiusRings={radiusRings}
               currentType={currentType}
@@ -156,7 +156,6 @@ function App() {
               >
                 {hours.map((hour, i) => {
                   const style = {
-                    // padding: 4,
                     flexGrow: 1,
                     height: 18,
                     fontSize: 13,
@@ -167,16 +166,20 @@ function App() {
                   if (i === 23) {
                     style.borderRight = "none";
                   }
-                  if (i === activeHour) {
+                  if (i === Math.ceil(activeHour % 24)) {
                     style.backgroundColor = "RGBA(255,255,255,0.2)";
                   }
                   return (
                     <div
                       key={i + "hour"}
                       style={style}
-                      onClick={() => setActiveHour(i)}
+                      onClick={() => {
+                        const diff = (activeHour % 24) - i;
+                        const final = activeHour - diff;
+                        setActiveHour(final);
+                      }}
                     >
-                      <p style={{ height: "100%" }}>{hour + 1}</p>
+                      <p style={{ height: "100%" }}>{hour}</p>
                     </div>
                   );
                 })}
@@ -193,9 +196,9 @@ function App() {
                     <WeatherDate
                       key={"weatherDate" + i}
                       date={date}
-                      index={i}
-                      activeDate={activeDate}
-                      setActiveDate={setActiveDate}
+                      index={i + 1}
+                      activeHour={activeHour}
+                      setActiveHour={setActiveHour}
                       currentType={currentType}
                     />
                   );

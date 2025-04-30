@@ -1,8 +1,8 @@
 export default function WeatherDate({
   date,
   index,
-  activeDate,
-  setActiveDate,
+  activeHour,
+  setActiveHour,
   currentType,
 }) {
   const options = { weekday: "short" };
@@ -19,25 +19,32 @@ export default function WeatherDate({
     fontSize: 13,
     borderRight: "2px solid RGBA(0,0,0,0.1)",
   };
-  if (index === 6) {
+  if (index === 7) {
     style.borderRight = "none";
   }
-  if (index === activeDate) {
+  if (index === Math.ceil((activeHour + 1) / 24)) {
     style.backgroundColor = "RGBA(255,255,255,0.2)";
   }
 
   let content;
   switch (currentType) {
     case "temp":
-      content = `${date.tempMax}°C`
+      content = `${date.tempMax}°C`;
       break;
     case "rain":
-      content = `${date.rainChance}%`
+      content = `${date.rainChance}%`;
       break;
   }
 
   return (
-    <div style={style} onClick={() => setActiveDate(index)}>
+    <div
+      style={style}
+      onClick={() => {
+        const diff = 24 - (activeHour % 24);
+        const final = index * 24 - diff;
+        setActiveHour(final);
+      }}
+    >
       <p>{content}</p>
       <p>{renderDate}</p>
     </div>
