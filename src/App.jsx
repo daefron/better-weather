@@ -21,6 +21,7 @@ function App() {
   const [centerPoint, setCenterPoint] = useState();
   const [activeHour, setActiveHour] = useState(62);
   const [currentType, setCurrentType] = useState("temp");
+  const inputRef = useRef();
 
   let hours = [];
   for (let i = 0; i < 24; i++) {
@@ -35,6 +36,7 @@ function App() {
     try {
       const inputData = await fetchCoords(locationInput);
       if (!inputData) return;
+      inputRef.current.value = inputData.address_components[0].long_name;
       inputCoords.current = inputData.geometry.location;
 
       const weatherCoords = coordinateMaker(
@@ -44,12 +46,10 @@ function App() {
       );
       const weatherData = await fetchWeather(weatherCoords);
       if (!weatherData) return;
-
       const finalData = await fetchSuburb(weatherData);
       if (!finalData) return;
 
       const parsedData = parseData(finalData);
-      console.log(parsedData);
       setCenterPoint({
         lat: inputCoords.current.lat,
         lng: inputCoords.current.lng,
@@ -70,6 +70,7 @@ function App() {
   }
 
   function editButton() {
+    setChangeLayout(false);
     setRenderMap(false);
   }
 
@@ -204,84 +205,78 @@ function App() {
                   );
                 })}
               </div>
+            </>
+          ) : null}
+          <form
+            onSubmit={initialFetch}
+            style={{
+              display: "flex",
+              flexDirection: changeLayout ? "row" : "column",
+              marginInline: changeLayout ? 0 : 15,
+              marginBlock: changeLayout ? 0 : 10,
+            }}
+          >
+            <input
+              type="text"
+              id="userLocation"
+              style={{ flexGrow: 1, fontSize: 18, padding: 4 }}
+              onChange={(e) => {
+                setLocationInput(e.target.value);
+              }}
+              ref={inputRef}
+              placeholder="Search for a location"
+            ></input>
+            {changeLayout ? (
+              <>
+                <button onClick={tempRainSwitch}>Switch</button>
+                <button onClick={editButton}>Edit</button>
+              </>
+            ) : loading ? (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: 10,
+                }}
+              >
+                <BarLoader width="80%" height={5} />
+              </div>
+            ) : null}
+          </form>
+          {changeLayout ? null : !loading ? (
+            <div
+              id="inputs"
+              style={{
+                width: "auto",
+                marginBlock: 10,
+                marginInline: 15,
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
               <div
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
                   gap: 10,
-                  padding: 10,
-                  borderBottom: "2px solid RGBA(0,0,0,0.1)",
                 }}
               >
-                <p style={{ flexGrow: 0 }}>
-                  {centerPoint.suburb} - {`${radiusInput} km`}
-                </p>
-                <button onClick={tempRainSwitch}>Switch</button>
-                <button onClick={editButton}>Edit</button>
+                <label htmlFor="searchRadius">
+                  Search radius: {`${radiusInput}km`}
+                </label>
+                <input
+                  type="range"
+                  id="searchRadius"
+                  style={{ flexGrow: 1 }}
+                  min="25"
+                  max="200"
+                  step="1"
+                  value={radiusInput}
+                  onChange={(e) => setRadiusInput(e.target.value)}
+                ></input>
               </div>
-            </>
-          ) : (
-            <>
-              <div
-                id="inputs"
-                style={{
-                  width: "auto",
-                  padding: 10,
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                {loading ? (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      marginTop: 10,
-                    }}
-                  >
-                    <BarLoader width="80%" height={5} />
-                  </div>
-                ) : (
-                  <>
-                    <form
-                      onSubmit={initialFetch}
-                      style={{ display: "flex", marginBottom: 15 }}
-                    >
-                      <input
-                        type="text"
-                        id="userLocation"
-                        style={{ flexGrow: 1, fontSize: 18, padding: 4 }}
-                        onChange={(e) => setLocationInput(e.target.value)}
-                        defaultValue={locationInput}
-                        placeholder="Search for a location"
-                      ></input>
-                    </form>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        gap: 10,
-                      }}
-                    >
-                      <label htmlFor="searchRadius">
-                        Search radius: {`${radiusInput}km`}
-                      </label>
-                      <input
-                        type="range"
-                        id="searchRadius"
-                        style={{ flexGrow: 1 }}
-                        min="25"
-                        max="200"
-                        step="1"
-                        value={radiusInput}
-                        onChange={(e) => setRadiusInput(e.target.value)}
-                      ></input>
-                    </div>
-                  </>
-                )}
-              </div>
-            </>
-          )}
+            </div>
+          ) : null}
         </footer>
       </div>
     </>
