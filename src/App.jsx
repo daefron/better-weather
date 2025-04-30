@@ -161,10 +161,12 @@ function App() {
               >
                 {hours.map((hour, i) => {
                   const style = {
+                    height: 30,
                     flexGrow: 1,
-                    height: 18,
-                    fontSize: 13,
-                    textAlign: "center",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontSize: 20,
                     borderRight: "1px solid RGBA(0,0,0,0.1)",
                     userSelect: "none",
                   };
@@ -184,7 +186,7 @@ function App() {
                         setActiveHour(final);
                       }}
                     >
-                      <p style={{ height: "100%" }}>{hour}</p>
+                      <p>{hour}</p>
                     </div>
                   );
                 })}
