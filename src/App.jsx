@@ -64,7 +64,7 @@ function App() {
       setChangeLayout(true);
       setTimeout(() => {
         setRenderMap(true);
-      }, 1000);
+      }, 500);
     } catch (error) {
       console.error("Initial fetch failed:", error);
     }
