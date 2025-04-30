@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { BarLoader } from "react-spinners";
 import { coordinateMaker } from "./CoordinateMaker";
 import { fetchWeather, fetchSuburb, fetchCoords } from "./ApiCalls";
@@ -22,6 +22,7 @@ function App() {
   const [activeHour, setActiveHour] = useState(62);
   const [currentType, setCurrentType] = useState("temp");
   const inputRef = useRef();
+  const radiusKM = useMemo(() => radiusInput / 554, [radiusInput]);
 
   let hours = [];
   for (let i = 0; i < 24; i++) {
@@ -42,7 +43,7 @@ function App() {
 
       const weatherCoords = coordinateMaker(
         inputCoords,
-        radiusInput / 554,
+        radiusKM,
         radiusRings
       );
       const weatherData = await fetchWeather(weatherCoords);
@@ -75,7 +76,8 @@ function App() {
     setRenderMap(false);
   }
 
-  function tempRainSwitch() {
+  function tempRainSwitch(e) {
+    e.preventDefault();
     switch (currentType) {
       case "temp":
         setCurrentType("rain");
@@ -129,7 +131,7 @@ function App() {
               renderMap={renderMap}
               centerPoint={centerPoint}
               activeHour={activeHour}
-              radiusInput={radiusInput / 554}
+              radiusInput={radiusKM}
               radiusRings={radiusRings}
               currentType={currentType}
             />
@@ -230,8 +232,8 @@ function App() {
             ></input>
             {changeLayout ? (
               <>
-                <button onClick={tempRainSwitch}>Switch</button>
-                <button onClick={editButton}>Edit</button>
+                <button onClick={tempRainSwitch}>Temp/Rain</button>
+                <button onClick={editButton}>Settings</button>
               </>
             ) : loading ? (
               <div
@@ -241,7 +243,7 @@ function App() {
                   marginTop: 15,
                 }}
               >
-                <BarLoader width="80%" height={5} color="#dcfff9"/>
+                <BarLoader width="80%" height={5} color="#dcfff9" />
               </div>
             ) : null}
           </form>
