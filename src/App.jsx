@@ -224,8 +224,7 @@ function App() {
               </div>
             </>
           ) : null}
-          <form
-            onSubmit={initialFetch}
+          <div
             style={{
               display: "flex",
               flexDirection: changeLayout ? "row" : "column",
@@ -233,16 +232,18 @@ function App() {
               marginBlock: changeLayout ? 0 : 10,
             }}
           >
-            <input
-              type="text"
-              id="userLocation"
-              style={{ flexGrow: 1, fontSize: 18, padding: 4 }}
-              onChange={(e) => {
-                setLocationInput(e.target.value);
-              }}
-              ref={inputRef}
-              placeholder="Search for a location"
-            ></input>
+            <form onSubmit={initialFetch} style={{width:"100%",display:"flex"}}>
+              <input
+                type="text"
+                id="userLocation"
+                style={{ flexGrow: 1, fontSize: 18, padding: 4 }}
+                onChange={(e) => {
+                  setLocationInput(e.target.value);
+                }}
+                ref={inputRef}
+                placeholder="Search for a location"
+              ></input>
+            </form>
             {changeLayout ? (
               <>
                 <button onClick={tempRainSwitch}>Temp/Rain</button>
@@ -259,7 +260,7 @@ function App() {
                 <BarLoader width="80%" height={5} color="#dcfff9" />
               </div>
             ) : null}
-          </form>
+          </div>
           {changeLayout ? null : !loading ? (
             <div
               id="inputs"
