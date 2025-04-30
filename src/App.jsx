@@ -1,5 +1,6 @@
 import "./App.css";
 import { useState, useRef } from "react";
+import { BarLoader } from "react-spinners";
 import { coordinateMaker } from "./CoordinateMaker";
 import { fetchWeather, fetchSuburb, fetchCoords } from "./ApiCalls";
 import { parseData } from "./WeatherParser";
@@ -224,9 +225,13 @@ function App() {
               >
                 {loading ? (
                   <div
-                    style={{ width: "auto", padding: 0, textAlign: "center" }}
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: 10,
+                    }}
                   >
-                    <h2>Loading</h2>
+                    <BarLoader width="80%" height={5} />
                   </div>
                 ) : (
                   <>

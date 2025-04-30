@@ -8,6 +8,7 @@ if (!googleApiKey) {
 
 export default function GoogleMap({
   mapData,
+  renderMap,
   centerPoint,
   activeDate,
   radiusInput,
