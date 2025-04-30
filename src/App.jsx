@@ -37,6 +37,7 @@ function App() {
       const inputData = await fetchCoords(locationInput);
       if (!inputData) return;
       inputRef.current.value = inputData.address_components[0].long_name;
+      inputRef.current.blur();
       inputCoords.current = inputData.geometry.location;
 
       const weatherCoords = coordinateMaker(
