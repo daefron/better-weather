@@ -136,13 +136,12 @@ function App() {
                 justifyContent: "space-between",
                 gap: 10,
                 boxSizing: "border-box",
-                border: "1px outset RGBA(0,0,0,1)",
                 paddingInline: 10,
+                fontSize: 16,
               }}
             >
-              <div style={{ flexGrow: 1 }}>
-                {centerPoint.suburb} -{" "}
-                {new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(
+              <p style={{ flexGrow: 1 }}>
+                {new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(
                   new Date(centerPoint.dates[Math.floor(activeHour / 24)].date)
                 )}{" "}
                 {new Intl.DateTimeFormat("en-AU", {
@@ -155,12 +154,10 @@ function App() {
                 {activeHour % 12 !== 11
                   ? ((activeHour + 1) % 12) + " " + AMPM
                   : 12 + (AMPM === "AM" ? "PM" : "AM")}
-              </div>
-              <div></div>
-              <div>{centerPoint.hours[activeHour].temp}°C</div>
-              <div>
-                {centerPoint.hours[activeHour].rainChance}% chance of rain
-              </div>
+              </p>
+              <p>{centerPoint.hours[activeHour].temp}°C</p>
+              <p>{centerPoint.hours[activeHour].rainChance}% rain</p>
+              <p>{centerPoint.hours[activeHour].windMax}km/h</p>
             </div>
           ) : null}
         </header>
@@ -297,8 +294,12 @@ function App() {
             </form>
             {changeLayout ? (
               <>
-                <button onClick={tempRainSwitch}>Temp/Rain</button>
-                <button onClick={editButton}>Settings</button>
+                <button style={{ fontSize: 14 }} onClick={tempRainSwitch}>
+                  Temp/Rain
+                </button>
+                <button style={{ fontSize: 14 }} onClick={editButton}>
+                  Settings
+                </button>
               </>
             ) : loading ? (
               <div
