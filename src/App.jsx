@@ -15,12 +15,14 @@ function App() {
   const radiusRings = Math.round(radiusInput / 10);
   const inputCoords = useRef("");
   const [mapData, setMapData] = useState([]);
+  const [changeLayout, setChangeLayout] = useState(false);
   const [renderMap, setRenderMap] = useState(false);
   const [loading, setLoading] = useState(false);
   const [centerPoint, setCenterPoint] = useState();
   const [activeDate, setActiveDate] = useState(0);
   const [activeHour, setActiveHour] = useState(12);
   const [currentType, setCurrentType] = useState("temp");
+
   let hours = [];
   for (let i = 0; i < 24; i++) {
     hours.push(i % 12);
@@ -58,7 +60,10 @@ function App() {
       getStats(parsedData);
       setMapData(parsedData);
       setLoading(false);
-      setRenderMap(true);
+      setChangeLayout(true);
+      setTimeout(() => {
+        setRenderMap(true);
+      }, 1000);
     } catch (error) {
       console.error("Initial fetch failed:", error);
     }
@@ -96,15 +101,15 @@ function App() {
         <header
           style={{
             width: "100%",
-            height: renderMap ? "auto" : 200,
-            paddingBlock: renderMap ? 10 : 0,
+            height: changeLayout ? "auto" : 200,
+            paddingBlock: changeLayout ? 10 : 0,
             display: "flex",
             justifyContent: "center",
             alignItems: "flex-end",
             zIndex: 50,
-            boxShadow: renderMap ? "0px 5px 5px 0px rgba(0,0,0,0.3)" : null,
+            boxShadow: changeLayout ? "0px 5px 5px 0px rgba(0,0,0,0.3)" : null,
             transition: "all 1s ease",
-            flexGrow: renderMap ? 0 : 1,
+            flexGrow: changeLayout ? 0 : 1,
           }}
         >
           <h1 style={{ height: "fit-content" }}>Better Weather</h1>
@@ -112,7 +117,7 @@ function App() {
         <main
           style={{
             backgroundColor: "rgba(132,215,235,1)",
-            flexGrow: renderMap ? 1 : 0,
+            flexGrow: changeLayout ? 1 : 0,
             transition: "all 1s ease",
           }}
         >
@@ -131,16 +136,16 @@ function App() {
         <footer
           style={{
             width: "100%",
-            height: renderMap ? "auto" : 200,
+            height: changeLayout ? "auto" : 200,
             display: "flex",
             flexDirection: "column",
             zIndex: 50,
-            boxShadow: renderMap ? "0px -3px 3px rgba(0,0,0,0.1)" : null,
+            boxShadow: changeLayout ? "0px -3px 3px rgba(0,0,0,0.05)" : null,
             transition: "all 1s ease",
-            flexGrow: renderMap ? 0 : 1,
+            flexGrow: changeLayout ? 0 : 1,
           }}
         >
-          {renderMap ? (
+          {changeLayout ? (
             <>
               <div
                 style={{
