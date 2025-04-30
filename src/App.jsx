@@ -88,42 +88,59 @@ function App() {
           flexDirection: "column",
           alignItems: "center",
           backgroundColor: "RGBA(130,145,255,0.5)",
+          justifyContent: "center",
+          transition: "all 1s ease",
         }}
       >
         <header
           style={{
             width: "100%",
+            height: renderMap ? "auto" : 200,
+            paddingBlock: renderMap ? 10 : 0,
             display: "flex",
             justifyContent: "center",
-            padding: 10,
+            alignItems: "flex-end",
             zIndex: 50,
-            boxShadow: renderMap ? "0px 1px 5px rgba(0,0,0,0.3)" : null,
+            boxShadow: renderMap ? "0px 5px 5px 0px rgba(0,0,0,0.3)" : null,
+            transition: "all 1s ease",
+            flexGrow: renderMap ? 0 : 1,
           }}
         >
-          <h2>Better Weather</h2>
+          <h1 style={{ height: "fit-content" }}>Better Weather</h1>
         </header>
-        {renderMap ? (
-          <>
-            <main style={{ flexGrow: 1 }}>
-              <Map
-                mapData={mapData}
-                renderMap={renderMap}
-                centerPoint={centerPoint}
-                activeDate={activeDate}
-                radiusInput={radiusInput}
-                radiusRings={radiusRings}
-                currentType={currentType}
-              />
-            </main>
-            <footer
-              style={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                zIndex: 50,
-                boxShadow: renderMap ? "0px 1px 3px rgba(0,0,0,0.3)" : null,
-              }}
-            >
+        <main
+          style={{
+            backgroundColor: "rgba(132,215,235,1)",
+            flexGrow: renderMap ? 1 : 0,
+            transition: "all 1s ease",
+          }}
+        >
+          {renderMap ? (
+            <Map
+              mapData={mapData}
+              renderMap={renderMap}
+              centerPoint={centerPoint}
+              activeDate={activeDate}
+              radiusInput={radiusInput / 554}
+              radiusRings={radiusRings}
+              currentType={currentType}
+            />
+          ) : null}
+        </main>
+        <footer
+          style={{
+            width: "100%",
+            height: renderMap ? "auto" : 200,
+            display: "flex",
+            flexDirection: "column",
+            zIndex: 50,
+            boxShadow: renderMap ? "0px -3px 3px rgba(0,0,0,0.1)" : null,
+            transition: "all 1s ease",
+            flexGrow: renderMap ? 0 : 1,
+          }}
+        >
+          {renderMap ? (
+            <>
               <div
                 style={{
                   display: "flex",
@@ -193,50 +210,66 @@ function App() {
                 <button onClick={tempRainSwitch}>Switch</button>
                 <button onClick={editButton}>Edit</button>
               </div>
-            </footer>
-          </>
-        ) : (
-          <main>
-            {loading ? <div>loading</div> : null}
-            <form
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                width: "min(100vw, 500px)",
-              }}
-              onSubmit={initialFetch}
-            >
-              <label htmlFor="userLocation">Enter a location: </label>
-              <input
-                type="text"
-                id="userLocation"
-                onChange={(e) => setLocationInput(e.target.value)}
-                defaultValue={locationInput}
-              ></input>
-            </form>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                width: "min(100vw, 500px)",
-              }}
-            >
-              <label htmlFor="searchRadius">
+            </>
+          ) : (
+            <>
+              <div
+                id="inputs"
+                style={{
+                  width: "auto",
+                  padding: 10,
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                {loading ? (
+                  <div
+                    style={{ width: "auto", padding: 0, textAlign: "center" }}
+                  >
+                    <h2>Loading</h2>
+                  </div>
+                ) : (
+                  <>
+                    <form
+                      onSubmit={initialFetch}
+                      style={{ display: "flex", marginBottom: 15 }}
+                    >
+                      <input
+                        type="text"
+                        id="userLocation"
+                        style={{ flexGrow: 1, fontSize: 18, padding: 4 }}
+                        onChange={(e) => setLocationInput(e.target.value)}
+                        defaultValue={locationInput}
+                        placeholder="Search for a location"
+                      ></input>
+                    </form>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        gap: 10,
+                      }}
+                    >
+                      <label htmlFor="searchRadius">
                         Search radius: {`${radiusInput}km`}
-              </label>
-              <input
-                type="range"
-                id="searchRadius"
+                      </label>
+                      <input
+                        type="range"
+                        id="searchRadius"
                         style={{ flexGrow: 1 }}
                         min="25"
                         max="200"
                         step="1"
-                value={radiusInput}
-                onChange={(e) => setRadiusInput(e.target.value)}
-              ></input>
-            </div>
-          </main>
-        )}
+                        value={radiusInput}
+                        onChange={(e) => setRadiusInput(e.target.value)}
+                      ></input>
+                    </div>
+                  </>
+                )}
+              </div>
+            </>
+          )}
+        </footer>
       </div>
     </>
   );
