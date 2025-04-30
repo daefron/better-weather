@@ -238,10 +238,10 @@ function App() {
                 style={{
                   display: "flex",
                   justifyContent: "center",
-                  marginTop: 10,
+                  marginTop: 15,
                 }}
               >
-                <BarLoader width="80%" height={5} />
+                <BarLoader width="80%" height={5} color="#dcfff9"/>
               </div>
             ) : null}
           </form>
