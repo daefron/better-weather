@@ -3,8 +3,6 @@ import { useState, useRef, useMemo } from "react";
 import { BarLoader } from "react-spinners";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { coordinateMaker } from "./CoordinateMaker";
 import { fetchWeather, fetchSuburb, fetchCoords } from "./ApiCalls";
 import { parseData } from "./WeatherParser";
@@ -23,12 +21,13 @@ function App() {
   const [renderMap, setRenderMap] = useState(false);
   const [loading, setLoading] = useState(false);
   const [centerPoint, setCenterPoint] = useState();
-  const [activeHour, setActiveHour] = useState(11);
+  const [activeHour, setActiveHour] = useState(8);
   const [currentType, setCurrentType] = useState("temp");
   const inputRef = useRef();
   const radiusKM = useMemo(() => radiusInput / 554, [radiusInput]);
   const [AMPM, setAMPM] = useState("AM");
   const [errorMessage, setErrorMessage] = useState();
+  const [listMap, setListMap] = useState("Map");
   let hours = [];
   for (let i = 0; i < 24; i++) {
     hours.push((i % 12) + 1);
@@ -114,9 +113,8 @@ function App() {
             width: "100%",
             height: changeLayout ? "auto" : 200,
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-end",
-            alignItems: "center",
+            alignItems: "flex-end",
+            justifyContent: "center",
             zIndex: 50,
             boxShadow: changeLayout ? "0px 5px 5px 0px rgba(0,0,0,0.3)" : null,
             transition: "flex-grow 1s ease",
@@ -128,10 +126,24 @@ function App() {
             style={{
               height: "fit-content",
               paddingBlock: changeLayout ? 10 : 0,
+              textAlign: "center",
+              flexGrow: 1,
             }}
           >
             Better Weather
           </h1>
+          {renderMap ? (
+            <button
+              style={{
+                height: changeLayout ? "100%" : 0,
+                flexGrow: 1,
+                fontSize: 20,
+                fontWeight: "bold",
+              }}
+            >
+              {listMap}
+            </button>
+          ) : null}
         </header>
         <main
           style={{
@@ -174,7 +186,7 @@ function App() {
                   gap: 10,
                   boxSizing: "border-box",
                   paddingInline: 10,
-                  paddingBlock:5,
+                  paddingBlock: 5,
                   fontSize: 16,
                 }}
               >
