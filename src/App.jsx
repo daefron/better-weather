@@ -96,7 +96,7 @@ function App() {
           alignItems: "center",
           backgroundColor: "RGBA(130,145,255,0.5)",
           justifyContent: "center",
-          transition: "all 1s ease",
+          transition: "flex-grow 1s ease",
         }}
       >
         <header
@@ -109,7 +109,7 @@ function App() {
             alignItems: "flex-end",
             zIndex: 50,
             boxShadow: changeLayout ? "0px 5px 5px 0px rgba(0,0,0,0.3)" : null,
-            transition: "all 1s ease",
+            transition: "flex-grow 1s ease",
             flexGrow: changeLayout ? 0 : 1,
           }}
         >
@@ -119,7 +119,7 @@ function App() {
           style={{
             backgroundColor: "rgba(132,215,235,1)",
             flexGrow: changeLayout ? 1 : 0,
-            transition: "all 1s ease",
+            transition: "flex-grow 1s ease",
           }}
         >
           {renderMap ? (
@@ -142,7 +142,7 @@ function App() {
             flexDirection: "column",
             zIndex: 50,
             boxShadow: changeLayout ? "0px -3px 3px rgba(0,0,0,0.05)" : null,
-            transition: "all 1s ease",
+            transition: "flex-grow 1s ease",
             flexGrow: changeLayout ? 0 : 1,
           }}
         >
