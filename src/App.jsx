@@ -153,7 +153,8 @@ function App() {
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  borderBottom: "2px solid RGBA(0,0,0,0.1)",
+                  boxSizing: "border-box",
+                  border: "1px outset RGBA(0,0,0,1)",
                 }}
               >
                 {hours.map((hour, i) => {
@@ -167,12 +168,9 @@ function App() {
                     justifyContent: "center",
                     alignItems: "center",
                     fontSize: 20,
-                    borderRight: "1px solid RGBA(0,0,0,0.1)",
+                    border: "1px outset RGBA(0,0,0,1)",
                     userSelect: "none",
                   };
-                  if (i === 23) {
-                    style.borderRight = "none";
-                  }
                   if (i === Math.ceil(activeHour % 24)) {
                     style.backgroundColor = "RGBA(255,255,255,0.2)";
                   }
@@ -191,11 +189,12 @@ function App() {
                   );
                 })}
                 <button
+                  style={{ fontSize: 20 }}
                   onClick={() => {
                     if (AMPM === "AM") {
-                      setActiveHour((activeHour + 12));
+                      setActiveHour(activeHour + 12);
                     } else {
-                      setActiveHour((activeHour - 12));
+                      setActiveHour(activeHour - 12);
                     }
                     setAMPM(AMPM === "AM" ? "PM" : "AM");
                   }}
@@ -207,7 +206,7 @@ function App() {
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  borderBottom: "2px solid RGBA(0,0,0,0.1)",
+                  border: "1px outset RGBA(0,0,0,1)",
                 }}
               >
                 {mapData[0].dates.map((date, i) => {

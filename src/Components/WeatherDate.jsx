@@ -15,13 +15,10 @@ export default function WeatherDate({
     alignItems: "center",
     gap: 5,
     flexGrow: 1,
-    padding: 5,
-    fontSize: 13,
-    borderRight: "2px solid RGBA(0,0,0,0.1)",
+    paddingBlock: 5,
+    fontSize: 15,
+    border: "1px outset RGBA(0,0,0,1)",
   };
-  if (index === 7) {
-    style.borderRight = "none";
-  }
   if (index === Math.ceil((activeHour + 1) / 24)) {
     style.backgroundColor = "RGBA(255,255,255,0.2)";
   }
