@@ -19,12 +19,12 @@ function App() {
   const [renderMap, setRenderMap] = useState(false);
   const [loading, setLoading] = useState(false);
   const [centerPoint, setCenterPoint] = useState();
-  const [activeHour, setActiveHour] = useState(12);
+  const [activeHour, setActiveHour] = useState(11);
   const [currentType, setCurrentType] = useState("temp");
   const inputRef = useRef();
   const radiusKM = useMemo(() => radiusInput / 554, [radiusInput]);
   const [AMPM, setAMPM] = useState("AM");
-
+  const [errorMessage, setErrorMessage] = useState();
   let hours = [];
   for (let i = 0; i < 24; i++) {
     hours.push((i % 12) + 1);
@@ -36,19 +36,22 @@ function App() {
     setRenderMap(false);
 
     try {
+      const fetchError = new Error("No results found for this location.");
       const inputData = await fetchCoords(locationInput);
-      if (!inputData) return;
+      if (!inputData) throw fetchError;
       inputRef.current.value = inputData.address_components[0].long_name;
       inputRef.current.blur();
       inputCoords.current = inputData.geometry.location;
 
       const weatherCoords = coordinateMaker(inputCoords, radiusKM, radiusRings);
       const weatherData = await fetchWeather(weatherCoords);
-      if (!weatherData) return;
+      if (!weatherData) throw fetchError;
       const finalData = await fetchSuburb(weatherData);
-      if (!finalData) return;
+      if (!finalData) throw fetchError;
 
       const parsedData = parseData(finalData);
+      if (!parsedData[0]) throw fetchError;
+
       setCenterPoint({
         lat: inputCoords.current.lat,
         lng: inputCoords.current.lng,
@@ -58,6 +61,7 @@ function App() {
       });
       getStats(parsedData);
       setMapData(parsedData);
+      setErrorMessage("");
       setLoading(false);
       setChangeLayout(true);
       setTimeout(() => {
@@ -65,6 +69,8 @@ function App() {
       }, 500);
     } catch (error) {
       console.error("Initial fetch failed:", error);
+      setErrorMessage(error.message);
+      setLoading(false);
     }
   }
 
@@ -161,6 +167,7 @@ function App() {
                   if ((AMPM === "AM" && i > 11) || (AMPM === "PM" && i < 12)) {
                     return;
                   }
+                  console.log(i, activeHour);
                   const style = {
                     height: 30,
                     flexGrow: 1,
@@ -232,7 +239,10 @@ function App() {
               marginBlock: changeLayout ? 0 : 10,
             }}
           >
-            <form onSubmit={initialFetch} style={{width:"100%",display:"flex"}}>
+            <form
+              onSubmit={initialFetch}
+              style={{ width: "100%", display: "flex" }}
+            >
               <input
                 type="text"
                 id="userLocation"
@@ -259,6 +269,18 @@ function App() {
               >
                 <BarLoader width="80%" height={5} color="#dcfff9" />
               </div>
+            ) : errorMessage ? (
+              <p
+                style={{
+                  textAlign: "center",
+                  textDecoration: "underline",
+                  fontWeight: "bold",
+                  marginBottom: -10,
+                  marginTop: 10,
+                }}
+              >
+                {errorMessage}
+              </p>
             ) : null}
           </div>
           {changeLayout ? null : !loading ? (
@@ -272,7 +294,7 @@ function App() {
                 flexDirection: "column",
               }}
             >
-              <div
+              <form
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
@@ -292,7 +314,7 @@ function App() {
                   value={radiusInput}
                   onChange={(e) => setRadiusInput(e.target.value)}
                 ></input>
-              </div>
+              </form>
             </div>
           ) : null}
         </footer>
