@@ -10,8 +10,8 @@ import WeatherDate from "./Components/WeatherDate";
 function App() {
   //user inputs
   const [locationInput, setLocationInput] = useState("");
-  const [radiusInput, setRadiusInput] = useState(0.13); //coordinate distance between circles, 1 == 111km
-  const radiusRings = 5;
+  const [radiusInput, setRadiusInput] = useState(50); //coordinate distance between circles in km
+  const radiusRings = Math.round(radiusInput / 10);
   const inputCoords = useRef("");
   const [mapData, setMapData] = useState([]);
   const [renderMap, setRenderMap] = useState(false);
@@ -37,7 +37,7 @@ function App() {
 
       const weatherCoords = coordinateMaker(
         inputCoords,
-        radiusInput,
+        radiusInput / 554,
         radiusRings
       );
       const weatherData = await fetchWeather(weatherCoords);
@@ -188,8 +188,7 @@ function App() {
                 }}
               >
                 <p style={{ flexGrow: 0 }}>
-                  {centerPoint.suburb} -{" "}
-                  {`${Math.round((radiusInput * 1111) / 2)} km`}
+                  {centerPoint.suburb} - {`${radiusInput} km`}
                 </p>
                 <button onClick={tempRainSwitch}>Switch</button>
                 <button onClick={editButton}>Edit</button>
@@ -223,14 +222,15 @@ function App() {
               }}
             >
               <label htmlFor="searchRadius">
-                Search radius: {`${Math.round((radiusInput * 1111) / 2)} km`}
+                        Search radius: {`${radiusInput}km`}
               </label>
               <input
                 type="range"
                 id="searchRadius"
-                min="0.05"
-                max="0.3"
-                step="0.01"
+                        style={{ flexGrow: 1 }}
+                        min="25"
+                        max="200"
+                        step="1"
                 value={radiusInput}
                 onChange={(e) => setRadiusInput(e.target.value)}
               ></input>
