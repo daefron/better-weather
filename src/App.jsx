@@ -109,10 +109,10 @@ function App() {
           style={{
             width: "100%",
             height: changeLayout ? "auto" : 200,
-            paddingBlock: changeLayout ? 10 : 0,
             display: "flex",
-            justifyContent: "center",
-            alignItems: "flex-end",
+            flexDirection: "column",
+            justifyContent: "flex-end",
+            alignItems: "center",
             zIndex: 50,
             boxShadow: changeLayout ? "0px 5px 5px 0px rgba(0,0,0,0.3)" : null,
             transition: "flex-grow 1s ease",
@@ -120,7 +120,49 @@ function App() {
             flexShrink: changeLayout ? 1 : 0,
           }}
         >
-          <h1 style={{ height: "fit-content" }}>Better Weather</h1>
+          <h1
+            style={{
+              height: "fit-content",
+              paddingBlock: changeLayout ? 10 : 0,
+            }}
+          >
+            Better Weather
+          </h1>
+          {changeLayout ? (
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+                gap: 10,
+                boxSizing: "border-box",
+                border: "1px outset RGBA(0,0,0,1)",
+                paddingInline: 10,
+              }}
+            >
+              <div style={{ flexGrow: 1 }}>
+                {centerPoint.suburb} -{" "}
+                {new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(
+                  new Date(centerPoint.dates[Math.floor(activeHour / 24)].date)
+                )}{" "}
+                {new Intl.DateTimeFormat("en-AU", {
+                  day: "numeric",
+                  month: "numeric",
+                }).format(
+                  new Date(centerPoint.dates[Math.floor(activeHour / 24)].date)
+                )}{" "}
+                -{" "}
+                {activeHour % 12 !== 11
+                  ? ((activeHour + 1) % 12) + " " + AMPM
+                  : 12 + (AMPM === "AM" ? "PM" : "AM")}
+              </div>
+              <div></div>
+              <div>{centerPoint.hours[activeHour].temp}°C</div>
+              <div>
+                {centerPoint.hours[activeHour].rainChance}% chance of rain
+              </div>
+            </div>
+          ) : null}
         </header>
         <main
           style={{
@@ -167,7 +209,6 @@ function App() {
                   if ((AMPM === "AM" && i > 11) || (AMPM === "PM" && i < 12)) {
                     return;
                   }
-                  console.log(i, activeHour);
                   const style = {
                     height: 30,
                     flexGrow: 1,
