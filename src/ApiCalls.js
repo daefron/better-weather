@@ -45,7 +45,7 @@ function buildSuburbUrl(lat, lng) {
   const url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
   url.search = new URLSearchParams({
     latlng: lat + "," + lng,
-    result_type: "locality",
+    result_type: "locality|postal_code|political",
     key: googleApiKey,
   }).toString();
   return url.toString();

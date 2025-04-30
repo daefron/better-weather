@@ -31,6 +31,5 @@ class Location {
 
 export function parseData(weatherData) {
   return weatherData
-    .filter((dataPoint) => dataPoint.suburb) //removes locations in water
     .map((dataPoint) => new Location(dataPoint));
 }
