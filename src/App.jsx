@@ -23,6 +23,7 @@ function App() {
   const [currentType, setCurrentType] = useState("temp");
   const inputRef = useRef();
   const radiusKM = useMemo(() => radiusInput / 554, [radiusInput]);
+  const [AMPM, setAMPM] = useState("AM");
 
   let hours = [];
   for (let i = 0; i < 24; i++) {
@@ -41,11 +42,7 @@ function App() {
       inputRef.current.blur();
       inputCoords.current = inputData.geometry.location;
 
-      const weatherCoords = coordinateMaker(
-        inputCoords,
-        radiusKM,
-        radiusRings
-      );
+      const weatherCoords = coordinateMaker(inputCoords, radiusKM, radiusRings);
       const weatherData = await fetchWeather(weatherCoords);
       if (!weatherData) return;
       const finalData = await fetchSuburb(weatherData);
@@ -160,6 +157,9 @@ function App() {
                 }}
               >
                 {hours.map((hour, i) => {
+                  if ((AMPM === "AM" && i > 11) || (AMPM === "PM" && i < 12)) {
+                    return;
+                  }
                   const style = {
                     height: 30,
                     flexGrow: 1,
@@ -190,6 +190,18 @@ function App() {
                     </div>
                   );
                 })}
+                <button
+                  onClick={() => {
+                    if (AMPM === "AM") {
+                      setActiveHour((activeHour + 12));
+                    } else {
+                      setActiveHour((activeHour - 12));
+                    }
+                    setAMPM(AMPM === "AM" ? "PM" : "AM");
+                  }}
+                >
+                  {AMPM}
+                </button>
               </div>
               <div
                 style={{
