@@ -95,7 +95,7 @@ function App() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          backgroundColor: "RGBA(130,145,255,0.5)",
+          backgroundColor: "RGBA(31,53,42,1)",
           justifyContent: changeLayout ? "space-between" : "center",
           transition: "flex-grow 1s ease",
         }}
@@ -119,7 +119,6 @@ function App() {
         </header>
         <main
           style={{
-            backgroundColor: "rgba(132,215,235,1)",
             flexGrow: changeLayout ? 1 : 0,
             transition: "flex-grow 1s ease",
           }}

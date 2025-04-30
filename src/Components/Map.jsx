@@ -32,6 +32,7 @@ export default function GoogleMap({
           width: "min(100vw, 500px)",
           flexGrow: 1,
         }}
+        colorScheme="DARK"
         defaultCenter={{ lat: centerPoint.lat, lng: centerPoint.lng }}
         defaultBounds={bounds}
         onClick={() => setActiveMarker()}
@@ -57,6 +58,7 @@ export default function GoogleMap({
             borderRadius: 4,
             padding: 3,
             fontSize: 13,
+            color:"black",
           };
           let content, positiveValue, negativeValue, colorRatio;
           switch (currentType) {

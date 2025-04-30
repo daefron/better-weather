@@ -5,4 +5,18 @@
 * {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
+  color: rgba(220, 255, 249, 1);
+}
+input,
+button {
+  background-color: rgb(41, 70, 55);
+  color: rgba(220, 255, 249, 1);
+  border-color: rgba(220, 255, 249, 1);
+}
+input::placeholder {
+  color: rgba(220, 255, 249, 0.8);
+}
+input:focus{
+  outline: none;
+  background-color: rgb(52, 105, 79);
 }
