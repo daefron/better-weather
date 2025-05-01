@@ -49,7 +49,7 @@ export default function NavHours({
         );
       })}
       <button
-        style={{ fontSize: 20 }}
+        style={{ flexGrow: 1, fontSize: 20 }}
         onClick={() => {
           if (amPm === "AM") {
             setSelectedHour(selectedHour + 12);

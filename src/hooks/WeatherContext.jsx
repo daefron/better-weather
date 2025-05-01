@@ -12,12 +12,12 @@ export function WeatherProvider({ children }) {
   const [selectedHour, setSelectedHour] = useState(8); //user-selected hour
   const [viewType, setViewType] = useState("temp"); //toggles between temp/rain
   const [amPm, setAmPm] = useState("AM"); //toggles between AM/PM
-  const [listMap, setListMap] = useState("Map"); //toggles list over map
 
   const normalizedRadius = useMemo(() => radiusKMInput / 554, [radiusKMInput]); //changes user input into value for math
   const ringCount = Math.round(radiusKMInput / 10); //amount of rings for coordinate search
 
   const [showMap, setShowMap] = useState(false); //shows/hides the map
+  const [showList, setShowList] = useState(false); //shows/hides the list
   const [loading, setLoading] = useState(false); //shows/hides while loading
   const [changeLayout, setChangeLayout] = useState(false); //changes layout
 
@@ -109,8 +109,8 @@ export function WeatherProvider({ children }) {
         normalizedRadius,
         amPm,
         setAmPm,
-        listMap,
-        setListMap,
+        showList,
+        setShowList,
       }}
     >
       {children}

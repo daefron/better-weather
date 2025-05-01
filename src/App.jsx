@@ -2,15 +2,24 @@ import "./App.css";
 
 import { useWeatherState } from "./hooks/WeatherContext";
 
-import Map from "./components/Map";
+import Map from "./components/Map/Map";
 import NavBar from "./components/NavBar/NavBar";
 import SearchBar from "./components/SearchBar/SearchBar";
 import Settings from "./components/Settings/Settings";
+import List from "./components/List/List";
 
 function App() {
-  const { loading, showMap, changeLayout, listMap } = useWeatherState();
+  const { loading, showMap, changeLayout, showList } = useWeatherState();
   return (
-    <>
+    <div style={{ width: "100%", display: "flex" }}>
+      <div
+        style={{
+          height: "100%",
+          flexGrow: 1,
+          backgroundColor: "black",
+          zIndex: 100,
+        }}
+      />
       <div
         style={{
           width: "min(100vw, 500px)",
@@ -32,6 +41,8 @@ function App() {
             justifyContent: "center",
             zIndex: 50,
             boxShadow: changeLayout ? "0px 5px 5px 0px rgba(0,0,0,0.3)" : null,
+            border: changeLayout ? "1px outset black" : null,
+            boxSizing: "border-box",
             transition: "flex-grow 1s ease",
             flexGrow: changeLayout ? 0 : 1,
             flexShrink: changeLayout ? 1 : 0,
@@ -47,26 +58,20 @@ function App() {
           >
             Better Weather
           </h1>
-          {showMap ? (
-            <button
-              style={{
-                height: changeLayout ? "100%" : 0,
-                flexGrow: 1,
-                fontSize: 20,
-                fontWeight: "bold",
-              }}
-            >
-              {listMap}
-            </button>
-          ) : null}
         </header>
         <main
           style={{
             flexGrow: changeLayout ? 1 : 0,
             transition: "flex-grow 1s ease",
+            display: "flex",
           }}
         >
-          {showMap ? <Map /> : null}
+          {showMap ? (
+            <>
+              <Map />
+              <List />
+            </>
+          ) : null}
         </main>
         <footer
           style={{
@@ -86,7 +91,15 @@ function App() {
           {changeLayout ? null : !loading ? <Settings /> : null}
         </footer>
       </div>
-    </>
+      <div
+        style={{
+          height: "100%",
+          flexGrow: 1,
+          backgroundColor: "black",
+          zIndex: 100,
+        }}
+      />
+    </div>
   );
 }
 

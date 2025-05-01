@@ -6,6 +6,7 @@ export default function NavStats({ centerPoint, selectedHour, amPm }) {
         display: "flex",
         justifyContent: "space-between",
         gap: 10,
+        border:"outset 1px black",
         boxSizing: "border-box",
         paddingInline: 10,
         paddingBlock: 5,

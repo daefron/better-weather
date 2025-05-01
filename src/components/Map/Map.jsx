@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
-import { useWeatherState } from "../hooks/WeatherContext";
+import { useWeatherState } from "../../hooks/WeatherContext";
 
 const googleApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 if (!googleApiKey) {
