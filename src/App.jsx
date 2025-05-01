@@ -8,7 +8,7 @@ import { fetchWeather, fetchSuburb, fetchCoords } from "./ApiCalls";
 import { parseData } from "./WeatherParser";
 import { getStats } from "./DataProcessing";
 import Map from "./Components/Map";
-import WeatherDate from "./Components/WeatherDate";
+import NavDate from "./Components/NavDate";
 
 function App() {
   //user inputs
@@ -35,7 +35,7 @@ function App() {
 
   async function userSubmit(e) {
     e.preventDefault();
-    
+
     //prevents multiple requests
     if (loading) {
       return;
@@ -286,8 +286,8 @@ function App() {
               >
                 {mapData[0].dates.map((date, i) => {
                   return (
-                    <WeatherDate
-                      key={"weatherDate" + i}
+                    <NavDate
+                      key={"NavDate" + i}
                       date={date}
                       index={i + 1}
                       activeHour={activeHour}

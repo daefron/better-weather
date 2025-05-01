@@ -1,4 +1,4 @@
-export default function WeatherDate({
+export default function NavDate({
   date,
   index,
   activeHour,
