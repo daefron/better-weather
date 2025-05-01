@@ -7,26 +7,27 @@ import { getStats } from "../DataProcessing";
 const WeatherContext = createContext();
 
 export function WeatherProvider({ children }) {
-  const [locationInput, setLocationInput] = useState("");
-  const [radiusInput, setRadiusInput] = useState(50); //coordinate distance between circles in km
-  const inputCoords = useRef(""); //parsed coordinates from locationInput
-  const [renderMap, setRenderMap] = useState(false); //shows/hides the map
+  const [locationInput, setLocationInput] = useState(""); //user-typed location
+  const [radiusKMInput, setRadiusKMInput] = useState(50); //coordinate distance between circles in km
+  const [selectedHour, setSelectedHour] = useState(8); //user-selected hour
+  const [viewType, setViewType] = useState("temp"); //toggles between temp/rain
+  const [amPm, setAmPm] = useState("AM"); //toggles between AM/PM
+  const [listMap, setListMap] = useState("Map"); //toggles list over map
 
-  const radiusRings = Math.round(radiusInput / 10);
+  const normalizedRadius = useMemo(() => radiusKMInput / 554, [radiusKMInput]); //changes user input into value for math
+  const ringCount = Math.round(radiusKMInput / 10); //amount of rings for coordinate search
 
-  const [mapData, setMapData] = useState([]);
-
+  const [showMap, setShowMap] = useState(false); //shows/hides the map
   const [loading, setLoading] = useState(false); //shows/hides while loading
-  const [centerPoint, setCenterPoint] = useState(); //parsed data from locationInput
-  const [activeHour, setActiveHour] = useState(8); //user-selected hour
-  const [currentType, setCurrentType] = useState("temp"); //temp/rain
-  const inputRef = useRef(); //locationInput element ref
-  const radiusKM = useMemo(() => radiusInput / 554, [radiusInput]); //changes user input into value for math
-  const [errorMessage, setErrorMessage] = useState();
-  const [changeLayout, setChangeLayout] = useState(false); //true shows after loading
+  const [changeLayout, setChangeLayout] = useState(false); //changes layout
 
-  const [AMPM, setAMPM] = useState("AM");
-  const [listMap, setListMap] = useState("Map");
+  const inputCoordsRef = useRef(""); //parsed coordinates from locationInput
+  const [mapData, setMapData] = useState([]); //parsed data to be shown on map
+  const [centerPoint, setCenterPoint] = useState(); //parsed data from locationInput
+
+  const inputRef = useRef(); //locationInput element ref
+
+  const [errorMessage, setErrorMessage] = useState(); //error message to display
 
   async function userSubmit(e) {
     e.preventDefault();
@@ -35,7 +36,7 @@ export function WeatherProvider({ children }) {
     if (loading) return;
 
     setLoading(true);
-    setRenderMap(false);
+    setShowMap(false);
 
     try {
       const fetchError = new Error("No results found for this location.");
@@ -45,9 +46,13 @@ export function WeatherProvider({ children }) {
       inputRef.current.blur();
       inputRef.current.disabled = true;
 
-      inputCoords.current = inputData.geometry.location;
+      inputCoordsRef.current = inputData.geometry.location;
 
-      const weatherCoords = coordinateMaker(inputCoords, radiusKM, radiusRings);
+      const weatherCoords = coordinateMaker(
+        inputCoordsRef,
+        normalizedRadius,
+        ringCount
+      );
       const weatherData = await fetchWeather(weatherCoords);
       if (!weatherData) throw fetchError;
       const finalData = await fetchSuburb(weatherData);
@@ -57,8 +62,8 @@ export function WeatherProvider({ children }) {
       if (!parsedData[0]) throw fetchError;
 
       setCenterPoint({
-        lat: inputCoords.current.lat,
-        lng: inputCoords.current.lng,
+        lat: inputCoordsRef.current.lat,
+        lng: inputCoordsRef.current.lng,
         suburb: inputData.address_components[0].long_name,
         dates: parsedData[0].dates,
         hours: parsedData[0].hours,
@@ -70,7 +75,7 @@ export function WeatherProvider({ children }) {
       setLoading(false);
       setChangeLayout(true);
       setTimeout(() => {
-        setRenderMap(true);
+        setShowMap(true);
         inputRef.current.disabled = false;
       }, 500);
     } catch (error) {
@@ -84,26 +89,26 @@ export function WeatherProvider({ children }) {
     <WeatherContext.Provider
       value={{
         setLocationInput,
-        radiusInput,
-        setRadiusInput,
-        radiusRings,
+        radiusKMInput,
+        setRadiusKMInput,
+        ringCount,
         mapData,
         centerPoint,
         loading,
         errorMessage,
-        activeHour,
-        setActiveHour,
-        currentType,
-        setCurrentType,
+        selectedHour,
+        setSelectedHour,
+        viewType,
+        setViewType,
         inputRef,
         userSubmit,
-        renderMap,
-        setRenderMap,
+        showMap,
+        setShowMap,
         changeLayout,
         setChangeLayout,
-        radiusKM,
-        AMPM,
-        setAMPM,
+        normalizedRadius,
+        amPm,
+        setAmPm,
         listMap,
         setListMap,
       }}
