@@ -97,9 +97,9 @@ export default function List() {
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          padding: 10,
           boxSizing: "border-box",
-          gap: 5,
+          justifyContent: "space-between",
+          backgroundColor: "rgba(0,0,0,0.13)",
         }}
       >
         {sortedData.map((place, i) => {
@@ -110,13 +110,20 @@ export default function List() {
             <div
               key={"suburbList" + i}
               style={{
+                border: "solid 4px rgba(0,0,0,0.13)",
+                borderInline: " solid 10px rgba(0,0,0,0.13)",
+                paddingInline: 5,
+                paddingBlock: 1,
                 display: "flex",
                 justifyContent: "space-between",
                 fontSize: 18,
                 fontWeight: place.chosenLocation ? "bold" : "normal",
-                textDecoration: place.index === selectedLocation ? "underline" : "none",
+                textDecoration:
+                  place.index === selectedLocation ? "underline" : "none",
                 gap: 10,
-                cursor:"pointer"
+                cursor: "pointer",
+                boxSizing: "border-box",
+                backgroundColor: "rgb(31, 53, 42)",
               }}
               onClick={() => setSelectedLocation(place.index)}
             >
