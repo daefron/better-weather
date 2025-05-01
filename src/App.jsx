@@ -64,6 +64,7 @@ function App() {
             flexGrow: changeLayout ? 1 : 0,
             transition: "flex-grow 1s ease",
             display: "flex",
+            maxHeight:"90vh"
           }}
         >
           {showMap ? (

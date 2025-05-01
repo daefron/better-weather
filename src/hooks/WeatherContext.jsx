@@ -77,7 +77,7 @@ export function WeatherProvider({ children }) {
       setTimeout(() => {
         setShowMap(true);
         inputRef.current.disabled = false;
-      }, 500);
+      }, 1000);
     } catch (error) {
       console.error("Initial fetch failed:", error);
       setErrorMessage(error.message);

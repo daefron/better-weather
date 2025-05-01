@@ -81,7 +81,7 @@ export default function GoogleMap() {
                 negativeValue = 255 * (2 - colorRatio) * 0.8;
               }
               break;
-            case "rain":
+            case "rainChance":
               if (activeMarker === i) {
                 content = `${data.suburb} - ${data.hours[selectedHour].rainChance}%`;
               } else {

@@ -7,22 +7,50 @@ import {
 import { useWeatherState } from "../../hooks/WeatherContext";
 
 export default function List() {
-  const { showList, setShowList, mapData, selectedHour, viewType } =
-    useWeatherState();
+  const {
+    showList,
+    setShowList,
+    mapData,
+    selectedHour,
+    viewType,
+    centerPoint,
+  } = useWeatherState();
 
   const sortedData = [...mapData]
-    .map((place) => ({
-      suburb: place.suburb,
-      temp: place.hours[selectedHour].temp,
-      rain: place.hours[selectedHour].rainChance,
-    }))
+    .map((place, i) => {
+      if (!i) {
+        return {
+          suburb: place.suburb,
+          temp: place.hours[selectedHour].temp,
+          rainChance: place.hours[selectedHour].rainChance,
+          chosenLocation: true,
+        };
+      }
+      return {
+        suburb: place.suburb,
+        temp: place.hours[selectedHour].temp,
+        rainChance: place.hours[selectedHour].rainChance,
+      };
+    })
     .sort((a, b) => b[viewType] - a[viewType]);
 
-    return (
+  let symbol;
+  switch (viewType) {
+    case "temp":
+      symbol = "°C";
+      break;
+    case "rainChance":
+      symbol = "%";
+      break;
+  }
+
+  return (
     <div
       style={{
         display: "flex",
+        alignSelf: "center",
         height: "calc(100% - 2px)",
+        maxHeight: "max(70vh, 500px)",
         position: "relative",
         width: "min(90vw, 450px)",
         marginRight: "max(-90vw, -452px)",
@@ -31,6 +59,7 @@ export default function List() {
         flexGrow: 1,
         backgroundColor: "rgba(31,53,42,1)",
         border: "outset 2px black",
+        borderRight: "none",
         zIndex: 50,
       }}
     >
@@ -59,29 +88,47 @@ export default function List() {
       <div
         id="suburbList"
         style={{
+          overflowY: "scroll",
           height: "100%",
           width: "100%",
           display: "flex",
           flexDirection: "column",
           padding: 10,
+          boxSizing: "border-box",
+          gap: 5,
         }}
       >
-        <p>{viewType}</p>
+        {/* <p>{viewType}</p> */}
         {sortedData.map((place, i) => {
-          let symbol;
-          switch (viewType) {
-            case "temp":
-              symbol = "°C";
-              break;
-            case "rainChance":
-              symbol = "%";
-              break;
-          }
+          console.log(centerPoint);
+          const diffToChosen = (
+            place[viewType] - centerPoint.hours[selectedHour][viewType]
+          ).toFixed(1);
           return (
-            <div key={"suburbList" + i} style={{ display: "flex" }}>
+            <div
+              key={"suburbList" + i}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontSize: 18,
+                fontWeight: place.chosenLocation ? "bold" : "normal",
+                gap: 10,
+              }}
+            >
+              <p style={{ flexGrow: 1 }}>
+                {i + 1}.{" "}
+                {place.chosenLocation ? centerPoint.suburb : place.suburb}
+              </p>
               <p>
-                {i + 1}. {place.suburb} {place[viewType]}
+                {place[viewType]}
                 {symbol}
+              </p>
+              <p>
+                {!place.chosenLocation
+                  ? diffToChosen >= 0
+                    ? `+${diffToChosen}`
+                    : diffToChosen
+                  : diffToChosen}
               </p>
             </div>
           );

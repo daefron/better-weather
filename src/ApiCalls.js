@@ -45,7 +45,7 @@ function buildSuburbUrl(lat, lng) {
   const url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
   url.search = new URLSearchParams({
     latlng: lat + "," + lng,
-    result_type: "locality|postal_code|political",
+    result_type: "locality",
     key: googleApiKey,
   }).toString();
   return url.toString();
@@ -69,7 +69,7 @@ export async function fetchSuburb(weatherData) {
     );
     weatherData.forEach((point, i) => {
       if (data[i].results[0]) {
-        point.suburb = data[i].results[0].formatted_address;
+        point.suburb = data[i].results[0].address_components[0].long_name;
       }
     });
     console.log("Suburb data fetched successfully.");
