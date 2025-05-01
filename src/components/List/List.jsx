@@ -57,7 +57,7 @@ export default function List() {
         maxHeight: "max(70vh, 500px)",
         position: "relative",
         width: "min(90vw, 450px)",
-        marginRight: "max(-90vw, -452px)",
+        marginRight: "max(calc(-90vw - 2px), -452px)",
         right: showList ? "min(90vw, 450px)" : 0,
         transition: "right 1s ease",
         flexGrow: 1,
