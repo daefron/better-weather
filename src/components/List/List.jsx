@@ -14,6 +14,8 @@ export default function List() {
     selectedHour,
     viewType,
     centerPoint,
+    selectedLocation,
+    setSelectedLocation,
   } = useWeatherState();
 
   const sortedData = [...mapData]
@@ -24,12 +26,14 @@ export default function List() {
           temp: place.hours[selectedHour].temp,
           rainChance: place.hours[selectedHour].rainChance,
           chosenLocation: true,
+          index: i,
         };
       }
       return {
         suburb: place.suburb,
         temp: place.hours[selectedHour].temp,
         rainChance: place.hours[selectedHour].rainChance,
+        index: i,
       };
     })
     .sort((a, b) => b[viewType] - a[viewType]);
@@ -99,7 +103,6 @@ export default function List() {
         }}
       >
         {sortedData.map((place, i) => {
-          console.log(centerPoint);
           const diffToChosen = (
             place[viewType] - centerPoint.hours[selectedHour][viewType]
           ).toFixed(1);
@@ -111,8 +114,11 @@ export default function List() {
                 justifyContent: "space-between",
                 fontSize: 18,
                 fontWeight: place.chosenLocation ? "bold" : "normal",
+                textDecoration: place.index === selectedLocation ? "underline" : "none",
                 gap: 10,
+                cursor:"pointer"
               }}
+              onClick={() => setSelectedLocation(place.index)}
             >
               <p style={{ flexGrow: 1 }}>
                 {i + 1}.{" "}

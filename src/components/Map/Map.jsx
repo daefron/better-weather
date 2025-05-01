@@ -15,8 +15,9 @@ export default function GoogleMap() {
     normalizedRadius,
     ringCount,
     viewType,
+    selectedLocation,
+    setSelectedLocation,
   } = useWeatherState();
-  const [activeMarker, setActiveMarker] = useState();
   //zooms map to show all found weather points
   const boundDist = normalizedRadius * ringCount * 0.7;
   const bounds = {
@@ -36,7 +37,7 @@ export default function GoogleMap() {
         colorScheme="DARK"
         defaultCenter={{ lat: centerPoint.lat, lng: centerPoint.lng }}
         defaultBounds={bounds}
-        onClick={() => setActiveMarker()}
+        onClick={() => setSelectedLocation()}
         disableDefaultUI
       >
         <AdvancedMarker
@@ -64,7 +65,7 @@ export default function GoogleMap() {
           let content, positiveValue, negativeValue, colorRatio;
           switch (viewType) {
             case "temp":
-              if (activeMarker === i) {
+              if (selectedLocation === i) {
                 content = `${data.suburb} - ${data.hours[selectedHour].temp}°`;
               } else {
                 content = `${data.hours[selectedHour].temp}°`;
@@ -82,7 +83,7 @@ export default function GoogleMap() {
               }
               break;
             case "rainChance":
-              if (activeMarker === i) {
+              if (selectedLocation === i) {
                 content = `${data.suburb} - ${data.hours[selectedHour].rainChance}%`;
               } else {
                 content = `${data.hours[selectedHour].rainChance}%`;
@@ -109,7 +110,7 @@ export default function GoogleMap() {
           }
           style.backgroundColor = `RGBA(${negativeValue}, ${positiveValue}, 0, 1)`;
           let zIndex = 1;
-          if (activeMarker === i) {
+          if (selectedLocation === i) {
             style.textDecoration = "underline";
             zIndex = 20;
           } else {
@@ -121,7 +122,7 @@ export default function GoogleMap() {
               key={i + "markerKey"}
               position={{ lat: data.latitude, lng: data.longitude }}
               zIndex={zIndex}
-              onClick={() => setActiveMarker(i)}
+              onClick={() => setSelectedLocation(i)}
             >
               <p style={style}>{content}</p>
             </AdvancedMarker>

@@ -12,6 +12,7 @@ export function WeatherProvider({ children }) {
   const [selectedHour, setSelectedHour] = useState(8); //user-selected hour
   const [viewType, setViewType] = useState("temp"); //toggles between temp/rain
   const [amPm, setAmPm] = useState("AM"); //toggles between AM/PM
+  const [selectedLocation, setSelectedLocation] = useState();
 
   const normalizedRadius = useMemo(() => radiusKMInput / 554, [radiusKMInput]); //changes user input into value for math
   const ringCount = Math.round(radiusKMInput / 10); //amount of rings for coordinate search
@@ -33,7 +34,7 @@ export function WeatherProvider({ children }) {
     e.preventDefault();
 
     //prevents multiple requests
-    if (loading) return;
+    if (loading || !locationInput) return;
 
     setLoading(true);
     setShowMap(false);
@@ -112,6 +113,8 @@ export function WeatherProvider({ children }) {
         setAmPm,
         showList,
         setShowList,
+        selectedLocation,
+        setSelectedLocation,
       }}
     >
       {children}
