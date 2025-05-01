@@ -8,7 +8,7 @@ import { fetchWeather, fetchSuburb, fetchCoords } from "./ApiCalls";
 import { parseData } from "./WeatherParser";
 import { getStats } from "./DataProcessing";
 import Map from "./Components/Map";
-import NavDate from "./Components/NavDate";
+import NavBar from "./Components/NavBar/NavBar";
 
 function App() {
   //user inputs
@@ -28,10 +28,6 @@ function App() {
   const [AMPM, setAMPM] = useState("AM");
   const [errorMessage, setErrorMessage] = useState();
   const [listMap, setListMap] = useState("Map");
-  let hours = [];
-  for (let i = 0; i < 24; i++) {
-    hours.push((i % 12) + 1);
-  }
 
   async function userSubmit(e) {
     e.preventDefault();
@@ -186,118 +182,15 @@ function App() {
           }}
         >
           {changeLayout ? (
-            <>
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  gap: 10,
-                  boxSizing: "border-box",
-                  paddingInline: 10,
-                  paddingBlock: 5,
-                  fontSize: 16,
-                }}
-              >
-                <p style={{ flexGrow: 1 }}>
-                  {new Intl.DateTimeFormat("en-US", {
-                    weekday: "short",
-                  }).format(
-                    new Date(
-                      centerPoint.dates[Math.floor(activeHour / 24)].date
-                    )
-                  )}{" "}
-                  {new Intl.DateTimeFormat("en-AU", {
-                    day: "numeric",
-                    month: "numeric",
-                  }).format(
-                    new Date(
-                      centerPoint.dates[Math.floor(activeHour / 24)].date
-                    )
-                  )}{" "}
-                  -{" "}
-                  {activeHour % 12 !== 11
-                    ? ((activeHour + 1) % 12) + " " + AMPM
-                    : 12 + (AMPM === "AM" ? "PM" : "AM")}
-                </p>
-                <p>{centerPoint.hours[activeHour].temp}°C</p>
-                <p>{centerPoint.hours[activeHour].rainChance}% rain</p>
-                <p>{centerPoint.hours[activeHour].windMax}km/h</p>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  boxSizing: "border-box",
-                  border: "1px outset RGBA(0,0,0,1)",
-                }}
-              >
-                {hours.map((hour, i) => {
-                  if ((AMPM === "AM" && i > 11) || (AMPM === "PM" && i < 12)) {
-                    return;
-                  }
-                  const style = {
-                    height: 30,
-                    flexGrow: 1,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    fontSize: 20,
-                    border: "1px outset RGBA(0,0,0,1)",
-                    userSelect: "none",
-                  };
-                  if (i === Math.ceil(activeHour % 24)) {
-                    style.backgroundColor = "RGBA(255,255,255,0.2)";
-                  }
-                  return (
-                    <div
-                      key={i + "hour"}
-                      style={style}
-                      onClick={() => {
-                        const diff = (activeHour % 24) - i;
-                        const final = activeHour - diff;
-                        setActiveHour(final);
-                      }}
-                    >
-                      <p>{hour}</p>
-                    </div>
-                  );
-                })}
-                <button
-                  style={{ fontSize: 20 }}
-                  onClick={() => {
-                    if (AMPM === "AM") {
-                      setActiveHour(activeHour + 12);
-                    } else {
-                      setActiveHour(activeHour - 12);
-                    }
-                    setAMPM(AMPM === "AM" ? "PM" : "AM");
-                  }}
-                >
-                  {AMPM}
-                </button>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  border: "1px outset RGBA(0,0,0,1)",
-                }}
-              >
-                {mapData[0].dates.map((date, i) => {
-                  return (
-                    <NavDate
-                      key={"NavDate" + i}
-                      date={date}
-                      index={i + 1}
-                      activeHour={activeHour}
-                      setActiveHour={setActiveHour}
-                      currentType={currentType}
-                    />
-                  );
-                })}
-              </div>
-            </>
+            <NavBar
+              centerPoint={centerPoint}
+              activeHour={activeHour}
+              setActiveHour={setActiveHour}
+              AMPM={AMPM}
+              setAMPM={setAMPM}
+              mapData={mapData}
+              currentType={currentType}
+            />
           ) : null}
           <div
             style={{
