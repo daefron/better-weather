@@ -5,27 +5,27 @@ import { useWeatherState } from "../../hooks/WeatherContext";
 export default function NavBar() {
   const {
     centerPoint,
-    activeHour,
-    setActiveHour,
-    AMPM,
-    setAMPM,
+    selectedHour,
+    setSelectedHour,
+    amPm,
+    setAmPm,
     mapData,
-    currentType,
+    viewType,
   } = useWeatherState();
   return (
     <div id="navBar">
-      <NavStats centerPoint={centerPoint} activeHour={activeHour} AMPM={AMPM} />
+      <NavStats centerPoint={centerPoint} selectedHour={selectedHour} amPm={amPm} />
       <NavHours
-        AMPM={AMPM}
-        setAMPM={setAMPM}
-        activeHour={activeHour}
-        setActiveHour={setActiveHour}
+        amPm={amPm}
+        setAmPm={setAmPm}
+        selectedHour={selectedHour}
+        setSelectedHour={setSelectedHour}
       />
       <NavDates
         mapData={mapData}
-        currentType={currentType}
-        activeHour={activeHour}
-        setActiveHour={setActiveHour}
+        viewType={viewType}
+        selectedHour={selectedHour}
+        setSelectedHour={setSelectedHour}
       />
     </div>
   );

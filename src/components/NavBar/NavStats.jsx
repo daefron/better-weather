@@ -1,4 +1,4 @@
-export default function NavStats({ centerPoint, activeHour, AMPM }) {
+export default function NavStats({ centerPoint, selectedHour, amPm }) {
   return (
     <div
       style={{
@@ -16,22 +16,22 @@ export default function NavStats({ centerPoint, activeHour, AMPM }) {
         {new Intl.DateTimeFormat("en-US", {
           weekday: "short",
         }).format(
-          new Date(centerPoint.dates[Math.floor(activeHour / 24)].date)
+          new Date(centerPoint.dates[Math.floor(selectedHour / 24)].date)
         )}{" "}
         {new Intl.DateTimeFormat("en-AU", {
           day: "numeric",
           month: "numeric",
         }).format(
-          new Date(centerPoint.dates[Math.floor(activeHour / 24)].date)
+          new Date(centerPoint.dates[Math.floor(selectedHour / 24)].date)
         )}{" "}
         -{" "}
-        {activeHour % 12 !== 11
-          ? ((activeHour + 1) % 12) + " " + AMPM
-          : 12 + (AMPM === "AM" ? "PM" : "AM")}
+        {selectedHour % 12 !== 11
+          ? ((selectedHour + 1) % 12) + " " + amPm
+          : 12 + (amPm === "AM" ? "PM" : "AM")}
       </p>
-      <p>{centerPoint.hours[activeHour].temp}°C</p>
-      <p>{centerPoint.hours[activeHour].rainChance}% rain</p>
-      <p>{centerPoint.hours[activeHour].windMax}km/h</p>
+      <p>{centerPoint.hours[selectedHour].temp}°C</p>
+      <p>{centerPoint.hours[selectedHour].rainChance}% rain</p>
+      <p>{centerPoint.hours[selectedHour].windMax}km/h</p>
     </div>
   );
 }

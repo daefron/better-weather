@@ -1,8 +1,8 @@
 export default function NavDates({
   mapData,
-  currentType,
-  activeHour,
-  setActiveHour,
+  viewType,
+  selectedHour,
+  setSelectedHour,
 }) {
   return (
     <div
@@ -13,7 +13,7 @@ export default function NavDates({
       }}
     >
       {mapData[0].dates.map((date, index) => {
-        index+= 1
+        index += 1;
         const options = { weekday: "short" };
         const renderDate = new Intl.DateTimeFormat("en-US", options).format(
           new Date(date.date)
@@ -28,12 +28,12 @@ export default function NavDates({
           fontSize: 15,
           border: "1px outset RGBA(0,0,0,1)",
         };
-        if (index === Math.ceil((activeHour + 1) / 24)) {
+        if (index === Math.ceil((selectedHour + 1) / 24)) {
           style.backgroundColor = "RGBA(255,255,255,0.2)";
         }
 
         let content;
-        switch (currentType) {
+        switch (viewType) {
           case "temp":
             content = `${date.tempMax}°C`;
             break;
@@ -47,9 +47,9 @@ export default function NavDates({
             key={"navDate" + index}
             style={style}
             onClick={() => {
-              const diff = 24 - (activeHour % 24);
+              const diff = 24 - (selectedHour % 24);
               const final = index * 24 - diff;
-              setActiveHour(final);
+              setSelectedHour(final);
             }}
           >
             <p>{content}</p>

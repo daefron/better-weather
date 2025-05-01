@@ -8,7 +8,7 @@ import SearchBar from "./components/SearchBar/SearchBar";
 import Settings from "./components/Settings/Settings";
 
 function App() {
-  const { loading, renderMap, changeLayout, listMap } = useWeatherState();
+  const { loading, showMap, changeLayout, listMap } = useWeatherState();
   return (
     <>
       <div
@@ -47,7 +47,7 @@ function App() {
           >
             Better Weather
           </h1>
-          {renderMap ? (
+          {showMap ? (
             <button
               style={{
                 height: changeLayout ? "100%" : 0,
@@ -66,7 +66,7 @@ function App() {
             transition: "flex-grow 1s ease",
           }}
         >
-          {renderMap ? <Map /> : null}
+          {showMap ? <Map /> : null}
         </main>
         <footer
           style={{

@@ -1,6 +1,6 @@
 import { useWeatherState } from "../../hooks/WeatherContext";
 export default function Settings() {
-  const { radiusInput, setRadiusInput } = useWeatherState();
+  const { radiusKMInput, setRadiusKMInput } = useWeatherState();
   return (
     <div
       id="inputs"
@@ -20,7 +20,7 @@ export default function Settings() {
         }}
       >
         <label htmlFor="searchRadius">
-          Search radius: {`${radiusInput}km`}
+          Search radius: {`${radiusKMInput}km`}
         </label>
         <input
           type="range"
@@ -29,8 +29,8 @@ export default function Settings() {
           min="25"
           max="200"
           step="1"
-          value={radiusInput}
-          onChange={(e) => setRadiusInput(e.target.value)}
+          value={radiusKMInput}
+          onChange={(e) => setRadiusKMInput(e.target.value)}
         ></input>
       </form>
     </div>

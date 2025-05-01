@@ -11,18 +11,19 @@ export default function SearchBar() {
     errorMessage,
     loading,
     inputRef,
-    currentType,
-    setCurrentType,
+    viewType,
+    setViewType,
+    setShowMap,
   } = useWeatherState();
 
   function tempRainSwitch(e) {
     e.preventDefault();
-    switch (currentType) {
+    switch (viewType) {
       case "temp":
-        setCurrentType("rain");
+        setViewType("rain");
         break;
       case "rain":
-        setCurrentType("temp");
+        setViewType("temp");
         break;
     }
   }
@@ -77,7 +78,7 @@ export default function SearchBar() {
             style={{ fontSize: 16, flexGrow: 1 }}
             onClick={() => {
               setChangeLayout(false);
-              setRenderMap(false);
+              setShowMap(false);
             }}
           >
             Settings

@@ -11,14 +11,14 @@ export default function GoogleMap() {
   const {
     mapData,
     centerPoint,
-    activeHour,
-    radiusKM,
-    radiusRings,
-    currentType,
+    selectedHour,
+    normalizedRadius,
+    ringCount,
+    viewType,
   } = useWeatherState();
   const [activeMarker, setActiveMarker] = useState();
   //zooms map to show all found weather points
-  const boundDist = radiusKM * radiusRings * 0.7;
+  const boundDist = normalizedRadius * ringCount * 0.7;
   const bounds = {
     east: centerPoint.lng + boundDist,
     north: centerPoint.lat + boundDist,
@@ -62,17 +62,17 @@ export default function GoogleMap() {
             color: "black",
           };
           let content, positiveValue, negativeValue, colorRatio;
-          switch (currentType) {
+          switch (viewType) {
             case "temp":
               if (activeMarker === i) {
-                content = `${data.suburb} - ${data.hours[activeHour].temp}°`;
+                content = `${data.suburb} - ${data.hours[selectedHour].temp}°`;
               } else {
-                content = `${data.hours[activeHour].temp}°`;
+                content = `${data.hours[selectedHour].temp}°`;
               }
 
               colorRatio =
-                data.hours[activeHour].temp /
-                centerPoint.hours[activeHour].temp;
+                data.hours[selectedHour].temp /
+                centerPoint.hours[selectedHour].temp;
               if (colorRatio < 1) {
                 negativeValue = 255;
                 positiveValue = 255 * colorRatio;
@@ -83,14 +83,14 @@ export default function GoogleMap() {
               break;
             case "rain":
               if (activeMarker === i) {
-                content = `${data.suburb} - ${data.hours[activeHour].rainChance}%`;
+                content = `${data.suburb} - ${data.hours[selectedHour].rainChance}%`;
               } else {
-                content = `${data.hours[activeHour].rainChance}%`;
+                content = `${data.hours[selectedHour].rainChance}%`;
               }
 
               colorRatio =
-                data.hours[activeHour].rainChance /
-                centerPoint.hours[activeHour].rainChance;
+                data.hours[selectedHour].rainChance /
+                centerPoint.hours[selectedHour].rainChance;
 
               //sets to same color if same value
               if (colorRatio === Infinity || isNaN(colorRatio)) {

@@ -1,4 +1,9 @@
-export default function NavHours({ AMPM, setAMPM, activeHour, setActiveHour }) {
+export default function NavHours({
+  amPm,
+  setAmPm,
+  selectedHour,
+  setSelectedHour,
+}) {
   let hours = [];
   for (let i = 0; i < 24; i++) {
     hours.push((i % 12) + 1);
@@ -13,7 +18,7 @@ export default function NavHours({ AMPM, setAMPM, activeHour, setActiveHour }) {
       }}
     >
       {hours.map((hour, i) => {
-        if ((AMPM === "AM" && i > 11) || (AMPM === "PM" && i < 12)) {
+        if ((amPm === "AM" && i > 11) || (amPm === "PM" && i < 12)) {
           return;
         }
         const style = {
@@ -26,7 +31,7 @@ export default function NavHours({ AMPM, setAMPM, activeHour, setActiveHour }) {
           border: "1px outset RGBA(0,0,0,1)",
           userSelect: "none",
         };
-        if (i === Math.ceil(activeHour % 24)) {
+        if (i === Math.ceil(selectedHour % 24)) {
           style.backgroundColor = "RGBA(255,255,255,0.2)";
         }
         return (
@@ -34,9 +39,9 @@ export default function NavHours({ AMPM, setAMPM, activeHour, setActiveHour }) {
             key={i + "hour"}
             style={style}
             onClick={() => {
-              const diff = (activeHour % 24) - i;
-              const final = activeHour - diff;
-              setActiveHour(final);
+              const diff = (selectedHour % 24) - i;
+              const final = selectedHour - diff;
+              setSelectedHour(final);
             }}
           >
             <p>{hour}</p>
@@ -46,15 +51,15 @@ export default function NavHours({ AMPM, setAMPM, activeHour, setActiveHour }) {
       <button
         style={{ fontSize: 20 }}
         onClick={() => {
-          if (AMPM === "AM") {
-            setActiveHour(activeHour + 12);
+          if (amPm === "AM") {
+            setSelectedHour(selectedHour + 12);
           } else {
-            setActiveHour(activeHour - 12);
+            setSelectedHour(selectedHour - 12);
           }
-          setAMPM(AMPM === "AM" ? "PM" : "AM");
+          setAmPm(amPm === "AM" ? "PM" : "AM");
         }}
       >
-        {AMPM}
+        {amPm}
       </button>
     </div>
   );
