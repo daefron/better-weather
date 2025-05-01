@@ -33,7 +33,7 @@ function App() {
     hours.push((i % 12) + 1);
   }
 
-  async function initialFetch(e) {
+  async function userSubmit(e) {
     e.preventDefault();
     setLoading(true);
     setRenderMap(false);
@@ -299,7 +299,7 @@ function App() {
             }}
           >
             <form
-              onSubmit={initialFetch}
+              onSubmit={userSubmit}
               style={{
                 width: changeLayout ? 0 : "100%",
                 flexGrow: 8,
