@@ -44,6 +44,8 @@ function App() {
       if (!inputData) throw fetchError;
       inputRef.current.value = inputData.address_components[0].long_name;
       inputRef.current.blur();
+      inputRef.current.disabled = true;
+
       inputCoords.current = inputData.geometry.location;
 
       const weatherCoords = coordinateMaker(inputCoords, radiusKM, radiusRings);
@@ -69,6 +71,7 @@ function App() {
       setChangeLayout(true);
       setTimeout(() => {
         setRenderMap(true);
+        inputRef.current.disabled = false;
       }, 500);
     } catch (error) {
       console.error("Initial fetch failed:", error);
