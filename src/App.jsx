@@ -35,6 +35,12 @@ function App() {
 
   async function userSubmit(e) {
     e.preventDefault();
+    
+    //prevents multiple requests
+    if (loading) {
+      return;
+    }
+
     setLoading(true);
     setRenderMap(false);
 
