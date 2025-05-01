@@ -98,7 +98,6 @@ export default function List() {
           gap: 5,
         }}
       >
-        {/* <p>{viewType}</p> */}
         {sortedData.map((place, i) => {
           console.log(centerPoint);
           const diffToChosen = (

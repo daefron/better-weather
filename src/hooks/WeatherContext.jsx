@@ -37,6 +37,7 @@ export function WeatherProvider({ children }) {
 
     setLoading(true);
     setShowMap(false);
+    setShowList(false);
 
     try {
       const fetchError = new Error("No results found for this location.");

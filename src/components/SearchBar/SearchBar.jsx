@@ -56,13 +56,16 @@ export default function SearchBar() {
         ></input>
         <FontAwesomeIcon
           icon={faSearch}
+          onClick={(e) => {
+            userSubmit(e);
+          }}
           style={{
             position: "absolute",
             right: 0,
             top: "50%",
             transform: "translateY(-50%)",
-            pointerEvents: "none",
             color: "#888",
+            cursor: "pointer",
           }}
         />
       </form>
