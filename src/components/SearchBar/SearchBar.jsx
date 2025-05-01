@@ -39,7 +39,7 @@ export default function SearchBar() {
       <form
         onSubmit={userSubmit}
         style={{
-          width: changeLayout ? 0 : "100%",
+          width: changeLayout ? 0 : "calc(100% - 8px)",
           flexGrow: 8,
           position: "relative",
         }}
