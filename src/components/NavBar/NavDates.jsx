@@ -37,7 +37,7 @@ export default function NavDates({
           case "temp":
             content = `${date.tempMax}°C`;
             break;
-          case "rain":
+          case "rainChance":
             content = `${date.rainChance}%`;
             break;
         }

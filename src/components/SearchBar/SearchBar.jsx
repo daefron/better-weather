@@ -20,9 +20,9 @@ export default function SearchBar() {
     e.preventDefault();
     switch (viewType) {
       case "temp":
-        setViewType("rain");
+        setViewType("rainChance");
         break;
-      case "rain":
+      case "rainChance":
         setViewType("temp");
         break;
     }

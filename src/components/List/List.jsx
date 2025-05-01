@@ -7,8 +7,18 @@ import {
 import { useWeatherState } from "../../hooks/WeatherContext";
 
 export default function List() {
-  const { showList, setShowList } = useWeatherState();
-  return (
+  const { showList, setShowList, mapData, selectedHour, viewType } =
+    useWeatherState();
+
+  const sortedData = [...mapData]
+    .map((place) => ({
+      suburb: place.suburb,
+      temp: place.hours[selectedHour].temp,
+      rain: place.hours[selectedHour].rainChance,
+    }))
+    .sort((a, b) => b[viewType] - a[viewType]);
+
+    return (
     <div
       style={{
         display: "flex",
@@ -46,6 +56,37 @@ export default function List() {
           }}
         />
       </button>
+      <div
+        id="suburbList"
+        style={{
+          height: "100%",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          padding: 10,
+        }}
+      >
+        <p>{viewType}</p>
+        {sortedData.map((place, i) => {
+          let symbol;
+          switch (viewType) {
+            case "temp":
+              symbol = "°C";
+              break;
+            case "rainChance":
+              symbol = "%";
+              break;
+          }
+          return (
+            <div key={"suburbList" + i} style={{ display: "flex" }}>
+              <p>
+                {i + 1}. {place.suburb} {place[viewType]}
+                {symbol}
+              </p>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
