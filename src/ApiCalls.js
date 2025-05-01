@@ -53,7 +53,7 @@ function buildSuburbUrl(lat, lng) {
 
 export async function fetchSuburb(weatherData) {
   const promises = weatherData.map((data) => {
-    const url = buildSuburbUrl(data.latitude, data.longitude);
+    const url = buildSuburbUrl((data.latitude).toFixed(5), (data.longitude).toFixed(5));
     return fetch(url, { method: "GET" });
   });
 

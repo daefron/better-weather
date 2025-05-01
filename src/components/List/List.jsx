@@ -100,6 +100,7 @@ export default function List() {
           boxSizing: "border-box",
           justifyContent: "space-between",
           backgroundColor: "rgba(0,0,0,0.13)",
+          paddingTop: 5,
         }}
       >
         {sortedData.map((place, i) => {
