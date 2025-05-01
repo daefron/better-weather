@@ -1,15 +1,17 @@
 import NavStats from "./NavStats";
 import NavDates from "./NavDates";
 import NavHours from "./NavHours";
-export default function NavBar({
-  centerPoint,
-  activeHour,
-  setActiveHour,
-  AMPM,
-  setAMPM,
-  mapData,
-  currentType,
-}) {
+import { useWeatherState } from "../../hooks/WeatherContext";
+export default function NavBar() {
+  const {
+    centerPoint,
+    activeHour,
+    setActiveHour,
+    AMPM,
+    setAMPM,
+    mapData,
+    currentType,
+  } = useWeatherState();
   return (
     <div id="navBar">
       <NavStats centerPoint={centerPoint} activeHour={activeHour} AMPM={AMPM} />

@@ -13,6 +13,7 @@ export default function NavDates({
       }}
     >
       {mapData[0].dates.map((date, index) => {
+        index+= 1
         const options = { weekday: "short" };
         const renderDate = new Intl.DateTimeFormat("en-US", options).format(
           new Date(date.date)

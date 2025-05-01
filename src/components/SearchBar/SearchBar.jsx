@@ -1,17 +1,20 @@
 import { BarLoader } from "react-spinners";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-export default function SearchBar({
-  changeLayout,
-  userSubmit,
-  setLocationInput,
-  editButton,
-  errorMessage,
-  loading,
-  inputRef,
-  currentType,
-  setCurrentType
-}) {
+import { useWeatherState } from "../../hooks/WeatherContext";
+export default function SearchBar() {
+  const {
+    changeLayout,
+    userSubmit,
+    setLocationInput,
+    setChangeLayout,
+    errorMessage,
+    loading,
+    inputRef,
+    currentType,
+    setCurrentType,
+  } = useWeatherState();
+
   function tempRainSwitch(e) {
     e.preventDefault();
     switch (currentType) {
@@ -70,7 +73,13 @@ export default function SearchBar({
           >
             Temp/Rain
           </button>
-          <button style={{ fontSize: 16, flexGrow: 1 }} onClick={editButton}>
+          <button
+            style={{ fontSize: 16, flexGrow: 1 }}
+            onClick={() => {
+              setChangeLayout(false);
+              setRenderMap(false);
+            }}
+          >
             Settings
           </button>
         </>

@@ -1,4 +1,6 @@
-export default function Settings({ radiusInput, setRadiusInput }) {
+import { useWeatherState } from "../../hooks/WeatherContext";
+export default function Settings() {
+  const { radiusInput, setRadiusInput } = useWeatherState();
   return (
     <div
       id="inputs"

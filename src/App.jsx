@@ -1,92 +1,14 @@
 import "./App.css";
-import { useState, useRef, useMemo } from "react";
 
-import { coordinateMaker } from "./CoordinateMaker";
-import { fetchWeather, fetchSuburb, fetchCoords } from "./ApiCalls";
-import { parseData } from "./WeatherParser";
-import { getStats } from "./DataProcessing";
-import Map from "./Components/Map";
-import NavBar from "./Components/NavBar/NavBar";
-import SearchBar from "./Components/SearchBar/SearchBar";
-import Settings from "./Components/Settings/Settings";
+import { useWeatherState } from "./hooks/WeatherContext";
+
+import Map from "./components/Map";
+import NavBar from "./components/NavBar/NavBar";
+import SearchBar from "./components/SearchBar/SearchBar";
+import Settings from "./components/Settings/Settings";
 
 function App() {
-  //user inputs
-  const [locationInput, setLocationInput] = useState("");
-  const [radiusInput, setRadiusInput] = useState(50); //coordinate distance between circles in km
-  const radiusRings = Math.round(radiusInput / 10);
-  const inputCoords = useRef("");
-  const [mapData, setMapData] = useState([]);
-  const [changeLayout, setChangeLayout] = useState(false);
-  const [renderMap, setRenderMap] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [centerPoint, setCenterPoint] = useState();
-  const [activeHour, setActiveHour] = useState(8);
-  const [currentType, setCurrentType] = useState("temp");
-  const inputRef = useRef();
-  const radiusKM = useMemo(() => radiusInput / 554, [radiusInput]);
-  const [AMPM, setAMPM] = useState("AM");
-  const [errorMessage, setErrorMessage] = useState();
-  const [listMap, setListMap] = useState("Map");
-
-  async function userSubmit(e) {
-    e.preventDefault();
-
-    //prevents multiple requests
-    if (loading) {
-      return;
-    }
-
-    setLoading(true);
-    setRenderMap(false);
-
-    try {
-      const fetchError = new Error("No results found for this location.");
-      const inputData = await fetchCoords(locationInput);
-      if (!inputData) throw fetchError;
-      inputRef.current.value = inputData.address_components[0].long_name;
-      inputRef.current.blur();
-      inputRef.current.disabled = true;
-
-      inputCoords.current = inputData.geometry.location;
-
-      const weatherCoords = coordinateMaker(inputCoords, radiusKM, radiusRings);
-      const weatherData = await fetchWeather(weatherCoords);
-      if (!weatherData) throw fetchError;
-      const finalData = await fetchSuburb(weatherData);
-      if (!finalData) throw fetchError;
-
-      const parsedData = parseData(finalData);
-      if (!parsedData[0]) throw fetchError;
-
-      setCenterPoint({
-        lat: inputCoords.current.lat,
-        lng: inputCoords.current.lng,
-        suburb: inputData.address_components[0].long_name,
-        dates: parsedData[0].dates,
-        hours: parsedData[0].hours,
-      });
-      getStats(parsedData);
-      setMapData(parsedData);
-      setErrorMessage("");
-      setLoading(false);
-      setChangeLayout(true);
-      setTimeout(() => {
-        setRenderMap(true);
-        inputRef.current.disabled = false;
-      }, 500);
-    } catch (error) {
-      console.error("Initial fetch failed:", error);
-      setErrorMessage(error.message);
-      setLoading(false);
-    }
-  }
-
-  function editButton() {
-    setChangeLayout(false);
-    setRenderMap(false);
-  }
-
+  const { loading, renderMap, changeLayout, listMap } = useWeatherState();
   return (
     <>
       <div
@@ -144,17 +66,7 @@ function App() {
             transition: "flex-grow 1s ease",
           }}
         >
-          {renderMap ? (
-            <Map
-              mapData={mapData}
-              renderMap={renderMap}
-              centerPoint={centerPoint}
-              activeHour={activeHour}
-              radiusInput={radiusKM}
-              radiusRings={radiusRings}
-              currentType={currentType}
-            />
-          ) : null}
+          {renderMap ? <Map /> : null}
         </main>
         <footer
           style={{
@@ -169,34 +81,9 @@ function App() {
             flexShrink: changeLayout ? 1 : 0,
           }}
         >
-          {changeLayout ? (
-            <NavBar
-              centerPoint={centerPoint}
-              activeHour={activeHour}
-              setActiveHour={setActiveHour}
-              AMPM={AMPM}
-              setAMPM={setAMPM}
-              mapData={mapData}
-              currentType={currentType}
-            />
-          ) : null}
-          <SearchBar
-            changeLayout={changeLayout}
-            userSubmit={userSubmit}
-            setLocationInput={setLocationInput}
-            editButton={editButton}
-            errorMessage={errorMessage}
-            loading={loading}
-            inputRef={inputRef}
-            currentType={currentType}
-            setCurrentType={setCurrentType}
-          />
-          {changeLayout ? null : !loading ? (
-            <Settings
-              radiusInput={radiusInput}
-              setRadiusInput={setRadiusInput}
-            />
-          ) : null}
+          {changeLayout ? <NavBar /> : null}
+          <SearchBar />
+          {changeLayout ? null : !loading ? <Settings /> : null}
         </footer>
       </div>
     </>

@@ -1,23 +1,24 @@
 import { useState } from "react";
 import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
+import { useWeatherState } from "../hooks/WeatherContext";
 
 const googleApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 if (!googleApiKey) {
   throw new Error("Google Maps Api key is missing.");
 }
 
-export default function GoogleMap({
-  mapData,
-  renderMap,
-  centerPoint,
-  activeHour,
-  radiusInput,
-  radiusRings,
-  currentType,
-}) {
+export default function GoogleMap() {
+  const {
+    mapData,
+    centerPoint,
+    activeHour,
+    radiusKM,
+    radiusRings,
+    currentType,
+  } = useWeatherState();
   const [activeMarker, setActiveMarker] = useState();
   //zooms map to show all found weather points
-  const boundDist = radiusInput * radiusRings * 0.7;
+  const boundDist = radiusKM * radiusRings * 0.7;
   const bounds = {
     east: centerPoint.lng + boundDist,
     north: centerPoint.lat + boundDist,
@@ -58,7 +59,7 @@ export default function GoogleMap({
             borderRadius: 4,
             padding: 3,
             fontSize: 13,
-            color:"black",
+            color: "black",
           };
           let content, positiveValue, negativeValue, colorRatio;
           switch (currentType) {
