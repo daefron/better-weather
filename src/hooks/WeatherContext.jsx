@@ -47,21 +47,21 @@ export function WeatherProvider({ children }) {
       inputRef.current.disabled = true;
 
       inputCoordsRef.current = inputData.geometry.location;
+
       const weatherCoords = coordinateMaker(
         inputCoordsRef,
         normalizedRadius,
         ringCount
       );
-      
       const weatherData = await fetchWeather(weatherCoords);
       if (!weatherData) throw fetchError;
-      
+
       const finalData = await fetchSuburb(weatherData);
       if (!finalData) throw fetchError;
-      
+
       const parsedData = parseData(finalData);
       if (!parsedData[0]) throw fetchError;
-      
+
       setCenterPoint({
         lat: inputCoordsRef.current.lat,
         lng: inputCoordsRef.current.lng,
