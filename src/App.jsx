@@ -63,8 +63,10 @@ function App() {
           style={{
             flexGrow: changeLayout ? 1 : 0,
             transition: "flex-grow 1s ease",
+            width: "100%",
             display: "flex",
-            maxHeight:"90vh"
+            maxHeight: "90vh",
+            backgroundColor: "rgba(15,26,21,1)",
           }}
         >
           {showMap ? (
