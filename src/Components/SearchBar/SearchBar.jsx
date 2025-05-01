@@ -5,12 +5,24 @@ export default function SearchBar({
   changeLayout,
   userSubmit,
   setLocationInput,
-  tempRainSwitch,
   editButton,
   errorMessage,
   loading,
   inputRef,
+  currentType,
+  setCurrentType
 }) {
+  function tempRainSwitch(e) {
+    e.preventDefault();
+    switch (currentType) {
+      case "temp":
+        setCurrentType("rain");
+        break;
+      case "rain":
+        setCurrentType("temp");
+        break;
+    }
+  }
   return (
     <div
       style={{

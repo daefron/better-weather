@@ -87,18 +87,6 @@ function App() {
     setRenderMap(false);
   }
 
-  function tempRainSwitch(e) {
-    e.preventDefault();
-    switch (currentType) {
-      case "temp":
-        setCurrentType("rain");
-        break;
-      case "rain":
-        setCurrentType("temp");
-        break;
-    }
-  }
-
   return (
     <>
       <div
@@ -196,11 +184,12 @@ function App() {
             changeLayout={changeLayout}
             userSubmit={userSubmit}
             setLocationInput={setLocationInput}
-            tempRainSwitch={tempRainSwitch}
             editButton={editButton}
             errorMessage={errorMessage}
             loading={loading}
             inputRef={inputRef}
+            currentType={currentType}
+            setCurrentType={setCurrentType}
           />
           {changeLayout ? null : !loading ? (
             <Settings
