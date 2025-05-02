@@ -44,10 +44,19 @@ export default function NavStats({
   };
   return (
     <>
-      <p style={{ flexGrow: 1 }}>{contentRef.current.dateTime}</p>
+      <p
+        style={{
+          paddingInline:"clamp(2px,1vw,5px)",
+          fontSize: "clamp(10px, 3.5vw, 16px)",
+          flexGrow: 1,
+        }}
+      >
+        {contentRef.current.dateTime}
+      </p>
       <button
         style={{
-          fontSize: 16,
+          paddingInline:"clamp(2px,1vw,5px)",
+          fontSize: "clamp(10px, 3.5vw, 16px)",
           height: "calc(100% + 12px)",
           border: unitType === "temp" ? "1px inset black" : null,
           background: unitType === "temp" ? "rgb(25,45,35)" : null,
@@ -61,7 +70,8 @@ export default function NavStats({
       </button>
       <button
         style={{
-          fontSize: 16,
+          paddingInline:"clamp(2px,1vw,5px)",
+          fontSize: "clamp(10px, 3.5vw, 16px)",
           height: "calc(100% + 12px)",
           border: unitType === "rainChance" ? "1px inset black" : null,
           background: unitType === "rainChance" ? "rgb(25,45,35)" : null,
@@ -75,7 +85,8 @@ export default function NavStats({
       </button>
       <button
         style={{
-          fontSize: 16,
+          paddingInline:"clamp(2px,1vw,5px)",
+          fontSize: "clamp(10px, 3.5vw, 16px)",
           height: "calc(100% + 12px)",
           border: unitType === "windMax" ? "1px inset black" : null,
           background: unitType === "windMax" ? "rgb(25,45,35)" : null,

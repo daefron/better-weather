@@ -80,7 +80,6 @@ export default function NavBar() {
           zIndex: 11,
           border: changeLayout ? "outset 1px black" : "none",
           boxSizing: "border-box",
-          paddingLeft: 10,
           paddingBlock: changeLayout ? 5 : 0,
           fontSize: 16,
           height: changeLayout ? 30 : 0,

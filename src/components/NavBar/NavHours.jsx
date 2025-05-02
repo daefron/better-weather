@@ -32,7 +32,7 @@ export default function NavHours({
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          fontSize: 20,
+          fontSize: "clamp(12px,5vw,18px)",
           border: "1px outset black",
           userSelect: "none",
         };
@@ -56,7 +56,7 @@ export default function NavHours({
         );
       })}
       <button
-        style={{ flexGrow: 1, fontSize: 20, height: 32 }}
+        style={{ flexGrow: 1, fontSize: "clamp(12px,5vw,18px)", height: 32 }}
         onClick={() => {
           if (amPm === "AM") {
             setSelectedHour(selectedHour + 12);

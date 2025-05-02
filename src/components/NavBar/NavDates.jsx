@@ -37,7 +37,8 @@ export default function NavDates({
         <FontAwesomeIcon
           icon={useHours ? faClock : faCalendar}
           style={{
-            width: 16,
+            width: "clamp(12px,5vw,18px)",
+            height: "clamp(12px,5vw,18px)",
             color: "#dcfff9",
             alignSelf: "center",
           }}
@@ -56,7 +57,7 @@ export default function NavDates({
           gap: 5,
           flexGrow: 1,
           paddingBlock: 5,
-          fontSize: 15,
+          fontSize: "clamp(10px,4vw,16px)",
           border: "1px outset black",
         };
         if (index === Math.ceil((selectedHour + 1) / 24)) {
