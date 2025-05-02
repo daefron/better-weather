@@ -21,7 +21,7 @@ export default function NavBar() {
       id="navBar"
       style={{
         maxHeight: changeLayout ? 500 : 0,
-        transition: "all 1s linear",
+        transition: "all 0.7s linear",
         overflow: "hidden",
       }}
     >

@@ -87,6 +87,7 @@ function App() {
             transition: "flex-grow 1s ease",
             flexGrow: changeLayout ? 0 : 1,
             flexShrink: changeLayout ? 1 : 0,
+            paddingBottom: changeLayout ? 5 : 0,
           }}
         >
           <NavBar />
