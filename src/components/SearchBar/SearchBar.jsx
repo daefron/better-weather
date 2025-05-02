@@ -7,7 +7,6 @@ export default function SearchBar() {
     changeLayout,
     userSubmit,
     setLocationInput,
-    setChangeLayout,
     errorMessage,
     loading,
     inputRef,

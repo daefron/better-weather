@@ -24,7 +24,7 @@ export default function NavDates({
         style={{
           display: "flex",
           justifyContent: "center",
-          flexGrow: 1,
+          width: "10%",
           backgroundColor: useHours ? "RGBA(255,255,255,0.2)" : null,
           border: useHours
             ? "1px inset RGBA(0,0,0,1)"
