@@ -11,19 +11,19 @@ export default function SearchBar() {
     errorMessage,
     loading,
     inputRef,
-    viewType,
-    setViewType,
+    unitType,
+    setUnitType,
     setShowMap,
   } = useWeatherState();
 
   function tempRainSwitch(e) {
     e.preventDefault();
-    switch (viewType) {
+    switch (unitType) {
       case "temp":
-        setViewType("rainChance");
+        setUnitType("rainChance");
         break;
       case "rainChance":
-        setViewType("temp");
+        setUnitType("temp");
         break;
     }
   }

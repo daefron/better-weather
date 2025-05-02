@@ -12,7 +12,7 @@ export default function List() {
     setShowList,
     mapData,
     selectedHour,
-    viewType,
+    unitType,
     centerPoint,
     selectedLocation,
     setSelectedLocation,
@@ -36,10 +36,10 @@ export default function List() {
         index: i,
       };
     })
-    .sort((a, b) => b[viewType] - a[viewType]);
+    .sort((a, b) => b[unitType] - a[unitType]);
 
   let symbol;
-  switch (viewType) {
+  switch (unitType) {
     case "temp":
       symbol = "°C";
       break;
@@ -105,7 +105,7 @@ export default function List() {
       >
         {sortedData.map((place, i) => {
           const diffToChosen = (
-            place[viewType] - centerPoint.hours[selectedHour][viewType]
+            place[unitType] - centerPoint.hours[selectedHour][unitType]
           ).toFixed(1);
           return (
             <div
@@ -133,7 +133,7 @@ export default function List() {
                 {place.chosenLocation ? centerPoint.suburb : place.suburb}
               </p>
               <p>
-                {place[viewType]}
+                {place[unitType]}
                 {symbol}
               </p>
               <p>

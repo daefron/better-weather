@@ -1,6 +1,6 @@
 export default function NavDates({
   mapData,
-  viewType,
+  unitType,
   selectedHour,
   setSelectedHour,
 }) {
@@ -33,7 +33,7 @@ export default function NavDates({
         }
 
         let content;
-        switch (viewType) {
+        switch (unitType) {
           case "temp":
             content = `${date.tempMax}°C`;
             break;

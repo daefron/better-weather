@@ -10,7 +10,7 @@ export function WeatherProvider({ children }) {
   const [locationInput, setLocationInput] = useState(""); //user-typed location
   const [radiusKMInput, setRadiusKMInput] = useState(50); //coordinate distance between circles in km
   const [selectedHour, setSelectedHour] = useState(8); //user-selected hour
-  const [viewType, setViewType] = useState("temp"); //toggles between temp/rain
+  const [unitType, setUnitType] = useState("temp"); //toggles between temp/rain
   const [amPm, setAmPm] = useState("AM"); //toggles between AM/PM
   const [selectedLocation, setSelectedLocation] = useState();
 
@@ -102,8 +102,8 @@ export function WeatherProvider({ children }) {
         errorMessage,
         selectedHour,
         setSelectedHour,
-        viewType,
-        setViewType,
+        unitType,
+        setUnitType,
         inputRef,
         userSubmit,
         showMap,

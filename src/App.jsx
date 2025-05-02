@@ -9,7 +9,7 @@ import Settings from "./components/Settings/Settings";
 import List from "./components/List/List";
 
 function App() {
-  const { loading, showMap, changeLayout, showList } = useWeatherState();
+  const { loading, showMap, changeLayout } = useWeatherState();
   return (
     <div style={{ width: "100%", display: "flex" }}>
       <div

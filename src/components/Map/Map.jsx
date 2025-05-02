@@ -14,7 +14,7 @@ export default function GoogleMap() {
     selectedHour,
     normalizedRadius,
     ringCount,
-    viewType,
+    unitType,
     selectedLocation,
     setSelectedLocation,
   } = useWeatherState();
@@ -63,7 +63,7 @@ export default function GoogleMap() {
             color: "black",
           };
           let content, positiveValue, negativeValue, colorRatio;
-          switch (viewType) {
+          switch (unitType) {
             case "temp":
               if (selectedLocation === i) {
                 content = `${data.suburb} - ${data.hours[selectedHour].temp}°`;
