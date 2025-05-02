@@ -1,17 +1,47 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClock, faCalendar } from "@fortawesome/free-solid-svg-icons";
 export default function NavDates({
   mapData,
   unitType,
   selectedHour,
   setSelectedHour,
+  setUseHours,
+  useHours,
 }) {
   return (
     <div
       style={{
         display: "flex",
         justifyContent: "space-between",
+        backgroundColor: "rgba(32,53,42,1)",
         border: "1px outset RGBA(0,0,0,1)",
+        position: "relative",
+        zIndex: 10,
       }}
     >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flexGrow: 1,
+          backgroundColor: useHours ? "RGBA(255,255,255,0.2)" : null,
+          border: useHours
+            ? "1px inset RGBA(0,0,0,1)"
+            : "1px outset RGBA(0,0,0,1)",
+        }}
+        onClick={() => {
+          setUseHours(!useHours);
+        }}
+      >
+        <FontAwesomeIcon
+          icon={useHours ? faClock : faCalendar}
+          style={{
+            width: 16,
+            color: "#dcfff9",
+            alignSelf: "center",
+          }}
+        />
+      </div>
       {mapData[0].dates.map((date, index) => {
         index += 1;
         const options = { weekday: "short" };
@@ -30,12 +60,13 @@ export default function NavDates({
         };
         if (index === Math.ceil((selectedHour + 1) / 24)) {
           style.backgroundColor = "RGBA(255,255,255,0.2)";
+          style.border = "1px inset RGBA(0,0,0,1)";
         }
 
         let content;
         switch (unitType) {
           case "temp":
-            content = `${date.tempMax}°C`;
+            content = `${date.temp}°C`;
             break;
           case "rainChance":
             content = `${date.rainChance}%`;

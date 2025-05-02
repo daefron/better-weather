@@ -3,6 +3,7 @@ export default function NavHours({
   setAmPm,
   selectedHour,
   setSelectedHour,
+  useHours,
 }) {
   let hours = [];
   for (let i = 0; i < 24; i++) {
@@ -15,6 +16,10 @@ export default function NavHours({
         justifyContent: "space-between",
         boxSizing: "border-box",
         border: "1px outset RGBA(0,0,0,1)",
+        height: useHours ? 34 : 3,
+        position: "relative",
+        zIndex: 1,
+        transition: "height 1s ease",
       }}
     >
       {hours.map((hour, i) => {
@@ -31,14 +36,16 @@ export default function NavHours({
           border: "1px outset RGBA(0,0,0,1)",
           userSelect: "none",
         };
-        if (i === Math.ceil(selectedHour % 24)) {
+        if (useHours && i === Math.ceil(selectedHour % 24)) {
           style.backgroundColor = "RGBA(255,255,255,0.2)";
+          style.border = "1px inset RGBA(0,0,0,1)"
         }
         return (
           <div
             key={i + "hour"}
             style={style}
             onClick={() => {
+              if (!useHours) return;
               const diff = (selectedHour % 24) - i;
               const final = selectedHour - diff;
               setSelectedHour(final);
@@ -49,7 +56,7 @@ export default function NavHours({
         );
       })}
       <button
-        style={{ flexGrow: 1, fontSize: 20 }}
+        style={{ flexGrow: 1, fontSize: 20, height: 32 }}
         onClick={() => {
           if (amPm === "AM") {
             setSelectedHour(selectedHour + 12);

@@ -1,4 +1,9 @@
-export default function NavStats({ centerPoint, selectedHour, amPm }) {
+export default function NavStats({
+  centerPoint,
+  selectedHour,
+  amPm,
+  useHours,
+}) {
   const dateIndex = Math.floor(selectedHour / 24);
   const date = new Date(centerPoint.dates[dateIndex].date);
   const weekdayContent = new Intl.DateTimeFormat("en-AU", {
@@ -8,17 +13,19 @@ export default function NavStats({ centerPoint, selectedHour, amPm }) {
     day: "numeric",
     month: "numeric",
   }).format(date);
-  const timeContent =
-    selectedHour % 12 !== 11
-      ? ((selectedHour + 1) % 12) + " " + amPm
-      : 12 + (amPm === "AM" ? "PM" : "AM");
-  const dateTimeContent =
-    weekdayContent + " " + dateContent + " - " + timeContent;
+  const timeContent = useHours
+    ? selectedHour % 12 !== 11
+      ? " - " + ((selectedHour + 1) % 12) + " " + amPm
+      : " - " + 12 + (amPm === "AM" ? "PM" : "AM")
+    : "";
+  const dateTimeContent = weekdayContent + " " + dateContent + timeContent;
 
-  const hourCache = centerPoint.hours[selectedHour];
-  const tempContent = hourCache.temp + "°C";
-  const rainContent = hourCache.rainChance + "% rain";
-  const windContent = hourCache.windMax + "km/h";
+  const valueSource = useHours
+    ? centerPoint.hours[selectedHour]
+    : centerPoint.dates[Math.floor(selectedHour / 24)];
+  const tempContent = valueSource.temp + "°C";
+  const rainContent = valueSource.rainChance + "% rain";
+  const windContent = valueSource.windMax + "km/h";
   return (
     <div
       style={{

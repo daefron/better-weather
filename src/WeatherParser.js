@@ -1,8 +1,7 @@
 class DailyWeather {
   constructor(dailyData, index) {
     this.date = dailyData.time[index];
-    this.tempMax = dailyData.temperature_2m_max[index];
-    this.tempMin = dailyData.temperature_2m_min[index];
+    this.temp = dailyData.temperature_2m_max[index];
     this.rainChance = dailyData.precipitation_probability_max[index];
     this.windMax = dailyData.wind_speed_10m_max[index];
   }

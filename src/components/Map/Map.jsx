@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
 import { useWeatherState } from "../../hooks/WeatherContext";
 
@@ -17,6 +16,7 @@ export default function GoogleMap() {
     unitType,
     selectedLocation,
     setSelectedLocation,
+    useHours,
   } = useWeatherState();
   //zooms map to show all found weather points
   const boundDist = normalizedRadius * ringCount * 0.7;
@@ -26,6 +26,7 @@ export default function GoogleMap() {
     south: centerPoint.lat - boundDist,
     west: centerPoint.lng - boundDist,
   };
+
   return (
     <APIProvider apiKey={googleApiKey}>
       <Map
@@ -62,18 +63,22 @@ export default function GoogleMap() {
             fontSize: 13,
             color: "black",
           };
-          let content, positiveValue, negativeValue, colorRatio;
+          const contentValue = useHours
+            ? data.hours[selectedHour][unitType]
+            : data.dates[Math.floor(selectedHour / 24)][unitType];
+
+          const colorRatio = useHours
+            ? contentValue / centerPoint.hours[selectedHour][unitType]
+            : contentValue / centerPoint.dates[Math.floor(selectedHour / 24)][unitType];
+
+          let content, positiveValue, negativeValue;
           switch (unitType) {
             case "temp":
               if (selectedLocation === i) {
-                content = `${data.suburb} - ${data.hours[selectedHour].temp}°`;
+                content = `${data.suburb} - ${contentValue}°`;
               } else {
-                content = `${data.hours[selectedHour].temp}°`;
+                content = `${contentValue}°`;
               }
-
-              colorRatio =
-                data.hours[selectedHour].temp /
-                centerPoint.hours[selectedHour].temp;
               if (colorRatio < 1) {
                 negativeValue = 255;
                 positiveValue = 255 * colorRatio;
@@ -84,14 +89,10 @@ export default function GoogleMap() {
               break;
             case "rainChance":
               if (selectedLocation === i) {
-                content = `${data.suburb} - ${data.hours[selectedHour].rainChance}%`;
+                content = `${data.suburb} - ${contentValue}%`;
               } else {
-                content = `${data.hours[selectedHour].rainChance}%`;
+                content = `${contentValue}%`;
               }
-
-              colorRatio =
-                data.hours[selectedHour].rainChance /
-                centerPoint.hours[selectedHour].rainChance;
 
               //sets to same color if same value
               if (colorRatio === Infinity || isNaN(colorRatio)) {

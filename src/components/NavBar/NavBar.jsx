@@ -11,25 +11,31 @@ export default function NavBar() {
     setAmPm,
     mapData,
     unitType,
+    useHours,
+    setUseHours,
   } = useWeatherState();
   return (
     <div id="navBar">
-      <NavStats
-        centerPoint={centerPoint}
-        selectedHour={selectedHour}
-        amPm={amPm}
-      />
       <NavHours
         amPm={amPm}
         setAmPm={setAmPm}
         selectedHour={selectedHour}
         setSelectedHour={setSelectedHour}
+        useHours={useHours}
       />
       <NavDates
         mapData={mapData}
         unitType={unitType}
         selectedHour={selectedHour}
         setSelectedHour={setSelectedHour}
+        setUseHours={setUseHours}
+        useHours={useHours}
+      />
+      <NavStats
+        centerPoint={centerPoint}
+        selectedHour={selectedHour}
+        amPm={amPm}
+        useHours={useHours}
       />
     </div>
   );

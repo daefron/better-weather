@@ -13,6 +13,7 @@ export function WeatherProvider({ children }) {
   const [unitType, setUnitType] = useState("temp"); //toggles between temp/rain
   const [amPm, setAmPm] = useState("AM"); //toggles between AM/PM
   const [selectedLocation, setSelectedLocation] = useState();
+  const [useHours, setUseHours] = useState(false);
 
   const normalizedRadius = useMemo(() => radiusKMInput / 554, [radiusKMInput]); //changes user input into value for math
   const ringCount = Math.round(radiusKMInput / 10); //amount of rings for coordinate search
@@ -117,6 +118,8 @@ export function WeatherProvider({ children }) {
         setShowList,
         selectedLocation,
         setSelectedLocation,
+        useHours,
+        setUseHours,
       }}
     >
       {children}
