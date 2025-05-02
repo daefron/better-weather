@@ -5,7 +5,8 @@ export default function NavStats({
   amPm,
   useHours,
   changeLayout,
-  unitType
+  unitType,
+  setUnitType,
 }) {
   const contentRef = useRef();
   if (!contentRef.current) {
@@ -31,9 +32,9 @@ export default function NavStats({
   const valueSource = useHours
     ? centerPoint.hours[selectedHour]
     : centerPoint.dates[Math.floor(selectedHour / 24)];
-  const tempContent = valueSource.temp + "°C";
-  const rainContent = valueSource.rainChance + "% rain";
-  const windContent = valueSource.windMax + "km/h";
+  const tempContent = "Temp - " + valueSource.temp + "°C";
+  const rainContent = "Rain - " + valueSource.rainChance + "%";
+  const windContent = "Wind - " + valueSource.windMax + "km/h";
 
   contentRef.current = {
     dateTime: dateTimeContent,
@@ -44,21 +45,45 @@ export default function NavStats({
   return (
     <>
       <p style={{ flexGrow: 1 }}>{contentRef.current.dateTime}</p>
-      <p style={{ textDecoration: unitType === "temp" ? "underline" : null }}>
-        {contentRef.current.temp}
-      </p>
-      <p
+      <button
         style={{
-          textDecoration: unitType === "rainChance" ? "underline" : null,
+          fontSize: 16,
+          height: "calc(100% + 12px)",
+          border: unitType === "temp" ? "1px inset black" : null,
+        }}
+        onClick={(e) => {
+          e.preventDefault;
+          setUnitType("temp");
+        }}
+      >
+        {contentRef.current.temp}
+      </button>
+      <button
+        style={{
+          fontSize: 16,
+          height: "calc(100% + 12px)",
+          border: unitType === "rainChance" ? "1px inset black" : null,
+        }}
+        onClick={(e) => {
+          e.preventDefault;
+          setUnitType("rainChance");
         }}
       >
         {contentRef.current.rain}
-      </p>
-      <p
-        style={{ textDecoration: unitType === "windMax" ? "underline" : null }}
+      </button>
+      <button
+        style={{
+          fontSize: 16,
+          height: "calc(100% + 12px)",
+          border: unitType === "windMax" ? "1px inset black" : null,
+        }}
+        onClick={(e) => {
+          e.preventDefault;
+          setUnitType("windMax");
+        }}
       >
         {contentRef.current.wind}
-      </p>
+      </button>
     </>
   );
 }

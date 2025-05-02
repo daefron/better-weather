@@ -11,6 +11,7 @@ export default function NavBar() {
     setAmPm,
     mapData,
     unitType,
+    setUnitType,
     useHours,
     setUseHours,
     changeLayout,
@@ -18,7 +19,11 @@ export default function NavBar() {
   return (
     <div
       id="navBar"
-      style={{ maxHeight: changeLayout ? 500 : 0, transition: "all 1s linear", overflow:"hidden" }}
+      style={{
+        maxHeight: changeLayout ? 500 : 0,
+        transition: "all 1s linear",
+        overflow: "hidden",
+      }}
     >
       <div
         style={{
@@ -68,13 +73,13 @@ export default function NavBar() {
           width: "100%",
           display: "flex",
           justifyContent: "space-between",
+          alignItems: "center",
           backgroundColor: "rgba(32,53,42,1)",
-          gap: 10,
           position: "relative",
           zIndex: 11,
           border: changeLayout ? "outset 1px black" : "none",
           boxSizing: "border-box",
-          paddingInline: 10,
+          paddingLeft: 10,
           paddingBlock: changeLayout ? 5 : 0,
           fontSize: 16,
           height: changeLayout ? 30 : 0,
@@ -88,6 +93,7 @@ export default function NavBar() {
           useHours={useHours}
           changeLayout={changeLayout}
           unitType={unitType}
+          setUnitType={setUnitType}
         />
       </div>
     </div>

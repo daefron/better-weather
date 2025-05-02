@@ -41,7 +41,7 @@ export default function SearchBar() {
       <form
         onSubmit={userSubmit}
         style={{
-          width: changeLayout ? 0 : "calc(100% - 8px)",
+          width: changeLayout ? 0 : "calc(100%)",
           flexGrow: 8,
           position: "relative",
         }}
@@ -49,7 +49,7 @@ export default function SearchBar() {
         <input
           type="text"
           id="userLocation"
-          style={{ width: "100%", fontSize: 18, padding: 4 }}
+          style={{ width: "calc(100% - 10px)", fontSize: 18, padding: 4 }}
           onChange={(e) => {
             setLocationInput(e.target.value);
           }}
@@ -68,7 +68,7 @@ export default function SearchBar() {
           }}
           style={{
             position: "absolute",
-            right: 0,
+            right: 10,
             top: "50%",
             transform: "translateY(-50%)",
             color: "#888",
@@ -76,22 +76,7 @@ export default function SearchBar() {
           }}
         />
       </form>
-      {changeLayout ? (
-        <>
-          <button
-            style={{ fontSize: 16, width: "25%" }}
-            onClick={tempRainSwitch}
-          >
-            {unitType === "temp"
-              ? "Temp"
-              : unitType === "rainChance"
-              ? "Rain"
-              : unitType === "windMax"
-              ? "Wind"
-              : null}
-          </button>
-        </>
-      ) : loading ? (
+      {changeLayout ? null : loading ? (
         <div
           style={{
             display: "flex",
