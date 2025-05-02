@@ -50,6 +50,7 @@ export default function NavStats({
           fontSize: 16,
           height: "calc(100% + 12px)",
           border: unitType === "temp" ? "1px inset black" : null,
+          background: unitType === "temp" ? "rgb(25,45,35)" : null,
         }}
         onClick={(e) => {
           e.preventDefault;
@@ -63,6 +64,7 @@ export default function NavStats({
           fontSize: 16,
           height: "calc(100% + 12px)",
           border: unitType === "rainChance" ? "1px inset black" : null,
+          background: unitType === "rainChance" ? "rgb(25,45,35)" : null,
         }}
         onClick={(e) => {
           e.preventDefault;
@@ -76,6 +78,7 @@ export default function NavStats({
           fontSize: 16,
           height: "calc(100% + 12px)",
           border: unitType === "windMax" ? "1px inset black" : null,
+          background: unitType === "windMax" ? "rgb(25,45,35)" : null,
         }}
         onClick={(e) => {
           e.preventDefault;

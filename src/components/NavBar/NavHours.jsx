@@ -27,12 +27,12 @@ export default function NavHours({
           justifyContent: "center",
           alignItems: "center",
           fontSize: 20,
-          border: "1px outset RGBA(0,0,0,1)",
+          border: "1px outset black",
           userSelect: "none",
         };
         if (useHours && i === Math.ceil(selectedHour % 24)) {
-          style.backgroundColor = "RGBA(255,255,255,0.2)";
-          style.border = "1px inset RGBA(0,0,0,1)";
+          style.backgroundColor = "rgb(25,45,35)";
+          style.border = "1px inset black";
         }
         return (
           <div

@@ -44,7 +44,7 @@ export default function Settings() {
                     paddingBlock: 3,
                     background:
                       radiusKMInput === option
-                        ? "rgb(52,105,78)"
+                        ? "rgb(25,45,35)"
                         : "rgb(41,70,55)",
                     border:
                       radiusKMInput === option
@@ -79,7 +79,7 @@ export default function Settings() {
                     paddingBlock: 3,
                     background:
                       radiusDensity === option
-                        ? "rgb(52,105,78)"
+                        ? "rgb(25,45,35)"
                         : "rgb(41,70,55)",
                     border:
                       radiusDensity === option

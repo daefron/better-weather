@@ -30,10 +30,10 @@ export default function NavBar() {
           display: "flex",
           justifyContent: "space-between",
           boxSizing: "border-box",
-          border: changeLayout ? "1px outset RGBA(0,0,0,1)" : "none",
+          border: changeLayout ? "1px outset black" : "none",
           height: useHours ? 34 : 3,
           position: "relative",
-          zIndex: 1,
+          zIndex: 9,
           transition: "all 0.5s linear",
         }}
       >
@@ -51,9 +51,10 @@ export default function NavBar() {
           display: "flex",
           justifyContent: "space-between",
           backgroundColor: "rgba(32,53,42,1)",
-          border: changeLayout ? "1px outset RGBA(0,0,0,1)" : "none",
+          border: changeLayout ? "1px outset black" : "none",
           position: "relative",
           zIndex: 10,
+          marginBottom: 1,
           height: changeLayout ? 51 : 0,
           transition: "all 0.7s linear",
         }}

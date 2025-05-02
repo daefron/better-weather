@@ -25,7 +25,7 @@ export default function NavDates({
           display: "flex",
           justifyContent: "center",
           width: "10%",
-          backgroundColor: useHours ? "RGBA(255,255,255,0.2)" : null,
+          backgroundColor: useHours ? "RGB(25,45,35)" : null,
           border: useHours
             ? "1px inset RGBA(0,0,0,1)"
             : "1px outset RGBA(0,0,0,1)",
@@ -57,11 +57,11 @@ export default function NavDates({
           flexGrow: 1,
           paddingBlock: 5,
           fontSize: 15,
-          border: "1px outset RGBA(0,0,0,1)",
+          border: "1px outset black",
         };
         if (index === Math.ceil((selectedHour + 1) / 24)) {
-          style.backgroundColor = "RGBA(255,255,255,0.2)";
-          style.border = "1px inset RGBA(0,0,0,1)";
+          style.backgroundColor = "RGBA(25,45,35,1)";
+          style.border = "1px inset black";
         }
 
         let content;
