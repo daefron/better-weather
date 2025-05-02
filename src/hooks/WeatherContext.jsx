@@ -36,18 +36,19 @@ export function WeatherProvider({ children }) {
     setShowMap(false);
     setShowList(false);
     setChangeLayout(false);
-  }
-
-  async function userSubmit(e) {
-    e.preventDefault();
-
-    //prevents multiple requests
-    if (loading || !locationInput) return;
-
-    resetLayout();
-    setLoading(true);
     setSelectedHour(10);
     setUseHours(false);
+  }
+  
+  async function userSubmit(e) {
+    e.preventDefault();
+    
+    //prevents multiple requests
+    if (loading || !locationInput) return;
+    
+    resetLayout();
+    
+    setLoading(true);
 
     try {
       const fetchError = new Error("No results found for this location.");

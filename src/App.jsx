@@ -91,7 +91,7 @@ function App() {
         >
           <NavBar />
           <SearchBar />
-          {changeLayout ? null : !loading ? <Settings /> : null}
+          <Settings />
         </footer>
       </div>
       <div

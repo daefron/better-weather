@@ -29,7 +29,7 @@ export default function NavBar() {
           height: useHours ? 34 : 3,
           position: "relative",
           zIndex: 1,
-          transition: "all 1s linear",
+          transition: "all 0.5s linear",
         }}
       >
         <NavHours
@@ -50,7 +50,7 @@ export default function NavBar() {
           position: "relative",
           zIndex: 10,
           height: changeLayout ? 51 : 0,
-          transition: "all 1s linear",
+          transition: "all 0.7s linear",
         }}
       >
         <NavDates
@@ -74,11 +74,11 @@ export default function NavBar() {
           zIndex: 11,
           border: changeLayout ? "outset 1px black" : "none",
           boxSizing: "border-box",
-          paddingInline: changeLayout ? 10 : 0,
+          paddingInline: 10,
           paddingBlock: changeLayout ? 5 : 0,
           fontSize: 16,
           height: changeLayout ? 30 : 0,
-          transition: "all 1s linear, padding 0s",
+          transition: "all 0.5s linear, padding 0s",
         }}
       >
         <NavStats

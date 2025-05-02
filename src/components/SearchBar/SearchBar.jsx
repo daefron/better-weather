@@ -13,7 +13,6 @@ export default function SearchBar() {
     inputRef,
     unitType,
     setUnitType,
-    setShowMap,
     resetLayout,
   } = useWeatherState();
 
@@ -35,7 +34,6 @@ export default function SearchBar() {
         flexDirection: changeLayout ? "row" : "column",
         marginInline: changeLayout ? 0 : 15,
         marginBlock: changeLayout ? 0 : 10,
-        // transition: "all linear 0.05s",
       }}
     >
       <form
