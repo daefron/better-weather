@@ -22,6 +22,7 @@ export function WeatherProvider({ children }) {
   const [showList, setShowList] = useState(false); //shows/hides the list
   const [loading, setLoading] = useState(false); //shows/hides while loading
   const [changeLayout, setChangeLayout] = useState(false); //changes layout
+  const [shrinkNav, setShrinkNav] = useState(true); //tells nav to grow/shrink before rerender
 
   const inputCoordsRef = useRef(""); //parsed coordinates from locationInput
   const [mapData, setMapData] = useState([]); //parsed data to be shown on map
@@ -43,10 +44,8 @@ export function WeatherProvider({ children }) {
     //prevents multiple requests
     if (loading || !locationInput) return;
 
+    resetLayout();
     setLoading(true);
-    setShowMap(false);
-    setShowList(false);
-    setChangeLayout(false);
     setSelectedHour(10);
     setUseHours(false);
 
@@ -85,7 +84,7 @@ export function WeatherProvider({ children }) {
       setMapData(parsedData);
       setErrorMessage("");
       setLoading(false);
-      setChangeLayout(true);
+      setChangeLayout(true)
       setTimeout(() => {
         setShowMap(true);
         inputRef.current.disabled = false;
@@ -129,6 +128,8 @@ export function WeatherProvider({ children }) {
         useHours,
         setUseHours,
         resetLayout,
+        shrinkNav,
+        setShrinkNav,
       }}
     >
       {children}

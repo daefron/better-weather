@@ -1,5 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faCalendar } from "@fortawesome/free-solid-svg-icons";
+
+import { useRef } from "react";
+
 export default function NavDates({
   mapData,
   unitType,
@@ -7,18 +10,16 @@ export default function NavDates({
   setSelectedHour,
   setUseHours,
   useHours,
+  changeLayout,
 }) {
+  const contentRef = useRef();
+
+  if (!contentRef.current) {
+    if (!changeLayout) return;
+  }
+  contentRef.current = mapData;
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        backgroundColor: "rgba(32,53,42,1)",
-        border: "1px outset RGBA(0,0,0,1)",
-        position: "relative",
-        zIndex: 10,
-      }}
-    >
+    <>
       <div
         style={{
           display: "flex",
@@ -42,7 +43,7 @@ export default function NavDates({
           }}
         />
       </div>
-      {mapData[0].dates.map((date, index) => {
+      {contentRef.current[0].dates.map((date, index) => {
         index += 1;
         const options = { weekday: "short" };
         const renderDate = new Intl.DateTimeFormat("en-US", options).format(
@@ -88,6 +89,6 @@ export default function NavDates({
           </div>
         );
       })}
-    </div>
+    </>
   );
 }

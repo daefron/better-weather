@@ -89,7 +89,7 @@ function App() {
             flexShrink: changeLayout ? 1 : 0,
           }}
         >
-          {changeLayout ? <NavBar /> : null}
+          <NavBar />
           <SearchBar />
           {changeLayout ? null : !loading ? <Settings /> : null}
         </footer>

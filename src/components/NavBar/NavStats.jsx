@@ -1,9 +1,16 @@
+import { useRef } from "react";
 export default function NavStats({
   centerPoint,
   selectedHour,
   amPm,
   useHours,
+  changeLayout,
 }) {
+  const contentRef = useRef();
+  if (!contentRef.current) {
+    if (!changeLayout) return;
+  }
+
   const dateIndex = Math.floor(selectedHour / 24);
   const date = new Date(centerPoint.dates[dateIndex].date);
   const weekdayContent = new Intl.DateTimeFormat("en-AU", {
@@ -26,24 +33,19 @@ export default function NavStats({
   const tempContent = valueSource.temp + "°C";
   const rainContent = valueSource.rainChance + "% rain";
   const windContent = valueSource.windMax + "km/h";
+  
+  contentRef.current = {
+    dateTime: dateTimeContent,
+    temp: tempContent,
+    rain: rainContent,
+    wind: windContent,
+  };
   return (
-    <div
-      style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "space-between",
-        gap: 10,
-        border: "outset 1px black",
-        boxSizing: "border-box",
-        paddingInline: 10,
-        paddingBlock: 5,
-        fontSize: 16,
-      }}
-    >
-      <p style={{ flexGrow: 1 }}>{dateTimeContent}</p>
-      <p>{tempContent}</p>
-      <p>{rainContent}</p>
-      <p>{windContent}</p>
-    </div>
+    <>
+      <p style={{ flexGrow: 1 }}>{contentRef.current.dateTime}</p>
+      <p>{contentRef.current.temp}</p>
+      <p>{contentRef.current.rain}</p>
+      <p>{contentRef.current.wind}</p>
+    </>
   );
 }
