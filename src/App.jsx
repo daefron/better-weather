@@ -54,6 +54,7 @@ function App() {
               paddingBlock: changeLayout ? 10 : 0,
               textAlign: "center",
               flexGrow: 1,
+              fontWeight: "normal",
             }}
           >
             Better Weather
