@@ -78,7 +78,6 @@ export default function NavBar() {
           backgroundColor: "rgba(32,53,42,1)",
           position: "relative",
           zIndex: 11,
-          border: changeLayout ? "outset 1px black" : "none",
           boxSizing: "border-box",
           paddingBlock: changeLayout ? 5 : 0,
           fontSize: 16,

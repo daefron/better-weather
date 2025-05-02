@@ -46,8 +46,12 @@ export default function NavStats({
     <>
       <p
         style={{
-          paddingInline:"clamp(2px,1vw,5px)",
+          height: 30,
+          lineHeight: "30px",
+          border: "1px outset black",
+          paddingInline: "clamp(2px,1vw,5px)",
           fontSize: "clamp(10px, 3.5vw, 16px)",
+          backgroundColor: "rgb(31, 53, 42)",
           flexGrow: 1,
         }}
       >
@@ -55,7 +59,7 @@ export default function NavStats({
       </p>
       <button
         style={{
-          paddingInline:"clamp(2px,1vw,5px)",
+          paddingInline: "clamp(2px,1vw,5px)",
           fontSize: "clamp(10px, 3.5vw, 16px)",
           height: "calc(100% + 12px)",
           border: unitType === "temp" ? "1px inset black" : null,
@@ -70,7 +74,7 @@ export default function NavStats({
       </button>
       <button
         style={{
-          paddingInline:"clamp(2px,1vw,5px)",
+          paddingInline: "clamp(2px,1vw,5px)",
           fontSize: "clamp(10px, 3.5vw, 16px)",
           height: "calc(100% + 12px)",
           border: unitType === "rainChance" ? "1px inset black" : null,
@@ -85,7 +89,7 @@ export default function NavStats({
       </button>
       <button
         style={{
-          paddingInline:"clamp(2px,1vw,5px)",
+          paddingInline: "clamp(2px,1vw,5px)",
           fontSize: "clamp(10px, 3.5vw, 16px)",
           height: "calc(100% + 12px)",
           border: unitType === "windMax" ? "1px inset black" : null,
