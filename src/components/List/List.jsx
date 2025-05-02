@@ -12,6 +12,7 @@ export default function List() {
     setShowList,
     mapData,
     selectedHour,
+    useHours,
     unitType,
     centerPoint,
     selectedLocation,
@@ -20,19 +21,22 @@ export default function List() {
 
   const sortedData = [...mapData]
     .map((place, i) => {
+      const dataSource = useHours
+        ? place.hours[selectedHour]
+        : place.dates[Math.floor(selectedHour / 24)];
       if (!i) {
         return {
           suburb: place.suburb,
-          temp: place.hours[selectedHour].temp,
-          rainChance: place.hours[selectedHour].rainChance,
+          temp: dataSource.temp,
+          rainChance: dataSource.rainChance,
           chosenLocation: true,
           index: i,
         };
       }
       return {
         suburb: place.suburb,
-        temp: place.hours[selectedHour].temp,
-        rainChance: place.hours[selectedHour].rainChance,
+        temp: dataSource.temp,
+        rainChance: dataSource.rainChance,
         index: i,
       };
     })
@@ -105,7 +109,10 @@ export default function List() {
       >
         {sortedData.map((place, i) => {
           const diffToChosen = (
-            place[unitType] - centerPoint.hours[selectedHour][unitType]
+            place[unitType] -
+            (useHours
+              ? centerPoint.hours[selectedHour][unitType]
+              : centerPoint.dates[Math.floor(selectedHour / 24)][unitType])
           ).toFixed(1);
           return (
             <div
