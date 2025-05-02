@@ -9,7 +9,7 @@ const WeatherContext = createContext();
 export function WeatherProvider({ children }) {
   const [locationInput, setLocationInput] = useState(""); //user-typed location
   const [radiusKMInput, setRadiusKMInput] = useState(50); //coordinate distance between circles in km
-  const [selectedHour, setSelectedHour] = useState(8); //user-selected hour
+  const [selectedHour, setSelectedHour] = useState(10); //user-selected hour
   const [unitType, setUnitType] = useState("temp"); //toggles between temp/rain
   const [amPm, setAmPm] = useState("AM"); //toggles between AM/PM
   const [selectedLocation, setSelectedLocation] = useState();
@@ -41,6 +41,8 @@ export function WeatherProvider({ children }) {
     setShowMap(false);
     setShowList(false);
     setChangeLayout(false);
+    setSelectedHour(10);
+    setUseHours(false);
 
     try {
       const fetchError = new Error("No results found for this location.");
