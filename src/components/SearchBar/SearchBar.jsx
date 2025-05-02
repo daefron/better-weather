@@ -14,6 +14,7 @@ export default function SearchBar() {
     unitType,
     setUnitType,
     setShowMap,
+    resetLayout,
   } = useWeatherState();
 
   function tempRainSwitch(e) {
@@ -34,6 +35,7 @@ export default function SearchBar() {
         flexDirection: changeLayout ? "row" : "column",
         marginInline: changeLayout ? 0 : 15,
         marginBlock: changeLayout ? 0 : 10,
+        transition: "all linear 0.05s",
       }}
     >
       <form
@@ -50,6 +52,11 @@ export default function SearchBar() {
           style={{ width: "100%", fontSize: 18, padding: 4 }}
           onChange={(e) => {
             setLocationInput(e.target.value);
+          }}
+          onFocus={() => {
+            if (changeLayout) {
+              resetLayout();
+            }
           }}
           ref={inputRef}
           placeholder="Search for a location"
@@ -77,7 +84,7 @@ export default function SearchBar() {
           >
             Temp/Rain
           </button>
-          <button
+          {/* <button
             style={{ fontSize: 16, flexGrow: 1 }}
             onClick={() => {
               setChangeLayout(false);
@@ -85,7 +92,7 @@ export default function SearchBar() {
             }}
           >
             Settings
-          </button>
+          </button> */}
         </>
       ) : loading ? (
         <div

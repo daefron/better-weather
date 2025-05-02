@@ -31,6 +31,12 @@ export function WeatherProvider({ children }) {
 
   const [errorMessage, setErrorMessage] = useState(); //error message to display
 
+  function resetLayout() {
+    setShowMap(false);
+    setShowList(false);
+    setChangeLayout(false);
+  }
+
   async function userSubmit(e) {
     e.preventDefault();
 
@@ -122,6 +128,7 @@ export function WeatherProvider({ children }) {
         setSelectedLocation,
         useHours,
         setUseHours,
+        resetLayout,
       }}
     >
       {children}
