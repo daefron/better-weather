@@ -52,6 +52,7 @@ function App() {
             style={{
               height: "fit-content",
               paddingBlock: changeLayout ? 10 : 0,
+              fontSize: changeLayout ? "clamp(20px, 7vw, 34px)" : null,
               textAlign: "center",
               flexGrow: 1,
               fontWeight: "normal",
@@ -84,6 +85,7 @@ function App() {
             width: "100%",
             height: changeLayout ? "auto" : 200,
             display: "flex",
+            flexGrow: 1,
             flexDirection: "column",
             zIndex: 50,
             boxShadow: changeLayout ? "0px -3px 3px rgba(0,0,0,0.05)" : null,
@@ -96,6 +98,17 @@ function App() {
           <NavBar />
           <SearchBar />
           <Settings />
+          {!changeLayout ? (
+            <p
+              style={{
+                alignSelf: "center",
+                marginTop: "auto",
+                marginBottom: 40,
+              }}
+            >
+              Created by Thomas Evans
+            </p>
+          ) : null}
         </footer>
       </div>
       <div
