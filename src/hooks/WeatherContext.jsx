@@ -9,6 +9,7 @@ const WeatherContext = createContext();
 export function WeatherProvider({ children }) {
   const [locationInput, setLocationInput] = useState(""); //user-typed location
   const [radiusKMInput, setRadiusKMInput] = useState(50); //coordinate distance between circles in km
+  const [radiusDensity, setRadiusDensity] = useState(2); //how often points are chosen on circle
   const [selectedHour, setSelectedHour] = useState(10); //user-selected hour
   const [unitType, setUnitType] = useState("temp"); //toggles between temp/rain
   const [amPm, setAmPm] = useState("AM"); //toggles between AM/PM
@@ -39,15 +40,15 @@ export function WeatherProvider({ children }) {
     setSelectedHour(10);
     setUseHours(false);
   }
-  
+
   async function userSubmit(e) {
     e.preventDefault();
-    
+
     //prevents multiple requests
     if (loading || !locationInput) return;
-    
+
     resetLayout();
-    
+
     setLoading(true);
 
     try {
@@ -63,7 +64,8 @@ export function WeatherProvider({ children }) {
       const weatherCoords = coordinateMaker(
         inputCoordsRef,
         normalizedRadius,
-        ringCount
+        ringCount,
+        radiusDensity
       );
       const weatherData = await fetchWeather(weatherCoords);
       if (!weatherData) throw fetchError;
@@ -85,7 +87,7 @@ export function WeatherProvider({ children }) {
       setMapData(parsedData);
       setErrorMessage("");
       setLoading(false);
-      setChangeLayout(true)
+      setChangeLayout(true);
       setTimeout(() => {
         setShowMap(true);
         inputRef.current.disabled = false;
@@ -131,6 +133,8 @@ export function WeatherProvider({ children }) {
         resetLayout,
         shrinkNav,
         setShrinkNav,
+        radiusDensity,
+        setRadiusDensity,
       }}
     >
       {children}

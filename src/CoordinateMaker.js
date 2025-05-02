@@ -26,7 +26,12 @@ function destinationPoint(lat, lng, distanceKm, bearingDegrees) {
 }
 
 //creates array of coordinate points in radius around user input
-export function coordinateMaker(inputCoords, radiusInput, radiusRings) {
+export function coordinateMaker(
+  inputCoords,
+  radiusInput,
+  radiusRings,
+  radiusDensity
+) {
   //user inputted location
   const centerLat = inputCoords.current.lat;
   const centerLng = inputCoords.current.lng;
@@ -37,7 +42,7 @@ export function coordinateMaker(inputCoords, radiusInput, radiusRings) {
   for (let radius = 1; radius <= radiusRings; radius++) {
     const distance = radius * radiusInput * 100; //distance in km
     const circumference = 2 * Math.PI * distance; //circumfrence of the circle
-    const pointCount = Math.max(4, Math.round(circumference / baseSpacingKm));
+    const pointCount = Math.max(4, Math.round(circumference / baseSpacingKm)) * (radiusDensity / 2);
 
     const angleSlice = 360 / pointCount;
     for (let point = 0; point < pointCount; point++) {

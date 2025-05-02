@@ -1,9 +1,16 @@
 import { useWeatherState } from "../../hooks/WeatherContext";
 export default function Settings() {
-  const { radiusKMInput, setRadiusKMInput, changeLayout, loading } =
-    useWeatherState();
+  const {
+    radiusKMInput,
+    setRadiusKMInput,
+    changeLayout,
+    loading,
+    radiusDensity,
+    setRadiusDensity,
+  } = useWeatherState();
 
   const radiusOptions = [25, 50, 75, 100, 125, 150];
+  const densityOptions = [1, 2, 4, 8];
 
   return (
     <div
@@ -14,26 +21,26 @@ export default function Settings() {
         marginInline: !changeLayout ? 15 : 0,
         display: "flex",
         flexDirection: "column",
+        gap: 10,
       }}
     >
       {changeLayout ? null : !loading ? (
         <>
-          <form
+          <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               gap: 10,
             }}
-            onChange={(e) => setRadiusKMInput(e.target.value)}
           >
-            <label htmlFor="searchRadius">Search radius (km):</label>
+            <p style={{ flexGrow: 1 }}>Search radius (km):</p>
             {radiusOptions.map((option) => {
               return (
                 <button
                   key={"radiusOption" + option}
                   style={{
-                    flexGrow: 1,
+                    width: "10%",
                     paddingBlock: 3,
                     background:
                       radiusKMInput === option
@@ -53,7 +60,42 @@ export default function Settings() {
                 </button>
               );
             })}
-          </form>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
+            <p style={{ flexGrow: 1 }}>Result density:</p>
+            {densityOptions.map((option) => {
+              return (
+                <button
+                  key={"densityOption" + option}
+                  style={{
+                    width: "10%",
+                    paddingBlock: 3,
+                    background:
+                      radiusDensity === option
+                        ? "rgb(52,105,78)"
+                        : "rgb(41,70,55)",
+                    border:
+                      radiusDensity === option
+                        ? "2px inset black"
+                        : "2px outset black",
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setRadiusDensity(option);
+                  }}
+                >
+                  {option}
+                </button>
+              );
+            })}
+          </div>
         </>
       ) : null}
     </div>
