@@ -25,6 +25,7 @@ export default function NavDates({
           display: "flex",
           justifyContent: "center",
           width: "10%",
+          minWidth: 30,
           backgroundColor: useHours ? "RGB(25,45,35)" : null,
           border: useHours
             ? "1px inset RGBA(0,0,0,1)"
@@ -54,11 +55,13 @@ export default function NavDates({
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center",
           gap: 5,
           flexGrow: 1,
           paddingBlock: 5,
-          fontSize: "clamp(10px,4vw,16px)",
+          fontSize: "clamp(10px,3vw,16px)",
           border: "1px outset black",
+          textAlign: "center",
         };
         if (index === Math.ceil((selectedHour + 1) / 24)) {
           style.backgroundColor = "RGBA(25,45,35,1)";
@@ -74,7 +77,7 @@ export default function NavDates({
             content = `${date.rainChance}%`;
             break;
           case "windMax":
-            content = `${date.windMax}km/h`;
+            content = `${date.windMax} km/h`;
 
             break;
         }
