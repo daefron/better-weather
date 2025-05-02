@@ -11,7 +11,7 @@ import List from "./components/List/List";
 function App() {
   const { loading, showMap, changeLayout } = useWeatherState();
   return (
-    <div style={{ width: "100%", display: "flex" }}>
+    <div style={{ width: "100%", height: "100%", display: "flex" }}>
       <div
         style={{
           height: "100%",
@@ -23,7 +23,7 @@ function App() {
       <div
         style={{
           width: "min(100vw, 500px)",
-          height: "100vh",
+          height: "100%",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -65,8 +65,10 @@ function App() {
             transition: "flex-grow 1s ease",
             width: "100%",
             display: "flex",
-            maxHeight: "90vh",
+            height:"0%",
+            maxHeight: "90%",
             backgroundColor: "rgba(15,26,21,1)",
+            transition: "all 1s ease",
           }}
         >
           {showMap ? (

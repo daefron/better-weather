@@ -63,7 +63,7 @@ export default function List() {
         display: "flex",
         alignSelf: "center",
         height: "calc(100% - 2px)",
-        maxHeight: "max(70vh, 500px)",
+        maxHeight: "max(70%, 500px)",
         position: "relative",
         width: "min(90vw, 450px)",
         marginRight: "max(calc(-90vw - 2px), -452px)",
