@@ -87,6 +87,7 @@ export default function NavBar() {
           amPm={amPm}
           useHours={useHours}
           changeLayout={changeLayout}
+          unitType={unitType}
         />
       </div>
     </div>

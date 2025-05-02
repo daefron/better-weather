@@ -5,6 +5,7 @@ export default function NavStats({
   amPm,
   useHours,
   changeLayout,
+  unitType
 }) {
   const contentRef = useRef();
   if (!contentRef.current) {
@@ -33,7 +34,7 @@ export default function NavStats({
   const tempContent = valueSource.temp + "°C";
   const rainContent = valueSource.rainChance + "% rain";
   const windContent = valueSource.windMax + "km/h";
-  
+
   contentRef.current = {
     dateTime: dateTimeContent,
     temp: tempContent,
@@ -43,9 +44,21 @@ export default function NavStats({
   return (
     <>
       <p style={{ flexGrow: 1 }}>{contentRef.current.dateTime}</p>
-      <p>{contentRef.current.temp}</p>
-      <p>{contentRef.current.rain}</p>
-      <p>{contentRef.current.wind}</p>
+      <p style={{ textDecoration: unitType === "temp" ? "underline" : null }}>
+        {contentRef.current.temp}
+      </p>
+      <p
+        style={{
+          textDecoration: unitType === "rainChance" ? "underline" : null,
+        }}
+      >
+        {contentRef.current.rain}
+      </p>
+      <p
+        style={{ textDecoration: unitType === "windMax" ? "underline" : null }}
+      >
+        {contentRef.current.wind}
+      </p>
     </>
   );
 }
