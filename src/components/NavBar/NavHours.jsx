@@ -12,7 +12,13 @@ export default function NavHours({
   }
   let hours = [];
   for (let i = 0; i < 24; i++) {
-    hours.push((i % 12) + 1);
+    if (i === 0) {
+      hours.push(12);
+    } else if (i === 12) {
+      hours.push(12);
+    } else {
+      hours.push(i % 12);
+    }
   }
   return (
     <>

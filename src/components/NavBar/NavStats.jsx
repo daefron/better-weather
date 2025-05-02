@@ -23,9 +23,9 @@ export default function NavStats({
     month: "numeric",
   }).format(date);
   const timeContent = useHours
-    ? selectedHour % 12 !== 11
-      ? " - " + ((selectedHour + 1) % 12) + " " + amPm
-      : " - " + 12 + (amPm === "AM" ? "PM" : "AM")
+    ? selectedHour % 12 !== 0
+      ? " - " + (selectedHour % 12) + " " + amPm
+      : " - " + 12 + amPm
     : "";
   const dateTimeContent = weekdayContent + " " + dateContent + timeContent;
 
