@@ -77,20 +77,17 @@ export default function SearchBar() {
       {changeLayout ? (
         <>
           <button
-            style={{ fontSize: 16, flexGrow: 1 }}
+            style={{ fontSize: 16, width: "25%" }}
             onClick={tempRainSwitch}
           >
-            Temp/Rain
+            {unitType === "temp"
+              ? "Temp"
+              : unitType === "rainChance"
+              ? "Rain"
+              : unitType === "windMax"
+              ? "Wind"
+              : null}
           </button>
-          {/* <button
-            style={{ fontSize: 16, flexGrow: 1 }}
-            onClick={() => {
-              setChangeLayout(false);
-              setShowMap(false);
-            }}
-          >
-            Settings
-          </button> */}
         </>
       ) : loading ? (
         <div
