@@ -69,7 +69,8 @@ export default function GoogleMap() {
 
           const colorRatio = useHours
             ? contentValue / centerPoint.hours[selectedHour][unitType]
-            : contentValue / centerPoint.dates[Math.floor(selectedHour / 24)][unitType];
+            : contentValue /
+              centerPoint.dates[Math.floor(selectedHour / 24)][unitType];
 
           let content, positiveValue, negativeValue;
           switch (unitType) {
@@ -106,6 +107,20 @@ export default function GoogleMap() {
               } else {
                 positiveValue = 255 * (2 - colorRatio);
                 negativeValue = 255;
+              }
+              break;
+            case "windMax":
+              if (selectedLocation === i) {
+                content = `${data.suburb} - ${contentValue}km/h`;
+              } else {
+                content = `${contentValue}km/h`;
+              }
+              if (colorRatio > 1) {
+                negativeValue = 255;
+                positiveValue = 255 * colorRatio;
+              } else {
+                positiveValue = 255;
+                negativeValue = 255 * (2 - colorRatio) * 0.8;
               }
               break;
           }

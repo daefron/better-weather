@@ -72,6 +72,10 @@ export default function NavDates({
           case "rainChance":
             content = `${date.rainChance}%`;
             break;
+          case "windMax":
+            content = `${date.windMax}km/h`;
+
+            break;
         }
 
         return (

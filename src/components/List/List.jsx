@@ -29,6 +29,7 @@ export default function List() {
           suburb: place.suburb,
           temp: dataSource.temp,
           rainChance: dataSource.rainChance,
+          windMax: dataSource.windMax,
           chosenLocation: true,
           index: i,
         };
@@ -37,6 +38,7 @@ export default function List() {
         suburb: place.suburb,
         temp: dataSource.temp,
         rainChance: dataSource.rainChance,
+        windMax: dataSource.windMax,
         index: i,
       };
     })
@@ -49,6 +51,9 @@ export default function List() {
       break;
     case "rainChance":
       symbol = "%";
+      break;
+    case "windMax":
+      symbol = "km/h";
       break;
   }
 

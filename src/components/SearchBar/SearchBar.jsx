@@ -22,6 +22,9 @@ export default function SearchBar() {
         setUnitType("rainChance");
         break;
       case "rainChance":
+        setUnitType("windMax");
+        break;
+      case "windMax":
         setUnitType("temp");
         break;
     }
