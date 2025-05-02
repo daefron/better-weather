@@ -65,7 +65,7 @@ function App() {
             transition: "flex-grow 1s ease",
             width: "100%",
             display: "flex",
-            height:"0%",
+            height: "0%",
             maxHeight: "90%",
             backgroundColor: "rgba(15,26,21,1)",
             transition: "all 1s ease",

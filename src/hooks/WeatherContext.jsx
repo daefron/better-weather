@@ -90,7 +90,6 @@ export function WeatherProvider({ children }) {
       setChangeLayout(true);
       setTimeout(() => {
         setShowMap(true);
-        inputRef.current.disabled = false;
       }, 1000);
     } catch (error) {
       console.error("Initial fetch failed:", error);

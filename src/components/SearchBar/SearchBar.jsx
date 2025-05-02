@@ -10,25 +10,9 @@ export default function SearchBar() {
     errorMessage,
     loading,
     inputRef,
-    unitType,
-    setUnitType,
     resetLayout,
   } = useWeatherState();
 
-  function tempRainSwitch(e) {
-    e.preventDefault();
-    switch (unitType) {
-      case "temp":
-        setUnitType("rainChance");
-        break;
-      case "rainChance":
-        setUnitType("windMax");
-        break;
-      case "windMax":
-        setUnitType("temp");
-        break;
-    }
-  }
   return (
     <div
       style={{
@@ -36,6 +20,7 @@ export default function SearchBar() {
         flexDirection: changeLayout ? "row" : "column",
         marginInline: changeLayout ? 0 : 15,
         marginBlock: changeLayout ? 0 : 10,
+        userSelect: true,
       }}
     >
       <form
@@ -45,18 +30,27 @@ export default function SearchBar() {
           flexGrow: 8,
           position: "relative",
         }}
+        onClick={() => {
+          if (changeLayout) {
+            inputRef.current.disabled = false;
+            resetLayout();
+          }
+        }}
       >
         <input
           type="text"
           id="userLocation"
-          style={{ width: "calc(100% - 10px)", fontSize: 18, padding: 4 }}
+          style={{
+            width: "calc(100% - 10px)",
+            fontSize: 18,
+            padding: 4,
+            position: "relative",
+            zIndex: changeLayout ? -1 : 1,
+            border: changeLayout ? "1px outset black" : null,
+            background: changeLayout ? "rgb(32,53,42)" : null,
+          }}
           onChange={(e) => {
             setLocationInput(e.target.value);
-          }}
-          onFocus={() => {
-            if (changeLayout) {
-              resetLayout();
-            }
           }}
           ref={inputRef}
           placeholder="Search for a location"
@@ -73,6 +67,7 @@ export default function SearchBar() {
             transform: "translateY(-50%)",
             color: "#888",
             cursor: "pointer",
+            zIndex: changeLayout ? -2 : 2,
           }}
         />
       </form>

@@ -59,7 +59,7 @@ export default function NavDates({
           gap: 5,
           flexGrow: 1,
           paddingBlock: 5,
-          fontSize: "clamp(10px,3vw,16px)",
+          fontSize: "clamp(10px,3vw,15px)",
           border: "1px outset black",
           textAlign: "center",
         };
