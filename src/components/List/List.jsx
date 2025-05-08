@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
+  faMap,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useWeatherState } from "../../hooks/WeatherContext";
@@ -25,6 +26,9 @@ export default function List() {
       const dataSource = useHours
         ? place.hours[selectedHour]
         : place.dates[Math.floor(selectedHour / 24)];
+      const url = new URL(
+        `https://www.google.com/maps/place/${place.suburb},${place.latitude},${place.longitude}`
+      );
       if (!i) {
         return {
           suburb: place.suburb,
@@ -33,6 +37,7 @@ export default function List() {
           windMax: dataSource.windMax,
           distance: place.distance,
           chosenLocation: true,
+          url: url,
           index: i,
         };
       }
@@ -42,6 +47,7 @@ export default function List() {
         rainChance: dataSource.rainChance,
         windMax: dataSource.windMax,
         distance: place.distance,
+        url: url,
         index: i,
       };
     })
@@ -96,7 +102,7 @@ export default function List() {
           icon={showList ? faChevronRight : faChevronLeft}
           style={{
             pointerEvents: "none",
-            color: "#dcfff9",
+            color: "#affff",
             height: 20,
           }}
         />
@@ -128,10 +134,10 @@ export default function List() {
               style={{
                 border: "solid 4px rgba(0,0,0,0.13)",
                 borderInline: " solid 10px rgba(0,0,0,0.13)",
-                paddingInline: 5,
-                paddingBlock: 1,
+                padding: 8,
                 display: "flex",
                 justifyContent: "space-between",
+                alignItems: "center",
                 fontSize: 18,
                 fontWeight: place.chosenLocation ? "bold" : "normal",
                 textDecoration:
@@ -159,6 +165,15 @@ export default function List() {
                     : diffToChosen
                   : diffToChosen}
               </p>
+              <a href={place.url} target="_blank">
+                <FontAwesomeIcon
+                  icon={faMap}
+                  style={{
+                    color: "#affff",
+                    height: 18,
+                  }}
+                />
+              </a>
             </div>
           );
         })}
