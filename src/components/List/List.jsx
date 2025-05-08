@@ -30,6 +30,7 @@ export default function List() {
           temp: dataSource.temp,
           rainChance: dataSource.rainChance,
           windMax: dataSource.windMax,
+          distance: place.distance,
           chosenLocation: true,
           index: i,
         };
@@ -39,6 +40,7 @@ export default function List() {
         temp: dataSource.temp,
         rainChance: dataSource.rainChance,
         windMax: dataSource.windMax,
+        distance: place.distance,
         index: i,
       };
     })
@@ -144,6 +146,7 @@ export default function List() {
                 {i + 1}.{" "}
                 {place.chosenLocation ? centerPoint.suburb : place.suburb}
               </p>
+              <p>{place.distance.toFixed(1)} km</p>
               <p>
                 {place[unitType]}
                 {symbol}
