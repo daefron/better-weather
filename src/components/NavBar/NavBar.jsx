@@ -21,7 +21,6 @@ export default function NavBar() {
       id="navBar"
       style={{
         maxHeight: changeLayout ? 500 : 0,
-        transition: "all 0.7s linear",
         overflow: "hidden",
       }}
     >
@@ -30,7 +29,7 @@ export default function NavBar() {
           display: "flex",
           justifyContent: "space-between",
           boxSizing: "border-box",
-          border: changeLayout ? "1px outset black" : "none",
+          border: "1px outset black",
           height: useHours ? 34 : 3,
           position: "relative",
           zIndex: 9,
@@ -51,12 +50,12 @@ export default function NavBar() {
           display: "flex",
           justifyContent: "space-between",
           backgroundColor: "rgba(32,53,42,1)",
-          border: changeLayout ? "1px outset black" : "none",
+          border: "1px outset black",
           position: "relative",
           zIndex: 10,
           marginBottom: 1,
-          height: changeLayout ? 51 : 0,
-          transition: "all 0.7s linear",
+          height: 51,
+          // transition: "all 0.7s linear",
         }}
       >
         <NavDates
@@ -79,10 +78,10 @@ export default function NavBar() {
           position: "relative",
           zIndex: 11,
           boxSizing: "border-box",
-          paddingBlock: changeLayout ? 5 : 0,
+          paddingBlock: 5,
           fontSize: 16,
-          height: changeLayout ? 30 : 0,
-          transition: "all 0.5s linear, padding 0s",
+          height: 30,
+          // transition: "all 0.5s linear, padding 0s",
         }}
       >
         <NavStats
