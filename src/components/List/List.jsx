@@ -136,8 +136,8 @@ export default function List() {
               key={"suburbList" + i}
               id={"suburbList" + i}
               style={{
-                border: "solid 4px rgba(0,0,0,0.13)",
-                borderInline: " solid 10px rgba(0,0,0,0.13)",
+                margin: 4,
+                marginInline: 10,
                 padding: 8,
                 display: "flex",
                 justifyContent: "space-between",
@@ -151,7 +151,10 @@ export default function List() {
                 gap: 10,
                 cursor: "pointer",
                 boxSizing: "border-box",
-                backgroundColor: "rgb(31, 53, 42)",
+                backgroundColor:
+                  place.index === selectedLocation
+                    ? "rgb(40,61,50)"
+                    : "rgb(31, 53, 42)",
               }}
               onClick={() => setSelectedLocation(place.index)}
             >
