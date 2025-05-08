@@ -143,7 +143,7 @@ export default function List() {
                 fontSize: 18,
                 fontWeight: place.chosenLocation ? "bold" : "normal",
                 textDecoration:
-                  place.index === selectedLocation ? "underline" : "none",
+                  place.index === selectedLocation ? "underline #afffff" : "none",
                 gap: 10,
                 cursor: "pointer",
                 boxSizing: "border-box",
@@ -181,7 +181,7 @@ export default function List() {
                 <FontAwesomeIcon
                   icon={faMapMarkerAlt}
                   style={{
-                    color: "#affff",
+                    color: "#afffff",
                     height: 18,
                     width: 18,
                   }}
@@ -201,7 +201,7 @@ export default function List() {
                 <FontAwesomeIcon
                   icon={faMap}
                   style={{
-                    color: "#affff",
+                    color: "#afffff",
                     height: 18,
                     width: 18,
                   }}

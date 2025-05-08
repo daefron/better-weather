@@ -41,7 +41,7 @@ export default function NavDates({
           style={{
             width: "clamp(12px,5vw,18px)",
             height: "clamp(12px,5vw,18px)",
-            color: "#dcfff9",
+            color: "#afffff",
             alignSelf: "center",
           }}
         />

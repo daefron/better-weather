@@ -11,8 +11,12 @@ body {
 * {
   margin: 0;
   font-family: Georgia, "Times New Roman", Times, serif;
-  color: rgba(175, 255, 255, 1);
   user-select: none;
+}
+h1,
+p {
+  color: rgba(175, 255, 255, 1);
+  text-decoration-color: rgba(175, 255, 255, 1);
 }
 input {
   background-color: rgb(41, 70, 55);

@@ -65,7 +65,7 @@ export default function SearchBar() {
             right: 10,
             top: "50%",
             transform: "translateY(-50%)",
-            color: "#888",
+            color: "#afffff",
             cursor: "pointer",
             zIndex: changeLayout ? -2 : 2,
           }}

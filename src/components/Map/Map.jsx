@@ -1,6 +1,7 @@
 import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faList } from "@fortawesome/free-solid-svg-icons";
 import { useWeatherState } from "../../hooks/WeatherContext";
-
 const googleApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 if (!googleApiKey) {
   throw new Error("Google Maps Api key is missing.");
@@ -17,6 +18,7 @@ export default function GoogleMap() {
     selectedLocation,
     setSelectedLocation,
     useHours,
+    setShowList,
   } = useWeatherState();
   //zooms map to show all found weather points
   const boundDist = normalizedRadius * ringCount * 0.7;
@@ -58,11 +60,13 @@ export default function GoogleMap() {
         </AdvancedMarker>
         {mapData.map((data, i) => {
           const style = {
+            display: "flex",
+            gap: 5,
             borderRadius: 4,
             padding: 3,
             fontSize: 13,
             color: "black",
-            border:"2px solid rgba(0,0,0,0.2)"
+            border: "2px solid rgba(0,0,0,0.2)",
           };
           const contentValue = useHours
             ? data.hours[selectedHour][unitType]
@@ -129,6 +133,7 @@ export default function GoogleMap() {
           let zIndex = 1;
           if (selectedLocation === i) {
             style.textDecoration = "underline";
+            style.fontSize = 16;
             zIndex = 20;
           } else {
             style.textDecoration = "";
@@ -137,11 +142,28 @@ export default function GoogleMap() {
           return (
             <AdvancedMarker
               key={i + "markerKey"}
+              style={style}
               position={{ lat: data.latitude, lng: data.longitude }}
               zIndex={zIndex}
-              onClick={() => setSelectedLocation(i)}
+              onClick={() =>
+                setSelectedLocation(selectedLocation === i ? null : i)
+              }
             >
-              <p style={style}>{content}</p>
+              <p style={{ color: "black" }}>{content}</p>
+              {selectedLocation === i ? (
+                <FontAwesomeIcon
+                  icon={faList}
+                  color="black"
+                  style={{
+                    height: 18,
+                    width: 18,
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowList(true);
+                  }}
+                />
+              ) : null}
             </AdvancedMarker>
           );
         })}
