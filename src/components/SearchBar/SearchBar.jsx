@@ -79,7 +79,7 @@ export default function SearchBar() {
             marginTop: 15,
           }}
         >
-          <BarLoader width="80%" height={5} color="#dcfff9" />
+          <BarLoader width="80%" height={5} color="#afffff" />
         </div>
       ) : errorMessage ? (
         <p

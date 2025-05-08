@@ -11,22 +11,22 @@ body {
 * {
   margin: 0;
   font-family: Georgia, "Times New Roman", Times, serif;
-  color: rgba(220, 255, 249, 1);
+  color: rgba(175, 255, 255, 1);
   user-select: none;
 }
 input {
   background-color: rgb(41, 70, 55);
-  color: rgba(220, 255, 249, 1);
+  color: rgba(175, 255, 255, 1);
   border-color: black;
   border-width: 1px;
 }
 button {
   background-color: RGBA(31, 53, 42, 1);
-  color: rgba(220, 255, 249, 1);
+  color: rgba(175, 255, 255, 1);
   border-width: 1px;
 }
 input::placeholder {
-  color: rgba(220, 255, 249, 0.8);
+  color: rgba(175, 255, 255, 0.8);
 }
 input:focus {
   outline: none;
