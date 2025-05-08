@@ -3,7 +3,31 @@ if (!googleApiKey) {
   throw new Error("Google Maps Api key is missing.");
 }
 
-function buildWeatherUrl(lat, lng) {
+function buildTimezoneUrl(coords) {
+  const url = new URL("https://maps.googleapis.com/maps/api/timezone/json");
+  url.search = new URLSearchParams({
+    location: coords.lat + "," + coords.lng,
+    timestamp: Date.now() / 1000,
+    key: googleApiKey,
+  }).toString();
+  return url.toString();
+}
+
+export async function fetchTimezone(coords) {
+  const url = buildTimezoneUrl(coords);
+  const response = await fetch(url, { method: "GET" });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status ${response.status}`);
+  }
+
+  const result = await response.json();
+
+  console.log("Center-point timezone data fetched successfully.");
+  return result.timeZoneId;
+}
+
+function buildWeatherUrl(lat, lng, timezone) {
   const url = new URL("https://api.open-meteo.com/v1/forecast");
   url.search = new URLSearchParams({
     latitude: lat,
@@ -11,15 +35,15 @@ function buildWeatherUrl(lat, lng) {
     daily:
       "temperature_2m_max,temperature_2m_min,precipitation_hours,precipitation_probability_max,weather_code,wind_speed_10m_max",
     hourly: "temperature_2m,precipitation_probability,wind_speed_10m",
-    timezone: "auto",
+    timezone: timezone,
   }).toString();
   return url.toString();
 }
 
 //fetches weather data in weatherCoords points
-export async function fetchWeather(weatherCoords) {
+export async function fetchWeather(weatherCoords, timezone) {
   const promises = weatherCoords.map((coords) => {
-    const url = buildWeatherUrl(coords[0], coords[1]);
+    const url = buildWeatherUrl(coords[0], coords[1], timezone);
     return fetch(url, { method: "GET" });
   });
 
@@ -53,7 +77,10 @@ function buildSuburbUrl(lat, lng) {
 
 export async function fetchSuburb(weatherData) {
   const promises = weatherData.map((data) => {
-    const url = buildSuburbUrl((data.latitude).toFixed(5), (data.longitude).toFixed(5));
+    const url = buildSuburbUrl(
+      data.latitude.toFixed(5),
+      data.longitude.toFixed(5)
+    );
     return fetch(url, { method: "GET" });
   });
 
@@ -103,5 +130,6 @@ export async function fetchCoords(locationInput) {
     throw new Error("No results found for this location.");
   }
   console.log("Center-point geometry data fetched successfully.");
+  const coords = result.results[0].geometry.location;
   return result.results[0];
 }

@@ -1,6 +1,11 @@
 import { createContext, useContext, useState, useRef, useMemo } from "react";
 import { coordinateMaker } from "../CoordinateMaker";
-import { fetchWeather, fetchSuburb, fetchCoords } from "../ApiCalls";
+import {
+  fetchWeather,
+  fetchSuburb,
+  fetchCoords,
+  fetchTimezone,
+} from "../ApiCalls";
 import { parseData } from "../WeatherParser";
 import { getStats } from "../DataProcessing";
 
@@ -67,7 +72,11 @@ export function WeatherProvider({ children }) {
         ringCount,
         radiusDensity
       );
-      const weatherData = await fetchWeather(weatherCoords);
+
+      const timezone = await fetchTimezone(inputCoordsRef.current);
+      if (!timezone) throw fetchError;
+
+      const weatherData = await fetchWeather(weatherCoords, timezone);
       if (!weatherData) throw fetchError;
 
       const finalData = await fetchSuburb(weatherData);
