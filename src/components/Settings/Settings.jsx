@@ -9,11 +9,14 @@ export default function Settings() {
     setRadiusDensity,
     tempUnit,
     setTempUnit,
+    dateFormat,
+    setDateFormat,
   } = useWeatherState();
 
   const radiusOptions = [25, 50, 75, 100, 125, 150];
   const densityOptions = [1, 2, 4, 8];
   const tempUnitOptions = ["C", "F"];
+  const dateFormatOptions = ["DD/MM", "MM/DD"];
 
   return (
     <div
@@ -128,6 +131,38 @@ export default function Settings() {
                   }}
                 >
                   °{option}
+                </button>
+              );
+            })}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
+            <p style={{ flexGrow: 1 }}>Date format:</p>
+            {dateFormatOptions.map((option) => {
+              return (
+                <button
+                  key={"dateFormatOption" + option}
+                  style={{
+                    paddingBlock: 3,
+                    background:
+                      dateFormat === option ? "rgb(25,45,35)" : "rgb(41,70,55)",
+                    border:
+                      dateFormat === option
+                        ? "2px inset black"
+                        : "2px outset black",
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setDateFormat(option);
+                  }}
+                >
+                  {option}
                 </button>
               );
             })}

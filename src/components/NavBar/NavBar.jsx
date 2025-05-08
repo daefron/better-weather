@@ -16,6 +16,7 @@ export default function NavBar() {
     setUseHours,
     changeLayout,
     tempUnit,
+    dateFormat,
   } = useWeatherState();
   return (
     <div
@@ -93,6 +94,7 @@ export default function NavBar() {
           unitType={unitType}
           setUnitType={setUnitType}
           tempUnit={tempUnit}
+          dateFormat={dateFormat}
         />
       </div>
     </div>

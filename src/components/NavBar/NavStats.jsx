@@ -8,6 +8,7 @@ export default function NavStats({
   unitType,
   setUnitType,
   tempUnit,
+  dateFormat,
 }) {
   const contentRef = useRef();
   if (!contentRef.current) {
@@ -19,10 +20,13 @@ export default function NavStats({
   const weekdayContent = new Intl.DateTimeFormat("en-AU", {
     weekday: "short",
   }).format(date);
-  const dateContent = new Intl.DateTimeFormat("en-AU", {
-    day: "numeric",
-    month: "numeric",
-  }).format(date);
+  const dateContent = new Intl.DateTimeFormat(
+    dateFormat === "DD/MM" ? "en-AU" : "en-US",
+    {
+      day: "numeric",
+      month: "numeric",
+    }
+  ).format(date);
   const timeContent = useHours
     ? selectedHour % 12 !== 0
       ? " - " + (selectedHour % 12) + " " + amPm

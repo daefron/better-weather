@@ -16,6 +16,7 @@ export function WeatherProvider({ children }) {
   const [radiusKMInput, setRadiusKMInput] = useState(50); //coordinate distance between circles in km
   const [radiusDensity, setRadiusDensity] = useState(2); //how often points are chosen on circle
   const [tempUnit, setTempUnit] = useState("C"); //sets celsius/fahrenheit
+  const [dateFormat, setDateFormat] = useState("DD/MM"); //sets date format for display
   const [selectedHour, setSelectedHour] = useState(10); //user-selected hour
   const [unitType, setUnitType] = useState("temp"); //toggles between temp/rain
   const [amPm, setAmPm] = useState("AM"); //toggles between AM/PM
@@ -146,6 +147,8 @@ export function WeatherProvider({ children }) {
         setRadiusDensity,
         tempUnit,
         setTempUnit,
+        dateFormat,
+        setDateFormat,
       }}
     >
       {children}
