@@ -15,6 +15,7 @@ export default function NavBar() {
     useHours,
     setUseHours,
     changeLayout,
+    tempUnit,
   } = useWeatherState();
   return (
     <div
@@ -55,7 +56,6 @@ export default function NavBar() {
           zIndex: 10,
           marginBottom: 1,
           height: 51,
-          // transition: "all 0.7s linear",
         }}
       >
         <NavDates
@@ -66,6 +66,7 @@ export default function NavBar() {
           setUseHours={setUseHours}
           useHours={useHours}
           changeLayout={changeLayout}
+          tempUnit={tempUnit}
         />
       </div>
       <div
@@ -81,7 +82,6 @@ export default function NavBar() {
           paddingBlock: 5,
           fontSize: 16,
           height: 30,
-          // transition: "all 0.5s linear, padding 0s",
         }}
       >
         <NavStats
@@ -92,6 +92,7 @@ export default function NavBar() {
           changeLayout={changeLayout}
           unitType={unitType}
           setUnitType={setUnitType}
+          tempUnit={tempUnit}
         />
       </div>
     </div>

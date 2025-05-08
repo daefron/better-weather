@@ -27,7 +27,7 @@ export async function fetchTimezone(coords) {
   return result.timeZoneId;
 }
 
-function buildWeatherUrl(lat, lng, timezone) {
+function buildWeatherUrl(lat, lng, timezone, tempUnit) {
   const url = new URL("https://api.open-meteo.com/v1/forecast");
   url.search = new URLSearchParams({
     latitude: lat,
@@ -36,14 +36,15 @@ function buildWeatherUrl(lat, lng, timezone) {
       "temperature_2m_max,temperature_2m_min,precipitation_hours,precipitation_probability_max,weather_code,wind_speed_10m_max",
     hourly: "temperature_2m,precipitation_probability,wind_speed_10m",
     timezone: timezone,
+    temperature_unit: tempUnit === "C" ? "celsius" : "fahrenheit",
   }).toString();
   return url.toString();
 }
 
 //fetches weather data in weatherCoords points
-export async function fetchWeather(weatherCoords, timezone) {
+export async function fetchWeather(weatherCoords, timezone, tempUnit) {
   const promises = weatherCoords.map((coords) => {
-    const url = buildWeatherUrl(coords[0], coords[1], timezone);
+    const url = buildWeatherUrl(coords[0], coords[1], timezone, tempUnit);
     return fetch(url, { method: "GET" });
   });
 

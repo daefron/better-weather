@@ -7,6 +7,7 @@ export default function NavStats({
   changeLayout,
   unitType,
   setUnitType,
+  tempUnit,
 }) {
   const contentRef = useRef();
   if (!contentRef.current) {
@@ -32,7 +33,7 @@ export default function NavStats({
   const valueSource = useHours
     ? centerPoint.hours[selectedHour]
     : centerPoint.dates[Math.floor(selectedHour / 24)];
-  const tempContent = "Temp - " + valueSource.temp + "°C";
+  const tempContent = "Temp - " + valueSource.temp + "°" + tempUnit;
   const rainContent = "Rain - " + valueSource.rainChance + "%";
   const windContent = "Wind - " + valueSource.windMax + "km/h";
 

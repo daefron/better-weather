@@ -11,6 +11,7 @@ export default function NavDates({
   setUseHours,
   useHours,
   changeLayout,
+  tempUnit,
 }) {
   const contentRef = useRef();
 
@@ -71,7 +72,7 @@ export default function NavDates({
         let content;
         switch (unitType) {
           case "temp":
-            content = `${date.temp}°C`;
+            content = `${date.temp}°${tempUnit}`;
             break;
           case "rainChance":
             content = `${date.rainChance}%`;

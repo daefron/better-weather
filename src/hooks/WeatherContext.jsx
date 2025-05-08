@@ -15,6 +15,7 @@ export function WeatherProvider({ children }) {
   const [locationInput, setLocationInput] = useState(""); //user-typed location
   const [radiusKMInput, setRadiusKMInput] = useState(50); //coordinate distance between circles in km
   const [radiusDensity, setRadiusDensity] = useState(2); //how often points are chosen on circle
+  const [tempUnit, setTempUnit] = useState("C"); //sets celsius/fahrenheit
   const [selectedHour, setSelectedHour] = useState(10); //user-selected hour
   const [unitType, setUnitType] = useState("temp"); //toggles between temp/rain
   const [amPm, setAmPm] = useState("AM"); //toggles between AM/PM
@@ -76,7 +77,7 @@ export function WeatherProvider({ children }) {
       const timezone = await fetchTimezone(inputCoordsRef.current);
       if (!timezone) throw fetchError;
 
-      const weatherData = await fetchWeather(weatherCoords, timezone);
+      const weatherData = await fetchWeather(weatherCoords, timezone, tempUnit);
       if (!weatherData) throw fetchError;
 
       const finalData = await fetchSuburb(weatherData);
@@ -143,6 +144,8 @@ export function WeatherProvider({ children }) {
         setShrinkNav,
         radiusDensity,
         setRadiusDensity,
+        tempUnit,
+        setTempUnit,
       }}
     >
       {children}

@@ -7,10 +7,13 @@ export default function Settings() {
     loading,
     radiusDensity,
     setRadiusDensity,
+    tempUnit,
+    setTempUnit,
   } = useWeatherState();
 
   const radiusOptions = [25, 50, 75, 100, 125, 150];
   const densityOptions = [1, 2, 4, 8];
+  const tempUnitOptions = ["C", "F"];
 
   return (
     <div
@@ -92,6 +95,39 @@ export default function Settings() {
                   }}
                 >
                   {option}
+                </button>
+              );
+            })}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
+            <p style={{ flexGrow: 1 }}>Temperature unit:</p>
+            {tempUnitOptions.map((option) => {
+              return (
+                <button
+                  key={"densityOption" + option}
+                  style={{
+                    width: "10%",
+                    paddingBlock: 3,
+                    background:
+                      tempUnit === option ? "rgb(25,45,35)" : "rgb(41,70,55)",
+                    border:
+                      tempUnit === option
+                        ? "2px inset black"
+                        : "2px outset black",
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setTempUnit(option);
+                  }}
+                >
+                  °{option}
                 </button>
               );
             })}

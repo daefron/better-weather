@@ -17,6 +17,7 @@ export default function List() {
     centerPoint,
     selectedLocation,
     setSelectedLocation,
+    tempUnit,
   } = useWeatherState();
 
   const sortedData = [...mapData]
@@ -49,7 +50,7 @@ export default function List() {
   let symbol;
   switch (unitType) {
     case "temp":
-      symbol = "°C";
+      symbol = "°" + tempUnit;
       break;
     case "rainChance":
       symbol = "%";
