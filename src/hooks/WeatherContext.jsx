@@ -35,6 +35,7 @@ export function WeatherProvider({ children }) {
   const inputCoordsRef = useRef(""); //parsed coordinates from locationInput
   const [mapData, setMapData] = useState([]); //parsed data to be shown on map
   const [centerPoint, setCenterPoint] = useState(); //parsed data from locationInput
+  const sortedData = useRef(); //data sorted for list
 
   const inputRef = useRef(); //locationInput element ref
 
@@ -52,6 +53,19 @@ export function WeatherProvider({ children }) {
   function clickMarker(place) {
     setShowList(!showList);
     setSelectedLocation(place.index);
+  }
+
+  function clickListMap(index) {
+    setShowList(true);
+    const sortedIndex = sortedData.current.findIndex(
+      (point) => point.index === index
+    );
+    const scrollDiv = document.getElementById("suburbList" + sortedIndex);
+    scrollDiv.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start",
+    });
   }
 
   async function userSubmit(e) {
@@ -156,6 +170,8 @@ export function WeatherProvider({ children }) {
         dateFormat,
         setDateFormat,
         clickMarker,
+        clickListMap,
+        sortedData,
       }}
     >
       {children}

@@ -18,7 +18,7 @@ export default function GoogleMap() {
     selectedLocation,
     setSelectedLocation,
     useHours,
-    setShowList,
+    clickListMap,
   } = useWeatherState();
   //zooms map to show all found weather points
   const boundDist = normalizedRadius * ringCount * 0.7;
@@ -160,7 +160,7 @@ export default function GoogleMap() {
                   }}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setShowList(true);
+                    clickListMap(i);
                   }}
                 />
               ) : null}

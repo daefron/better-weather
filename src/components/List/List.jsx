@@ -21,9 +21,10 @@ export default function List() {
     setSelectedLocation,
     tempUnit,
     clickMarker,
+    sortedData,
   } = useWeatherState();
 
-  const sortedData = [...mapData]
+  sortedData.current = [...mapData]
     .map((place, i) => {
       const dataSource = useHours
         ? place.hours[selectedHour]
@@ -123,7 +124,7 @@ export default function List() {
           paddingTop: 5,
         }}
       >
-        {sortedData.map((place, i) => {
+        {sortedData.current.map((place, i) => {
           const diffToChosen = (
             place[unitType] -
             (useHours
@@ -133,6 +134,7 @@ export default function List() {
           return (
             <div
               key={"suburbList" + i}
+              id={"suburbList" + i}
               style={{
                 border: "solid 4px rgba(0,0,0,0.13)",
                 borderInline: " solid 10px rgba(0,0,0,0.13)",
@@ -143,7 +145,9 @@ export default function List() {
                 fontSize: 18,
                 fontWeight: place.chosenLocation ? "bold" : "normal",
                 textDecoration:
-                  place.index === selectedLocation ? "underline #afffff" : "none",
+                  place.index === selectedLocation
+                    ? "underline #afffff"
+                    : "none",
                 gap: 10,
                 cursor: "pointer",
                 boxSizing: "border-box",

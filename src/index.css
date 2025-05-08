@@ -1,6 +1,6 @@
 html,
 body {
-  overflow: hidden;
+  overflow: clip;
   height: 100%;
 }
 #root {
