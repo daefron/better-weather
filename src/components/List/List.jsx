@@ -3,6 +3,7 @@ import {
   faChevronLeft,
   faChevronRight,
   faMap,
+  faMapMarkerAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useWeatherState } from "../../hooks/WeatherContext";
@@ -19,6 +20,7 @@ export default function List() {
     selectedLocation,
     setSelectedLocation,
     tempUnit,
+    clickMarker,
   } = useWeatherState();
 
   const sortedData = [...mapData]
@@ -27,7 +29,7 @@ export default function List() {
         ? place.hours[selectedHour]
         : place.dates[Math.floor(selectedHour / 24)];
       const url = new URL(
-        `https://www.google.com/maps/place/${place.suburb},${place.latitude},${place.longitude}`
+        `https://www.google.com/maps/place/${place.latitude},${place.longitude}`
       );
       if (!i) {
         return {
@@ -165,12 +167,43 @@ export default function List() {
                     : diffToChosen
                   : diffToChosen}
               </p>
-              <a href={place.url} target="_blank">
+              <p
+                onClick={(e) => {
+                  clickMarker(place);
+                }}
+                style={{
+                  border: "1px outset black",
+                  marginBlock: -8,
+                  paddingBlock: 8,
+                  paddingInline: 8,
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faMapMarkerAlt}
+                  style={{
+                    color: "#affff",
+                    height: 18,
+                    width: 18,
+                  }}
+                />
+              </p>
+              <a
+                href={place.url}
+                target="_blank"
+                style={{
+                  marginBlock: -8,
+                  paddingBlock: 8,
+                  marginInline: -10,
+                  paddingInline: 8,
+                  border: "outset 1px black",
+                }}
+              >
                 <FontAwesomeIcon
                   icon={faMap}
                   style={{
                     color: "#affff",
                     height: 18,
+                    width: 18,
                   }}
                 />
               </a>

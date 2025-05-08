@@ -48,6 +48,12 @@ export function WeatherProvider({ children }) {
     setUseHours(false);
   }
 
+  //used when user clicks on marker in list
+  function clickMarker(place) {
+    setShowList(!showList);
+    setSelectedLocation(place.index);
+  }
+
   async function userSubmit(e) {
     e.preventDefault();
 
@@ -149,6 +155,7 @@ export function WeatherProvider({ children }) {
         setTempUnit,
         dateFormat,
         setDateFormat,
+        clickMarker,
       }}
     >
       {children}
