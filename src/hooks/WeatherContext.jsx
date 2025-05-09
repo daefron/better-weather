@@ -41,12 +41,15 @@ export function WeatherProvider({ children }) {
 
   const [errorMessage, setErrorMessage] = useState(); //error message to display
 
+  const lastSearched = useRef(); //data from last search
+
   function resetLayout() {
     setShowMap(false);
     setShowList(false);
     setChangeLayout(false);
     setSelectedHour(10);
     setUseHours(false);
+    inputRef.current.disabled = false;
   }
 
   //used when user clicks on marker in list
@@ -91,7 +94,7 @@ export function WeatherProvider({ children }) {
   async function userSubmit(e, suburb) {
     e.preventDefault();
 
-    const locationToUse = locationInput || suburb;
+    const locationToUse = suburb || locationInput;
     //prevents multiple requests
     if (loading || !locationToUse) return;
     resetLayout();
@@ -106,36 +109,44 @@ export function WeatherProvider({ children }) {
       inputRef.current.blur();
       inputRef.current.disabled = true;
 
-      inputCoordsRef.current = inputData.geometry.location;
+      //skips excess API calls if has same input as last search
+      if (lastSearched.current !== inputRef.current.value) {
+        lastSearched.current = inputData.address_components[0].long_name;
 
-      const weatherCoords = coordinateMaker(
-        inputCoordsRef,
-        normalizedRadius,
-        ringCount,
-        radiusDensity
-      );
+        inputCoordsRef.current = inputData.geometry.location;
 
-      const timezone = await fetchTimezone(inputCoordsRef.current);
-      if (!timezone) throw fetchError;
+        const weatherCoords = coordinateMaker(
+          inputCoordsRef,
+          normalizedRadius,
+          ringCount,
+          radiusDensity
+        );
 
-      const weatherData = await fetchWeather(weatherCoords, timezone, tempUnit);
-      if (!weatherData) throw fetchError;
+        const timezone = await fetchTimezone(inputCoordsRef.current);
+        if (!timezone) throw fetchError;
 
-      const finalData = await fetchSuburb(weatherData);
-      if (!finalData) throw fetchError;
+        const weatherData = await fetchWeather(
+          weatherCoords,
+          timezone,
+          tempUnit
+        );
+        if (!weatherData) throw fetchError;
 
-      const parsedData = parseData(finalData);
-      if (!parsedData[0]) throw fetchError;
+        const finalData = await fetchSuburb(weatherData);
+        if (!finalData) throw fetchError;
 
-      setCenterPoint({
-        lat: inputCoordsRef.current.lat,
-        lng: inputCoordsRef.current.lng,
-        suburb: inputData.address_components[0].long_name,
-        dates: parsedData[0].dates,
-        hours: parsedData[0].hours,
-      });
-      getStats(parsedData);
-      setMapData(parsedData);
+        const parsedData = parseData(finalData);
+        if (!parsedData[0]) throw fetchError;
+
+        setCenterPoint({
+          lat: inputCoordsRef.current.lat,
+          lng: inputCoordsRef.current.lng,
+          suburb: inputData.address_components[0].long_name,
+          dates: parsedData[0].dates,
+          hours: parsedData[0].hours,
+        });
+        setMapData(parsedData);
+      }
       setErrorMessage("");
       setLoading(false);
       setChangeLayout(true);
