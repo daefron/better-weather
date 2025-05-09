@@ -68,19 +68,39 @@ export function WeatherProvider({ children }) {
     });
   }
 
-  async function userSubmit(e) {
+  function getUserLocation(e) {
+    setLoading(true);
+    async function success(result) {
+      const coords = [result.coords];
+
+      //get name of suburb from coords
+      const suburbData = await fetchSuburb(coords);
+      if (!suburbData) throw new Error("No results found for this location.");
+      const suburb = suburbData[0].suburb;
+
+      inputRef.current.value = suburb;
+      userSubmit(e, suburb);
+    }
+    navigator.geolocation.getCurrentPosition(success, (error) => {
+      setLoading(false);
+      console.error(error);
+      throw new Error(error);
+    });
+  }
+
+  async function userSubmit(e, suburb) {
     e.preventDefault();
 
+    const locationToUse = locationInput || suburb;
     //prevents multiple requests
-    if (loading || !locationInput) return;
-
+    if (loading || !locationToUse) return;
     resetLayout();
 
     setLoading(true);
 
     try {
       const fetchError = new Error("No results found for this location.");
-      const inputData = await fetchCoords(locationInput);
+      const inputData = await fetchCoords(locationToUse);
       if (!inputData) throw fetchError;
       inputRef.current.value = inputData.address_components[0].long_name;
       inputRef.current.blur();
@@ -147,6 +167,7 @@ export function WeatherProvider({ children }) {
         setUnitType,
         inputRef,
         userSubmit,
+        getUserLocation,
         showMap,
         setShowMap,
         changeLayout,

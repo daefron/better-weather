@@ -1,11 +1,12 @@
 import { BarLoader } from "react-spinners";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faLocation } from "@fortawesome/free-solid-svg-icons";
 import { useWeatherState } from "../../hooks/WeatherContext";
 export default function SearchBar() {
   const {
     changeLayout,
     userSubmit,
+    getUserLocation,
     setLocationInput,
     errorMessage,
     loading,
@@ -56,9 +57,9 @@ export default function SearchBar() {
           placeholder="Search for a location"
         ></input>
         <FontAwesomeIcon
-          icon={faSearch}
+          icon={faLocation}
           onClick={(e) => {
-            userSubmit(e);
+            getUserLocation(e);
           }}
           style={{
             position: "absolute",
