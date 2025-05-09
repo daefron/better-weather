@@ -73,6 +73,7 @@ export function WeatherProvider({ children }) {
 
   function getUserLocation(e) {
     setLoading(true);
+    inputRef.current.value = "Finding your location...";
     async function success(result) {
       const coords = [result.coords];
 
