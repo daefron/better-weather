@@ -6,6 +6,7 @@ import {
   faMapMarkerAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
+import Button from "../General/Button";
 import { useWeatherState } from "../../hooks/WeatherContext";
 
 export default function List() {
@@ -174,26 +175,27 @@ export default function List() {
                     : diffToChosen
                   : diffToChosen}
               </p>
-              <p
-                onClick={(e) => {
-                  clickMarker(place);
-                }}
+              <Button
                 style={{
-                  border: "1px outset black",
                   marginBlock: -8,
                   paddingBlock: 8,
                   paddingInline: 8,
+                  height:39
                 }}
-              >
-                <FontAwesomeIcon
-                  icon={faMapMarkerAlt}
-                  style={{
-                    color: "#afffff",
-                    height: 18,
-                    width: 18,
-                  }}
-                />
-              </p>
+                content={
+                  <FontAwesomeIcon
+                    icon={faMapMarkerAlt}
+                    style={{
+                      color: "#afffff",
+                      height: 18,
+                      width: 18,
+                    }}
+                  />
+                }
+                onClick={(e) => {
+                  clickMarker(place);
+                }}
+              />
               <a
                 href={place.url}
                 target="_blank"
