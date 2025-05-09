@@ -54,7 +54,8 @@ export default function SearchBar() {
             setLocationInput(e.target.value);
           }}
           ref={inputRef}
-          placeholder="Search for a location"
+          placeholder="Enter starting location"
+          autoFocus
         ></input>
         <FontAwesomeIcon
           icon={faLocation}
