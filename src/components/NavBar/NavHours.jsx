@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import Button from "../General/Button";
 export default function NavHours({
   amPm,
   setAmPm,
@@ -26,48 +26,38 @@ export default function NavHours({
         if ((amPm === "AM" && i > 11) || (amPm === "PM" && i < 12)) {
           return;
         }
-        const style = {
-          height: 30,
-          flexGrow: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          fontSize: "clamp(12px,5vw,18px)",
-          border: "1px outset black",
-          userSelect: "none",
-        };
-        if (useHours && i === Math.ceil(selectedHour % 24)) {
-          style.backgroundColor = "rgb(25,45,35)";
-          style.border = "1px inset black";
-        }
         return (
-          <div
+          <Button
             key={i + "hour"}
-            style={style}
+            content={hour}
+            active={useHours && i === Math.ceil(selectedHour % 24)}
+            style={{
+              display: "block",
+              flexGrow: 1,
+              fontSize: "clamp(14px, 4vw, 18px)",
+            }}
             onClick={() => {
               if (!useHours) return;
               const diff = (selectedHour % 24) - i;
               const final = selectedHour - diff;
               setSelectedHour(final);
             }}
-          >
-            <p>{hour}</p>
-          </div>
+          />
         );
       })}
-      <button
-        style={{ flexGrow: 1, fontSize: "clamp(12px,5vw,18px)", height: 32 }}
+      <Button
+        style={{
+          display: "block",
+          flexGrow: 1,
+          fontSize: "clamp(11px,4vw,17px)",
+        }}
+        active={amPm === "PM"}
+        content={amPm}
         onClick={() => {
-          if (amPm === "AM") {
-            setSelectedHour(selectedHour + 12);
-          } else {
-            setSelectedHour(selectedHour - 12);
-          }
+          setSelectedHour(selectedHour + (amPm === "AM" ? 12 : -12));
           setAmPm(amPm === "AM" ? "PM" : "AM");
         }}
-      >
-        {amPm}
-      </button>
+      />
     </>
   );
 }

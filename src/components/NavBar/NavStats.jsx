@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import Button from "../General/Button";
 export default function NavStats({
   centerPoint,
   selectedHour,
@@ -49,64 +50,47 @@ export default function NavStats({
   };
   return (
     <>
-      <p
+      <Button
         style={{
-          height: 30,
-          lineHeight: "30px",
-          border: "1px outset black",
-          paddingInline: "clamp(2px,1vw,5px)",
-          fontSize: "clamp(10px, 3.5vw, 16px)",
-          backgroundColor: "rgb(31, 53, 42)",
+          alignItems: "start",
+          height: "calc(100% + 12px)",
           flexGrow: 1,
         }}
-      >
-        {contentRef.current.dateTime}
-      </p>
-      <button
+        content={contentRef.current.dateTime}
+      />
+      <Button
         style={{
-          paddingInline: "clamp(2px,1vw,5px)",
-          fontSize: "clamp(10px, 3.5vw, 16px)",
           height: "calc(100% + 12px)",
-          border: unitType === "temp" ? "1px inset black" : null,
-          background: unitType === "temp" ? "rgb(25,45,35)" : null,
         }}
+        active={unitType === "temp"}
+        content={contentRef.current.temp}
         onClick={(e) => {
-          e.preventDefault;
+          e.preventDefault();
           setUnitType("temp");
         }}
-      >
-        {contentRef.current.temp}
-      </button>
-      <button
+      />
+      <Button
         style={{
-          paddingInline: "clamp(2px,1vw,5px)",
-          fontSize: "clamp(10px, 3.5vw, 16px)",
           height: "calc(100% + 12px)",
-          border: unitType === "rainChance" ? "1px inset black" : null,
-          background: unitType === "rainChance" ? "rgb(25,45,35)" : null,
         }}
+        active={unitType === "rainChance"}
+        content={contentRef.current.rain}
         onClick={(e) => {
-          e.preventDefault;
+          e.preventDefault();
           setUnitType("rainChance");
         }}
-      >
-        {contentRef.current.rain}
-      </button>
-      <button
+      />
+      <Button
         style={{
-          paddingInline: "clamp(2px,1vw,5px)",
-          fontSize: "clamp(10px, 3.5vw, 16px)",
           height: "calc(100% + 12px)",
-          border: unitType === "windMax" ? "1px inset black" : null,
-          background: unitType === "windMax" ? "rgb(25,45,35)" : null,
         }}
+        active={unitType === "windMax"}
+        content={contentRef.current.wind}
         onClick={(e) => {
-          e.preventDefault;
+          e.preventDefault();
           setUnitType("windMax");
         }}
-      >
-        {contentRef.current.wind}
-      </button>
+      />
     </>
   );
 }

@@ -1,4 +1,5 @@
 import { useWeatherState } from "../../hooks/WeatherContext";
+import Button from "../General/Button";
 export default function Settings() {
   const {
     radiusKMInput,
@@ -43,27 +44,18 @@ export default function Settings() {
             <p style={{ flexGrow: 1 }}>Search radius (km):</p>
             {radiusOptions.map((option) => {
               return (
-                <button
+                <Button
                   key={"radiusOption" + option}
+                  active={radiusKMInput === option}
+                  content={option}
                   style={{
                     width: "10%",
-                    paddingBlock: 3,
-                    background:
-                      radiusKMInput === option
-                        ? "rgb(25,45,35)"
-                        : "rgb(41,70,55)",
-                    border:
-                      radiusKMInput === option
-                        ? "2px inset black"
-                        : "2px outset black",
                   }}
                   onClick={(e) => {
                     e.preventDefault();
                     setRadiusKMInput(option);
                   }}
-                >
-                  {option}
-                </button>
+                />
               );
             })}
           </div>
@@ -78,27 +70,18 @@ export default function Settings() {
             <p style={{ flexGrow: 1 }}>Result density:</p>
             {densityOptions.map((option) => {
               return (
-                <button
-                  key={"densityOption" + option}
+                <Button
+                  key={"radiusDensityOption" + option}
+                  active={radiusDensity === option}
+                  content={option}
                   style={{
                     width: "10%",
-                    paddingBlock: 3,
-                    background:
-                      radiusDensity === option
-                        ? "rgb(25,45,35)"
-                        : "rgb(41,70,55)",
-                    border:
-                      radiusDensity === option
-                        ? "2px inset black"
-                        : "2px outset black",
                   }}
                   onClick={(e) => {
                     e.preventDefault();
                     setRadiusDensity(option);
                   }}
-                >
-                  {option}
-                </button>
+                />
               );
             })}
           </div>
@@ -113,25 +96,18 @@ export default function Settings() {
             <p style={{ flexGrow: 1 }}>Temperature unit:</p>
             {tempUnitOptions.map((option) => {
               return (
-                <button
-                  key={"densityOption" + option}
+                <Button
+                  key={"tempOption" + option}
+                  active={tempUnit === option}
+                  content={"°" + option}
                   style={{
                     width: "10%",
-                    paddingBlock: 3,
-                    background:
-                      tempUnit === option ? "rgb(25,45,35)" : "rgb(41,70,55)",
-                    border:
-                      tempUnit === option
-                        ? "2px inset black"
-                        : "2px outset black",
                   }}
                   onClick={(e) => {
                     e.preventDefault();
                     setTempUnit(option);
                   }}
-                >
-                  °{option}
-                </button>
+                />
               );
             })}
           </div>
@@ -146,24 +122,15 @@ export default function Settings() {
             <p style={{ flexGrow: 1 }}>Date format:</p>
             {dateFormatOptions.map((option) => {
               return (
-                <button
+                <Button
                   key={"dateFormatOption" + option}
-                  style={{
-                    paddingBlock: 3,
-                    background:
-                      dateFormat === option ? "rgb(25,45,35)" : "rgb(41,70,55)",
-                    border:
-                      dateFormat === option
-                        ? "2px inset black"
-                        : "2px outset black",
-                  }}
+                  active={dateFormat === option}
+                  content={option}
                   onClick={(e) => {
                     e.preventDefault();
                     setDateFormat(option);
                   }}
-                >
-                  {option}
-                </button>
+                />
               );
             })}
           </div>
