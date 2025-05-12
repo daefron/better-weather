@@ -19,7 +19,6 @@ export default function List() {
     unitType,
     userPoint,
     selectedLocation,
-    setSelectedLocation,
     tempUnit,
     clickMarker,
     sortedData,
@@ -190,7 +189,7 @@ export default function List() {
                   />
                 }
                 onClick={(e) => {
-                  setViewArea(place.coords)
+                  setViewArea(place.coords);
                   clickMarker(place);
                 }}
               />
@@ -202,7 +201,7 @@ export default function List() {
                   paddingBlock: 8,
                   marginInline: -10,
                   paddingInline: 8,
-                  backgroundColor:"rgb(32, 53, 42)",
+                  backgroundColor: "rgb(32, 53, 42)",
                   border: "outset 1px black",
                 }}
               >

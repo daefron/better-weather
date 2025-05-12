@@ -156,7 +156,6 @@ function GoogleMap() {
       map.fitBounds(bounds);
     }
   }, [viewArea]);
-
   //zooms map to show all found weather points
   const bounds = {
     east: userPoint.lng + boundDist * 0.7,

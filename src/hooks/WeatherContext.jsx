@@ -132,7 +132,6 @@ export function WeatherProvider({ children }) {
 
     //prevents multiple requests
     if (loading) return;
-    resetLayout();
 
     setLoading(true);
 
