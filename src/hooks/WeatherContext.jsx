@@ -52,6 +52,13 @@ export function WeatherProvider({ children }) {
     inputRef.current.disabled = false;
   }
 
+  function errorReset() {
+    inputRef.current.disabled = false;
+    inputRef.current.focus();
+    lastSearched.current = null;
+    throw new Error("No results found for this location.");
+  }
+
   //used when user clicks on marker in list
   function clickMarker(place) {
     setShowList(!showList);
@@ -79,42 +86,54 @@ export function WeatherProvider({ children }) {
 
       //get name of suburb from coords
       const suburbData = await fetchSuburb(coords);
-      if (!suburbData) throw new Error("No results found for this location.");
+      if (!suburbData) {
+        errorReset;
+      }
       const suburb = suburbData[0].suburb;
 
       inputRef.current.value = suburb;
+      inputRef.current.blur();
+      inputRef.current.disabled = true;
+      inputCoordsRef.current = {
+        lat: coords[0].latitude,
+        lng: coords[0].longitude,
+      };
+
       userSubmit(e, suburb);
     }
     navigator.geolocation.getCurrentPosition(success, (error) => {
       setLoading(false);
-      console.error(error);
-      throw new Error(error);
+      errorReset();
     });
   }
 
-  async function userSubmit(e, suburb) {
+  //fetches an auto-filled location name, then replaces user input with name
+  async function autoCorrectSuburb(input) {
+    const inputData = await fetchCoords(input);
+    if (!inputData) errorReset();
+    inputRef.current.value = inputData.address_components[0].long_name;
+    inputRef.current.blur();
+    inputRef.current.disabled = true;
+    inputCoordsRef.current = inputData.geometry.location;
+  }
+
+  async function userSubmit(e, suburbFetched) {
     e.preventDefault();
 
-    const locationToUse = suburb || locationInput;
     //prevents multiple requests
-    if (loading || !locationToUse) return;
+    if (loading) return;
     resetLayout();
 
     setLoading(true);
 
     try {
-      const fetchError = new Error("No results found for this location.");
-      const inputData = await fetchCoords(locationToUse);
-      if (!inputData) throw fetchError;
-      inputRef.current.value = inputData.address_components[0].long_name;
-      inputRef.current.blur();
-      inputRef.current.disabled = true;
+      if (!suburbFetched) {
+        await autoCorrectSuburb(locationInput);
+      }
 
       //skips excess API calls if has same input as last search
       if (lastSearched.current !== inputRef.current.value) {
-        lastSearched.current = inputData.address_components[0].long_name;
-
-        inputCoordsRef.current = inputData.geometry.location;
+        lastSearched.current = inputRef.current.value;
 
         const weatherCoords = coordinateMaker(
           inputCoordsRef,
@@ -124,25 +143,25 @@ export function WeatherProvider({ children }) {
         );
 
         const timezone = await fetchTimezone(inputCoordsRef.current);
-        if (!timezone) throw fetchError;
+        if (!timezone) errorReset();
 
         const weatherData = await fetchWeather(
           weatherCoords,
           timezone,
           tempUnit
         );
-        if (!weatherData) throw fetchError;
+        if (!weatherData) errorReset();
 
         const finalData = await fetchSuburb(weatherData);
-        if (!finalData) throw fetchError;
+        if (!finalData) errorReset();
 
         const parsedData = parseData(finalData);
-        if (!parsedData[0]) throw fetchError;
+        if (!parsedData[0]) errorReset();
 
         setCenterPoint({
           lat: inputCoordsRef.current.lat,
           lng: inputCoordsRef.current.lng,
-          suburb: inputData.address_components[0].long_name,
+          suburb: inputRef.current.value,
           dates: parsedData[0].dates,
           hours: parsedData[0].hours,
         });
