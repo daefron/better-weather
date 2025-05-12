@@ -27,6 +27,7 @@ function TempMarker({ data, i }) {
     clickListMap,
     setViewArea,
     userPoint,
+    setShowList,
   } = useWeatherState();
 
   const style = {
@@ -120,6 +121,7 @@ function TempMarker({ data, i }) {
             : { lat: data.latitude, lng: data.longitude }
         );
         setSelectedLocation(selectedLocation === i ? null : i);
+        setShowList(false);
       }}
       collisionBehavior={CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY}
     >
@@ -151,6 +153,7 @@ function GoogleMap() {
     setViewArea,
     setSelectedLocation,
     mapData,
+    setShowList,
   } = useWeatherState();
 
   const map = useMap();
@@ -194,6 +197,7 @@ function GoogleMap() {
       onClick={() => {
         setViewArea({ lat: userPoint.lat, lng: userPoint.lng });
         setSelectedLocation(null);
+        setShowList(false);
       }}
       disableDefaultUI
     >
