@@ -5,10 +5,7 @@ import {
   Map,
   useMap,
 } from "@vis.gl/react-google-maps";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faList } from "@fortawesome/free-solid-svg-icons";
-
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 
 import { useWeatherState } from "../../hooks/WeatherContext";
 
@@ -113,31 +110,16 @@ function TempMarker({ data, i }) {
       position={{ lat: data.latitude, lng: data.longitude }}
       zIndex={zIndex}
       onClick={() => {
-        setViewArea(
-          selectedLocation === i
-            ? { lat: userPoint.lat, lng: userPoint.lng }
-            : { lat: data.latitude, lng: data.longitude }
-        );
-        setSelectedLocation(selectedLocation === i ? null : i);
         setShowList(false);
+        setViewArea({ lat: data.latitude, lng: data.longitude });
+        setSelectedLocation(i);
+        if (selectedLocation === i) {
+          clickListMap(i);
+        }
       }}
       collisionBehavior={CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY}
     >
       <p style={{ color: "black" }}>{content}</p>
-      {selectedLocation === i ? (
-        <FontAwesomeIcon
-          icon={faList}
-          color="black"
-          style={{
-            height: 18,
-            width: 18,
-          }}
-          onClick={(e) => {
-            e.stopPropagation();
-            clickListMap(i);
-          }}
-        />
-      ) : null}
     </AdvancedMarker>
   );
 }
