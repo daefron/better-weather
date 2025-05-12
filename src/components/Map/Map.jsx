@@ -1,4 +1,4 @@
-import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
+import { AdvancedMarker, CollisionBehavior, APIProvider, Map } from "@vis.gl/react-google-maps";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 import { useWeatherState } from "../../hooks/WeatherContext";
@@ -148,6 +148,7 @@ export default function GoogleMap() {
               onClick={() =>
                 setSelectedLocation(selectedLocation === i ? null : i)
               }
+              collisionBehavior={CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY}
             >
               <p style={{ color: "black" }}>{content}</p>
               {selectedLocation === i ? (
