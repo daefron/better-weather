@@ -7,7 +7,6 @@ import {
   fetchTimezone,
 } from "../ApiCalls";
 import { parseData } from "../WeatherParser";
-import { getStats } from "../DataProcessing";
 
 const WeatherContext = createContext();
 
@@ -41,6 +40,7 @@ export function WeatherProvider({ children }) {
 
   const [errorMessage, setErrorMessage] = useState(); //error message to display
 
+  const lastState = useRef();
   const lastSearched = useRef(); //data from last search
 
   function resetLayout() {
@@ -117,6 +117,16 @@ export function WeatherProvider({ children }) {
     inputCoordsRef.current = inputData.geometry.location;
   }
 
+  function sameState() {
+    if (!lastState.current) return;
+    if (inputRef.current.value !== lastState.current.inputRef) return;
+    if (radiusKMInput !== lastState.current.radiusKMInput) return;
+    if (radiusDensity !== lastState.current.radiusDensity) return;
+    if (tempUnit !== lastState.current.tempUnit) return;
+    if (dateFormat !== lastState.current.dateFormat) return;
+    return true;
+  }
+
   async function userSubmit(e, suburbFetched) {
     e.preventDefault();
 
@@ -127,13 +137,18 @@ export function WeatherProvider({ children }) {
     setLoading(true);
 
     try {
-      if (!suburbFetched) {
-        await autoCorrectSuburb(locationInput);
-      }
-
       //skips excess API calls if has same input as last search
-      if (lastSearched.current !== inputRef.current.value) {
-        lastSearched.current = inputRef.current.value;
+      if (!sameState()) {
+        if (!suburbFetched) {
+          await autoCorrectSuburb(inputRef.current.value);
+        }
+        lastState.current = {
+          inputRef: inputRef.current.value,
+          radiusKMInput: radiusKMInput,
+          radiusDensity: radiusDensity,
+          tempUnit: tempUnit,
+          dateFormat: dateFormat,
+        };
 
         const weatherCoords = coordinateMaker(
           inputCoordsRef,
