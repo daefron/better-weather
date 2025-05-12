@@ -148,19 +148,13 @@ export default function List() {
                 alignItems: "center",
                 fontSize: 18,
                 fontWeight: place.chosenLocation ? "bold" : "normal",
-                textDecoration:
-                  place.index === selectedLocation
-                    ? "underline #afffff"
-                    : "none",
                 gap: 10,
-                cursor: "pointer",
                 boxSizing: "border-box",
                 backgroundColor:
                   place.index === selectedLocation
                     ? "rgb(40,61,50)"
                     : "rgb(31, 53, 42)",
               }}
-              onClick={() => setSelectedLocation(place.index)}
             >
               <p style={{ flexGrow: 1 }}>
                 {i + 1}.{" "}
@@ -208,6 +202,7 @@ export default function List() {
                   paddingBlock: 8,
                   marginInline: -10,
                   paddingInline: 8,
+                  backgroundColor:"rgb(32, 53, 42)",
                   border: "outset 1px black",
                 }}
               >
