@@ -24,6 +24,8 @@ export default function List() {
     sortedData,
     setViewArea,
   } = useWeatherState();
+  //furthest distance from start point in kms
+  const maxDistance = Math.max(...mapData.map((data) => data.distance));
 
   sortedData.current = [...mapData]
     .map((place, i) => {
@@ -31,34 +33,27 @@ export default function List() {
         ? place.hours[selectedHour]
         : place.dates[Math.floor(selectedHour / 24)];
       const url = new URL(
-        `https://www.google.com/maps/place/${place.latitude},${place.longitude}`
+        `https://www.google.com/maps/place/${
+          i ? place.suburb : userPoint.suburb
+        }/@${place.latitude},${place.longitude}`
       );
-      if (!i) {
-        return {
-          suburb: place.suburb,
-          temp: dataSource.temp,
-          rainChance: dataSource.rainChance,
-          windMax: dataSource.windMax,
-          distance: place.distance,
-          coords: { lat: place.latitude, lng: place.longitude },
-          chosenLocation: true,
-          url: url,
-          index: i,
-        };
-      }
-      return {
+      const item = {
         suburb: place.suburb,
         temp: dataSource.temp,
         rainChance: dataSource.rainChance,
         windMax: dataSource.windMax,
         distance: place.distance,
+        distanceRatio: place.distance / maxDistance,
         coords: { lat: place.latitude, lng: place.longitude },
         url: url,
         index: i,
       };
+      if (!i) {
+        item.chosenLocation = true;
+      }
+      return item;
     })
     .sort((a, b) => b[unitType] - a[unitType]);
-
   let symbol;
   switch (unitType) {
     case "temp":
