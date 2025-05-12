@@ -35,6 +35,7 @@ function TempMarker({ data, i }) {
     fontSize: 13,
     color: "black",
     border: "2px solid rgba(0,0,0,0.2)",
+    
   };
   const contentValue = useHours
     ? data.hours[selectedHour][unitType]
