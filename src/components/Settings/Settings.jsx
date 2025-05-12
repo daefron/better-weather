@@ -41,7 +41,15 @@ export default function Settings() {
               gap: 10,
             }}
           >
-            <p style={{ flexGrow: 1 }}>Search radius (km):</p>
+            <p
+              style={{
+                flexGrow: 1,
+                fontSize: "clamp(12px, 4vw, 16px)",
+                textWrap: "nowrap",
+              }}
+            >
+              Search radius (km):
+            </p>
             {radiusOptions.map((option) => {
               return (
                 <Button
@@ -67,7 +75,15 @@ export default function Settings() {
               gap: 10,
             }}
           >
-            <p style={{ flexGrow: 1 }}>Result density:</p>
+            <p
+              style={{
+                flexGrow: 1,
+                fontSize: "clamp(12px, 4vw, 16px)",
+                textWrap: "nowrap",
+              }}
+            >
+              Result density:
+            </p>
             {densityOptions.map((option) => {
               return (
                 <Button
@@ -93,7 +109,15 @@ export default function Settings() {
               gap: 10,
             }}
           >
-            <p style={{ flexGrow: 1 }}>Temperature unit:</p>
+            <p
+              style={{
+                flexGrow: 1,
+                fontSize: "clamp(12px, 4vw, 16px)",
+                textWrap: "nowrap",
+              }}
+            >
+              Temperature unit:
+            </p>
             {tempUnitOptions.map((option) => {
               return (
                 <Button
@@ -119,7 +143,15 @@ export default function Settings() {
               gap: 10,
             }}
           >
-            <p style={{ flexGrow: 1 }}>Date format:</p>
+            <p
+              style={{
+                flexGrow: 1,
+                fontSize: "clamp(12px, 4vw, 16px)",
+                textWrap: "nowrap",
+              }}
+            >
+              Date format:
+            </p>
             {dateFormatOptions.map((option) => {
               return (
                 <Button

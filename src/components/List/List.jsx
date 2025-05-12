@@ -140,7 +140,7 @@ export default function List() {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                fontSize: 18,
+                fontSize: "clamp(12px, 3.5vw, 16px)",
                 fontWeight: place.chosenLocation ? "bold" : "normal",
                 gap: 10,
                 boxSizing: "border-box",
@@ -169,7 +169,6 @@ export default function List() {
               <Button
                 style={{
                   marginBlock: -8,
-                  paddingBlock: 8,
                   paddingInline: 8,
                   height: 39,
                 }}
@@ -188,27 +187,26 @@ export default function List() {
                   clickMarker(place);
                 }}
               />
-              <a
-                href={place.url}
-                target="_blank"
+              <Button
                 style={{
                   marginBlock: -8,
-                  paddingBlock: 8,
                   marginInline: -10,
                   paddingInline: 8,
-                  backgroundColor: "rgb(32, 53, 42)",
-                  border: "outset 1px black",
+                  height: 39,
                 }}
-              >
-                <FontAwesomeIcon
-                  icon={faMap}
-                  style={{
-                    color: "#afffff",
-                    height: 18,
-                    width: 18,
-                  }}
-                />
-              </a>
+                content={
+                  <a href={place.url} target="_blank">
+                    <FontAwesomeIcon
+                      icon={faMap}
+                      style={{
+                        color: "#afffff",
+                        height: 18,
+                        width: 18,
+                      }}
+                    />
+                  </a>
+                }
+              />
             </div>
           );
         })}

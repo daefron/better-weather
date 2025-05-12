@@ -42,7 +42,7 @@ export default function SearchBar() {
           id="userLocation"
           style={{
             width: "calc(100% - 10px)",
-            fontSize: 18,
+            fontSize: changeLayout ? "clamp(14px, 4vw, 18px)" : 18,
             padding: 4,
             position: "relative",
             zIndex: changeLayout ? -1 : 1,

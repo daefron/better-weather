@@ -35,7 +35,7 @@ function App() {
         <header
           style={{
             width: "100%",
-            height: changeLayout ? "auto" : 200,
+            height: changeLayout ? "auto" : 0,
             display: "flex",
             alignItems: "flex-end",
             justifyContent: "center",
@@ -44,7 +44,7 @@ function App() {
             border: changeLayout ? "1px outset black" : null,
             boxSizing: "border-box",
             transition: "flex-grow 1s ease",
-            flexGrow: changeLayout ? 0 : 1,
+            flexGrow: changeLayout ? 0 : 0.7,
             flexShrink: changeLayout ? 1 : 0,
           }}
         >
@@ -83,9 +83,8 @@ function App() {
         <footer
           style={{
             width: "100%",
-            height: changeLayout ? "auto" : 200,
+            height: changeLayout ? "auto" : 0,
             display: "flex",
-            flexGrow: 1,
             flexDirection: "column",
             zIndex: 50,
             boxShadow: changeLayout ? "0px -3px 3px rgba(0,0,0,0.05)" : null,
@@ -103,7 +102,7 @@ function App() {
               style={{
                 alignSelf: "center",
                 marginTop: "auto",
-                marginBottom: 40,
+                marginBottom: 60,
               }}
             >
               Created by Thomas Evans
