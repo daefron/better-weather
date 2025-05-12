@@ -17,7 +17,7 @@ export default function List() {
     selectedHour,
     useHours,
     unitType,
-    centerPoint,
+    userPoint,
     selectedLocation,
     setSelectedLocation,
     tempUnit,
@@ -129,8 +129,8 @@ export default function List() {
           const diffToChosen = (
             place[unitType] -
             (useHours
-              ? centerPoint.hours[selectedHour][unitType]
-              : centerPoint.dates[Math.floor(selectedHour / 24)][unitType])
+              ? userPoint.hours[selectedHour][unitType]
+              : userPoint.dates[Math.floor(selectedHour / 24)][unitType])
           ).toFixed(1);
           return (
             <div
@@ -161,7 +161,7 @@ export default function List() {
             >
               <p style={{ flexGrow: 1 }}>
                 {i + 1}.{" "}
-                {place.chosenLocation ? centerPoint.suburb : place.suburb}
+                {place.chosenLocation ? userPoint.suburb : place.suburb}
               </p>
               <p>{place.distance.toFixed(1)} km</p>
               <p>

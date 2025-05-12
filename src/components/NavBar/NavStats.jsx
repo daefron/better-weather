@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import Button from "../General/Button";
 export default function NavStats({
-  centerPoint,
+  userPoint,
   selectedHour,
   amPm,
   useHours,
@@ -17,7 +17,7 @@ export default function NavStats({
   }
 
   const dateIndex = Math.floor(selectedHour / 24);
-  const date = new Date(centerPoint.dates[dateIndex].date);
+  const date = new Date(userPoint.dates[dateIndex].date);
   const weekdayContent = new Intl.DateTimeFormat("en-AU", {
     weekday: "short",
   }).format(date);
@@ -36,8 +36,8 @@ export default function NavStats({
   const dateTimeContent = weekdayContent + " " + dateContent + timeContent;
 
   const valueSource = useHours
-    ? centerPoint.hours[selectedHour]
-    : centerPoint.dates[Math.floor(selectedHour / 24)];
+    ? userPoint.hours[selectedHour]
+    : userPoint.dates[Math.floor(selectedHour / 24)];
   const tempContent = "Temp - " + valueSource.temp + "°" + tempUnit;
   const rainContent = "Rain - " + valueSource.rainChance + "%";
   const windContent = "Wind - " + valueSource.windMax + "km/h";

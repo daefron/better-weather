@@ -4,7 +4,7 @@ import NavHours from "./NavHours";
 import { useWeatherState } from "../../hooks/WeatherContext";
 export default function NavBar() {
   const {
-    centerPoint,
+    userPoint,
     selectedHour,
     setSelectedHour,
     amPm,
@@ -86,7 +86,7 @@ export default function NavBar() {
         }}
       >
         <NavStats
-          centerPoint={centerPoint}
+          userPoint={userPoint}
           selectedHour={selectedHour}
           amPm={amPm}
           useHours={useHours}

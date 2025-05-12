@@ -31,9 +31,9 @@ export function WeatherProvider({ children }) {
   const [changeLayout, setChangeLayout] = useState(false); //changes layout
   const [shrinkNav, setShrinkNav] = useState(true); //tells nav to grow/shrink before rerender
 
-  const inputCoordsRef = useRef(""); //parsed coordinates from locationInput
+  const inputCoordsRef = useRef(""); //parsed coordinates from user input
   const [mapData, setMapData] = useState([]); //parsed data to be shown on map
-  const [centerPoint, setCenterPoint] = useState(); //parsed data from locationInput
+  const [userPoint, setUserPoint] = useState(); //parsed data of user input
   const sortedData = useRef(); //data sorted for list
 
   const inputRef = useRef(); //locationInput element ref
@@ -173,7 +173,7 @@ export function WeatherProvider({ children }) {
         const parsedData = parseData(finalData);
         if (!parsedData[0]) errorReset();
 
-        setCenterPoint({
+        setUserPoint({
           lat: inputCoordsRef.current.lat,
           lng: inputCoordsRef.current.lng,
           suburb: inputRef.current.value,
@@ -204,7 +204,7 @@ export function WeatherProvider({ children }) {
         setRadiusKMInput,
         ringCount,
         mapData,
-        centerPoint,
+        userPoint,
         loading,
         errorMessage,
         selectedHour,

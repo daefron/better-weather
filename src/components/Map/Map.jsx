@@ -15,7 +15,7 @@ if (!googleApiKey) {
 export default function GoogleMap() {
   const {
     mapData,
-    centerPoint,
+    userPoint,
     selectedHour,
     normalizedRadius,
     ringCount,
