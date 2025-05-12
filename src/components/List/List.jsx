@@ -23,6 +23,7 @@ export default function List() {
     tempUnit,
     clickMarker,
     sortedData,
+    setViewArea,
   } = useWeatherState();
 
   sortedData.current = [...mapData]
@@ -40,6 +41,7 @@ export default function List() {
           rainChance: dataSource.rainChance,
           windMax: dataSource.windMax,
           distance: place.distance,
+          coords: { lat: place.latitude, lng: place.longitude },
           chosenLocation: true,
           url: url,
           index: i,
@@ -51,6 +53,7 @@ export default function List() {
         rainChance: dataSource.rainChance,
         windMax: dataSource.windMax,
         distance: place.distance,
+        coords: { lat: place.latitude, lng: place.longitude },
         url: url,
         index: i,
       };
@@ -180,7 +183,7 @@ export default function List() {
                   marginBlock: -8,
                   paddingBlock: 8,
                   paddingInline: 8,
-                  height:39
+                  height: 39,
                 }}
                 content={
                   <FontAwesomeIcon
@@ -193,6 +196,7 @@ export default function List() {
                   />
                 }
                 onClick={(e) => {
+                  setViewArea(place.coords)
                   clickMarker(place);
                 }}
               />

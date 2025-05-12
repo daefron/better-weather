@@ -7,7 +7,6 @@ export default function SearchBar() {
     changeLayout,
     userSubmit,
     getUserLocation,
-    setLocationInput,
     errorMessage,
     loading,
     inputRef,
@@ -49,9 +48,6 @@ export default function SearchBar() {
             zIndex: changeLayout ? -1 : 1,
             border: changeLayout ? "1px outset black" : null,
             background: changeLayout ? "rgb(32,53,42)" : null,
-          }}
-          onChange={(e) => {
-            setLocationInput(e.target.value);
           }}
           ref={inputRef}
           placeholder="Enter starting location"

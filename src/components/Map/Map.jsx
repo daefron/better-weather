@@ -3,16 +3,21 @@ import {
   CollisionBehavior,
   APIProvider,
   Map,
+  useMap,
 } from "@vis.gl/react-google-maps";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList } from "@fortawesome/free-solid-svg-icons";
+
+import { useEffect, useMemo } from "react";
+
 import { useWeatherState } from "../../hooks/WeatherContext";
+
 const googleApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 if (!googleApiKey) {
   throw new Error("Google Maps Api key is missing.");
 }
 
-export default function GoogleMap() {
+function GoogleMap() {
   const {
     mapData,
     userPoint,
@@ -24,14 +29,37 @@ export default function GoogleMap() {
     setSelectedLocation,
     useHours,
     clickListMap,
+    viewArea,
+    setViewArea,
   } = useWeatherState();
+
+  const map = useMap();
+
+  const boundDist = normalizedRadius * ringCount;
+
+  //moves the map bounds to user selected location from list
+  useEffect(() => {
+    if (map && viewArea) {
+      let multiplier = 0.4;
+      if (viewArea.lat === userPoint.lat && viewArea.lng === userPoint.lng) {
+        multiplier = 0.7;
+      }
+      const bounds = {
+        east: viewArea.lng + boundDist * multiplier,
+        north: viewArea.lat + boundDist * multiplier,
+        south: viewArea.lat - boundDist * multiplier,
+        west: viewArea.lng - boundDist * multiplier,
+      };
+      map.fitBounds(bounds);
+    }
+  }, [viewArea]);
+
   //zooms map to show all found weather points
-  const boundDist = normalizedRadius * ringCount * 0.7;
   const bounds = {
-    east: centerPoint.lng + boundDist,
-    north: centerPoint.lat + boundDist,
-    south: centerPoint.lat - boundDist,
-    west: centerPoint.lng - boundDist,
+    east: userPoint.lng + boundDist * 0.7,
+    north: userPoint.lat + boundDist * 0.7,
+    south: userPoint.lat - boundDist * 0.7,
+    west: userPoint.lng - boundDist * 0.7,
   };
 
   function TempMarker({ data, i }) {
@@ -49,9 +77,8 @@ export default function GoogleMap() {
       : data.dates[Math.floor(selectedHour / 24)][unitType];
 
     const colorRatio = useHours
-      ? contentValue / centerPoint.hours[selectedHour][unitType]
-      : contentValue /
-        centerPoint.dates[Math.floor(selectedHour / 24)][unitType];
+      ? contentValue / userPoint.hours[selectedHour][unitType]
+      : contentValue / userPoint.dates[Math.floor(selectedHour / 24)][unitType];
 
     let content, positiveValue, negativeValue;
     switch (unitType) {
@@ -120,7 +147,14 @@ export default function GoogleMap() {
         style={style}
         position={{ lat: data.latitude, lng: data.longitude }}
         zIndex={zIndex}
-        onClick={() => setSelectedLocation(selectedLocation === i ? null : i)}
+        onClick={() => {
+          setViewArea(
+            selectedLocation === i
+              ? { lat: userPoint.lat, lng: userPoint.lng }
+              : { lat: data.latitude, lng: data.longitude }
+          );
+          setSelectedLocation(selectedLocation === i ? null : i);
+        }}
         collisionBehavior={CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY}
       >
         <p style={{ color: "black" }}>{content}</p>
@@ -141,40 +175,48 @@ export default function GoogleMap() {
       </AdvancedMarker>
     );
   }
+  return (
+    <Map
+      mapId="mainMap"
+      style={{
+        width: "min(100vw, 500px)",
+        flexGrow: 1,
+      }}
+      colorScheme="DARK"
+      defaultCenter={{ lat: userPoint.lat, lng: userPoint.lng }}
+      defaultBounds={bounds}
+      onClick={() => {
+        setViewArea({ lat: userPoint.lat, lng: userPoint.lng });
+        setSelectedLocation(null);
+      }}
+      disableDefaultUI
+    >
+      <AdvancedMarker
+        key="centerPointMarker"
+        position={{ lat: userPoint.lat, lng: userPoint.lng }}
+        zIndex={10}
+      >
+        <div
+          style={{
+            width: 13,
+            height: 13,
+            backgroundColor: "white",
+            border: "solid black",
+            borderRadius: 13,
+          }}
+        ></div>
+      </AdvancedMarker>
+      {mapData.map((data, i) => {
+        return <TempMarker data={data} i={i} key={i + "markerKey"} />;
+      })}
+    </Map>
+  );
+}
 
+export default function APIHolder() {
   return (
     <APIProvider apiKey={googleApiKey}>
-      <Map
-        mapId="mainMap"
-        style={{
-          width: "min(100vw, 500px)",
-          flexGrow: 1,
-        }}
-        colorScheme="DARK"
-        defaultCenter={{ lat: centerPoint.lat, lng: centerPoint.lng }}
-        defaultBounds={bounds}
-        onClick={() => setSelectedLocation()}
-        disableDefaultUI
-      >
-        <AdvancedMarker
-          key="centerPointMarker"
-          position={{ lat: centerPoint.lat, lng: centerPoint.lng }}
-          zIndex={10}
-        >
-          <div
-            style={{
-              width: 13,
-              height: 13,
-              backgroundColor: "white",
-              border: "solid black",
-              borderRadius: 13,
-            }}
-          ></div>
-        </AdvancedMarker>
-        {mapData.map((data, i) => {
-          return <TempMarker data={data} i={i} key={i + "markerKey"} />;
-        })}
-      </Map>
+      <GoogleMap />
     </APIProvider>
   );
 }

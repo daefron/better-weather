@@ -11,7 +11,6 @@ import { parseData } from "../WeatherParser";
 const WeatherContext = createContext();
 
 export function WeatherProvider({ children }) {
-  const [locationInput, setLocationInput] = useState(""); //user-typed location
   const [radiusKMInput, setRadiusKMInput] = useState(50); //coordinate distance between circles in km
   const [radiusDensity, setRadiusDensity] = useState(2); //how often points are chosen on circle
   const [tempUnit, setTempUnit] = useState("C"); //sets celsius/fahrenheit
@@ -34,9 +33,10 @@ export function WeatherProvider({ children }) {
   const inputCoordsRef = useRef(""); //parsed coordinates from user input
   const [mapData, setMapData] = useState([]); //parsed data to be shown on map
   const [userPoint, setUserPoint] = useState(); //parsed data of user input
+  const [viewArea, setViewArea] = useState();
   const sortedData = useRef(); //data sorted for list
 
-  const inputRef = useRef(); //locationInput element ref
+  const inputRef = useRef(); //user input element ref
 
   const [errorMessage, setErrorMessage] = useState(); //error message to display
 
@@ -180,6 +180,10 @@ export function WeatherProvider({ children }) {
           dates: parsedData[0].dates,
           hours: parsedData[0].hours,
         });
+        setViewArea({
+          lat: inputCoordsRef.current.lat,
+          lng: inputCoordsRef.current.lng,
+        });
         setMapData(parsedData);
       }
       setErrorMessage("");
@@ -199,7 +203,6 @@ export function WeatherProvider({ children }) {
   return (
     <WeatherContext.Provider
       value={{
-        setLocationInput,
         radiusKMInput,
         setRadiusKMInput,
         ringCount,
@@ -239,6 +242,8 @@ export function WeatherProvider({ children }) {
         clickMarker,
         clickListMap,
         sortedData,
+        viewArea,
+        setViewArea,
       }}
     >
       {children}
