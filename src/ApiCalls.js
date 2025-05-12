@@ -100,8 +100,17 @@ export async function fetchSuburb(weatherData) {
         point.suburb = data[i].results[0].address_components[0].long_name;
       }
     });
+
+    const uniqueLocations = weatherData.filter(
+      (point, index, self) =>
+        index ===
+        self.findIndex(
+          (p) =>
+            p.latitude === point.latitude && p.longitude === point.longitude
+        )
+    );
     console.log("Suburb data fetched successfully.");
-    return weatherData;
+    return uniqueLocations;
   } catch (error) {
     console.error("Failed to fetch suburb data:", error);
     throw error;
@@ -131,6 +140,5 @@ export async function fetchCoords(locationInput) {
     throw new Error("No results found for this location.");
   }
   console.log("Center-point geometry data fetched successfully.");
-  const coords = result.results[0].geometry.location;
   return result.results[0];
 }
