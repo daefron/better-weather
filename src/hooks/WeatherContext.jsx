@@ -78,10 +78,12 @@ export function WeatherProvider({ children }) {
     });
   }
 
-  function getUserLocation(e) {
+  function getUserLocation() {
     setLoading(true);
     inputRef.current.value = "Finding your location...";
     async function success(result) {
+      inputRef.current.blur();
+      inputRef.current.disabled = true;
       const coords = [result.coords];
 
       //get name of suburb from coords
@@ -92,16 +94,14 @@ export function WeatherProvider({ children }) {
       const suburb = suburbData[0].suburb;
 
       inputRef.current.value = suburb;
-      inputRef.current.blur();
-      inputRef.current.disabled = true;
       inputCoordsRef.current = {
         lat: coords[0].latitude,
         lng: coords[0].longitude,
       };
 
-      userSubmit(e, suburb);
+      userSubmit(suburb);
     }
-    navigator.geolocation.getCurrentPosition(success, (error) => {
+    navigator.geolocation.getCurrentPosition(success, () => {
       setLoading(false);
       errorReset();
     });
@@ -127,18 +127,19 @@ export function WeatherProvider({ children }) {
     return true;
   }
 
-  async function userSubmit(e, suburbFetched) {
-    e.preventDefault();
-
+  async function userSubmit(suburbFetched) {
     //prevents multiple requests
     if (loading) return;
-
+    setErrorMessage("");
     setLoading(true);
 
     try {
       //skips excess API calls if has same input as last search
       if (!sameState()) {
-        if (!suburbFetched) {
+        if (inputRef.current.value === "") {
+          getUserLocation();
+          return;
+        } else if (!suburbFetched) {
           await autoCorrectSuburb(inputRef.current.value);
         }
         lastState.current = {
@@ -185,7 +186,7 @@ export function WeatherProvider({ children }) {
         });
         setMapData(parsedData);
       }
-      setErrorMessage("");
+      inputRef.current.blur();
       setLoading(false);
       setChangeLayout(true);
       setTimeout(() => {
@@ -195,6 +196,7 @@ export function WeatherProvider({ children }) {
       console.error("Initial fetch failed:", error);
       setErrorMessage(error.message);
       setLoading(false);
+      inputRef.current.focus();
       inputRef.current.disabled = false;
     }
   }

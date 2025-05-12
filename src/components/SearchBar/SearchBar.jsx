@@ -24,7 +24,10 @@ export default function SearchBar() {
       }}
     >
       <form
-        onSubmit={userSubmit}
+        onSubmit={(e) => {
+          e.preventDefault();
+          userSubmit();
+        }}
         style={{
           width: changeLayout ? 0 : "calc(100%)",
           flexGrow: 8,
@@ -55,8 +58,8 @@ export default function SearchBar() {
         ></input>
         <FontAwesomeIcon
           icon={faLocation}
-          onClick={(e) => {
-            getUserLocation(e);
+          onClick={() => {
+            getUserLocation();
           }}
           style={{
             position: "absolute",
