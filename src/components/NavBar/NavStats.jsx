@@ -50,14 +50,22 @@ export default function NavStats({
   };
   return (
     <>
-      <Button
+      <div
         style={{
+          fontSize: "clamp(10px, 3vw, 15px)",
+          backgroundColor: "rgb(32, 53, 42)",
+          border: "1px outset black",
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
           alignItems: "start",
-          height: "calc(100% + 12px)",
+          height: "calc(100% + 10px)",
           flexGrow: 1,
         }}
-        content={contentRef.current.dateTime}
-      />
+      >
+        <p style={{ paddingInline: "6px" }}>{contentRef.current.dateTime}</p>
+      </div>
       <Button
         style={{
           height: "calc(100% + 12px)",
