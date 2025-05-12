@@ -102,11 +102,9 @@ function TempMarker({ data, i }) {
   style.backgroundColor = `RGBA(${negativeValue}, ${positiveValue}, 0, 1)`;
   let zIndex = 1;
   if (selectedLocation === i) {
-    style.textDecoration = "underline";
     style.fontSize = 16;
     zIndex = 20;
   } else {
-    style.textDecoration = "";
     zIndex = 1;
   }
   return (
