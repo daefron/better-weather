@@ -170,8 +170,21 @@ export function WeatherProvider({ children }) {
             }),
           }
         );
+
+        if (!response.ok) {
+          throw new Error(`Server responsed with status ${response.status}`);
+        }
+
         const data = await response.json();
-        const parsedData = JSON.parse(data.result);
+
+        let parsedData;
+        try {
+          parsedData = JSON.parse(data.result);
+        } catch (parseError) {
+          throw new Error(
+            "Failed to parse 'refult' JSON:" + parseError.message
+          );
+        }
         const timezone = parsedData.timezone;
         const locations = parsedData.locations;
         const userLocation = locations[0];
