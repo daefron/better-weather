@@ -81,15 +81,18 @@ export function WeatherProvider({ children }) {
       const coords = [result.coords][0];
 
       //send results to API as auto received
-      const response = await fetch("http://localhost:3000/auto", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          coords: [coords.latitude, coords.longitude],
-        }),
-      });
+      const response = await fetch(
+        "https://better-weather.onrender.com/auto",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            coords: [coords.latitude, coords.longitude],
+          }),
+        }
+      );
       const data = await response.json();
       const parsedData = JSON.parse(data.result);
 
@@ -134,19 +137,22 @@ export function WeatherProvider({ children }) {
           dateFormat: dateFormat,
         };
 
-        const response = await fetch("http://localhost:3000/manual", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userInput: inputRef.current.value,
-            radiusKMInput: radiusKMInput,
-            radiusDensity: radiusDensity,
-            tempUnit: tempUnit,
-            dateFormat: dateFormat,
-          }),
-        });
+        const response = await fetch(
+          "https://better-weather.onrender.com/manual",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userInput: inputRef.current.value,
+              radiusKMInput: radiusKMInput,
+              radiusDensity: radiusDensity,
+              tempUnit: tempUnit,
+              dateFormat: dateFormat,
+            }),
+          }
+        );
         const data = await response.json();
         const parsedData = JSON.parse(data.result);
         const timezone = parsedData.timezone;
