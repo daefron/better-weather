@@ -106,6 +106,12 @@ export async function fetchSuburb(weatherData) {
           longitude: point[1],
           suburb: data[i].results[0].address_components[0].long_name,
         });
+      } else {
+        parsedData.push({
+          latitude: point[0],
+          longitude: point[1],
+          suburb: "Unkown suburb",
+        });
       }
     });
 
