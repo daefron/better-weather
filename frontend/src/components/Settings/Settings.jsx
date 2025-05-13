@@ -14,7 +14,7 @@ export default function Settings() {
     setDateFormat,
   } = useWeatherState();
 
-  const radiusOptions = [25, 50, 75, 100, 125, 150];
+  const radiusOptions = [25, 50, 75, 100, 125];
   const densityOptions = [1, 2, 4, 8];
   const tempUnitOptions = ["C", "F"];
   const dateFormatOptions = ["DD/MM", "MM/DD"];
