@@ -6,7 +6,18 @@ async function postManual(req, res) {
   try {
     const { userInput, radiusKMInput, radiusDensity } = req.body;
     console.log(`Getting request with location: ${userInput}`);
+  try {
+    const { userInput, radiusKMInput, radiusDensity } = req.body;
+    console.log(`Getting request with location: ${userInput}`);
 
+    const coordinates = await fetchCoords(userInput);
+    if (!coordinates) throw new Error("Coordinates not found.");
+    const finalData = await dataProcessing(
+      coordinates,
+      radiusKMInput,
+      radiusDensity
+    );
+    console.log(finalData.locations);
     const coordinates = await fetchCoords(userInput);
     if (!coordinates) throw new Error("Coordinates not found.");
     const finalData = await dataProcessing(
@@ -47,10 +58,27 @@ async function postAuto(req, res) {
     console.error("Failed in postAuto:", error.message);
     return res.status(500).json({ error: "Internal server error." });
   }
+  try {
+    const { coords } = req.body;
+    console.log(`Getting request with location: ${coords}`);
+    const suburbData = await fetchSuburb([coords]);
+    if (suburbData) throw new Error("No results found for this location");
+    const suburb = suburbData[0].suburb;
+    console.log(`Sent result for: ${coords}`);
+    return res.json({
+      result: JSON.stringify({
+        suburb: suburb,
+      }),
+    });
+  } catch (error) {
+    console.error("Failed in postAuto:", error.message);
+    return res.status(500).json({ error: "Internal server error." });
+  }
 }
 
 async function dataProcessing(coordinates, radiusKMInput, radiusDensity) {
   const timezone = await fetchTimezone(coordinates.geometry.location);
+  if (!timezone) throw new Error("Failed to fetch timezone data");
   if (!timezone) throw new Error("Failed to fetch timezone data");
 
   const weatherCoords = coordinateMaker(
@@ -61,6 +89,7 @@ async function dataProcessing(coordinates, radiusKMInput, radiusDensity) {
   );
 
   const locations = await fetchSuburb(weatherCoords);
+  if (!locations) throw new Error("Failed to fetch suburb data");
   if (!locations) throw new Error("Failed to fetch suburb data");
 
   return { timezone: timezone, locations: locations };
