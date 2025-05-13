@@ -14,8 +14,6 @@ async function postManual(req, res) {
       radiusKMInput,
       radiusDensity
     );
-    console.log(finalData.locations);
-
     console.log(`Sent result for: ${userInput}`);
     return res.json({
       result: JSON.stringify({
