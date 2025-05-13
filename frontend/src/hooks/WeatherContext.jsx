@@ -79,26 +79,43 @@ export function WeatherProvider({ children }) {
       inputRef.current.blur();
       inputRef.current.disabled = true;
       const coords = [result.coords][0];
-
-      //send results to API as auto received
-      const response = await fetch(
-        "https://better-weather.onrender.com/auto",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            coords: [coords.latitude, coords.longitude],
-          }),
+      try {
+        const response = await fetch(
+          "https://better-weather.onrender.com/auto",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              coords: [coords.latitude, coords.longitude],
+            }),
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`Server responsed with status ${response.status}`);
         }
-      );
-      const data = await response.json();
-      const parsedData = JSON.parse(data.result);
 
-      inputRef.current.value = parsedData.suburb;
+        const data = await response.json();
+        let parsedData;
+        try {
+          parsedData = JSON.parse(data.result);
+        } catch (parseError) {
+          throw new Error(
+            "Failed to parse 'refult' JSON:" + parseError.message
+          );
+        }
 
-      userSubmit();
+        inputRef.current.value = parsedData.suburb;
+
+        userSubmit();
+      } catch (error) {
+        console.error("Initial fetch failed:", error);
+        setErrorMessage(error.message);
+        setLoading(false);
+        inputRef.current.focus();
+        inputRef.current.disabled = false;
+      }
     }
     navigator.geolocation.getCurrentPosition(success, () => {
       setLoading(false);
