@@ -33,8 +33,8 @@ export function coordinateMaker(
   radiusDensity
 ) {
   //user inputted location
-  const centerLat = inputCoords.current.lat;
-  const centerLng = inputCoords.current.lng;
+  const centerLat = inputCoords.lat;
+  const centerLng = inputCoords.lng;
 
   const pointHolder = [[centerLat, centerLng]];
   const baseSpacingKm = 50;
@@ -42,7 +42,9 @@ export function coordinateMaker(
   for (let radius = 1; radius <= radiusRings; radius++) {
     const distance = radius * radiusInput * 100; //distance in km
     const circumference = 2 * Math.PI * distance; //circumfrence of the circle
-    const pointCount = Math.max(4, Math.round(circumference / baseSpacingKm)) * (radiusDensity / 2);
+    const pointCount =
+      Math.max(4, Math.round(circumference / baseSpacingKm)) *
+      (radiusDensity / 2);
 
     const angleSlice = 360 / pointCount;
     for (let point = 0; point < pointCount; point++) {

@@ -1,12 +1,6 @@
 import { createContext, useContext, useState, useRef, useMemo } from "react";
-import { coordinateMaker } from "../CoordinateMaker";
-import {
-  fetchWeather,
-  fetchSuburb,
-  fetchCoords,
-  fetchTimezone,
-} from "../ApiCalls";
-import { parseData } from "../WeatherParser";
+import { fetchWeather } from "../ApiCalls";
+import { parseData } from "../../../backend/WeatherParser";
 
 const WeatherContext = createContext();
 
@@ -84,37 +78,29 @@ export function WeatherProvider({ children }) {
     async function success(result) {
       inputRef.current.blur();
       inputRef.current.disabled = true;
-      const coords = [result.coords];
+      const coords = [result.coords][0];
 
-      //get name of suburb from coords
-      const suburbData = await fetchSuburb(coords);
-      if (!suburbData) {
-        errorReset;
-      }
-      const suburb = suburbData[0].suburb;
+      //send results to API as auto received
+      const response = await fetch("http://localhost:3000/auto", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          coords: [coords.latitude, coords.longitude],
+        }),
+      });
+      const data = await response.json();
+      const parsedData = JSON.parse(data.result);
 
-      inputRef.current.value = suburb;
-      inputCoordsRef.current = {
-        lat: coords[0].latitude,
-        lng: coords[0].longitude,
-      };
+      inputRef.current.value = parsedData.suburb;
 
-      userSubmit(suburb);
+      userSubmit();
     }
     navigator.geolocation.getCurrentPosition(success, () => {
       setLoading(false);
       errorReset();
     });
-  }
-
-  //fetches an auto-filled location name, then replaces user input with name
-  async function autoCorrectSuburb(input) {
-    const inputData = await fetchCoords(input);
-    if (!inputData) errorReset();
-    inputRef.current.value = inputData.address_components[0].long_name;
-    inputRef.current.blur();
-    inputRef.current.disabled = true;
-    inputCoordsRef.current = inputData.geometry.location;
   }
 
   function sameState() {
@@ -127,7 +113,7 @@ export function WeatherProvider({ children }) {
     return true;
   }
 
-  async function userSubmit(suburbFetched) {
+  async function userSubmit() {
     //prevents multiple requests
     if (loading) return;
     setErrorMessage("");
@@ -139,8 +125,6 @@ export function WeatherProvider({ children }) {
         if (inputRef.current.value === "") {
           getUserLocation();
           return;
-        } else if (!suburbFetched) {
-          await autoCorrectSuburb(inputRef.current.value);
         }
         lastState.current = {
           inputRef: inputRef.current.value,
@@ -150,42 +134,53 @@ export function WeatherProvider({ children }) {
           dateFormat: dateFormat,
         };
 
-        const weatherCoords = coordinateMaker(
-          inputCoordsRef,
-          normalizedRadius,
-          ringCount,
-          radiusDensity
-        );
+        const response = await fetch("http://localhost:3000/manual", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userInput: inputRef.current.value,
+            radiusKMInput: radiusKMInput,
+            radiusDensity: radiusDensity,
+            tempUnit: tempUnit,
+            dateFormat: dateFormat,
+          }),
+        });
+        const data = await response.json();
+        const parsedData = JSON.parse(data.result);
+        const timezone = parsedData.timezone;
+        const locations = parsedData.locations;
+        const userLocation = locations[0];
+        inputCoordsRef.current = {
+          lat: userLocation.latitude,
+          lng: userLocation.longitude,
+        };
 
-        const timezone = await fetchTimezone(inputCoordsRef.current);
-        if (!timezone) errorReset();
-
-        const weatherData = await fetchWeather(
-          weatherCoords,
-          timezone,
-          tempUnit
-        );
+        const weatherData = await fetchWeather(locations, timezone, tempUnit);
         if (!weatherData) errorReset();
 
-        const finalData = await fetchSuburb(weatherData);
-        if (!finalData) errorReset();
+        weatherData.forEach((location, i) => {
+          location.suburb = locations[i].suburb;
+        });
 
-        const parsedData = parseData(finalData);
-        if (!parsedData[0]) errorReset();
+        const lastData = parseData(weatherData);
+        if (!lastData[0]) errorReset();
 
         setUserPoint({
           lat: inputCoordsRef.current.lat,
           lng: inputCoordsRef.current.lng,
           suburb: inputRef.current.value,
-          dates: parsedData[0].dates,
-          hours: parsedData[0].hours,
+          dates: lastData[0].dates,
+          hours: lastData[0].hours,
         });
         setViewArea({
           lat: inputCoordsRef.current.lat,
           lng: inputCoordsRef.current.lng,
         });
-        setMapData(parsedData);
+        setMapData(lastData);
       }
+
       inputRef.current.blur();
       setLoading(false);
       setChangeLayout(true);
