@@ -113,6 +113,8 @@ export function WeatherProvider({ children }) {
         console.error("Initial fetch failed:", error);
         setErrorMessage(error.message);
         setLoading(false);
+
+        inputRef.current.value = "";
         inputRef.current.focus();
         inputRef.current.disabled = false;
       }
