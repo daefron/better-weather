@@ -24,7 +24,7 @@ async function postManual(req, res) {
       }),
     });
   } catch (error) {
-    console.error("Failed in postManual:", error.message);
+    console.log("Failed in postManual:", error.message);
     return res.status(500).json({ error: "Internal server error." });
   }
 }
@@ -44,7 +44,7 @@ async function postAuto(req, res) {
       }),
     });
   } catch (error) {
-    console.error("Failed in postAuto:", error.message);
+    console.log("Failed in postAuto:", error.message);
     return res.status(500).json({ error: "Internal server error." });
   }
 }
