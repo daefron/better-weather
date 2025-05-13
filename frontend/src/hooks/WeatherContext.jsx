@@ -81,7 +81,7 @@ export function WeatherProvider({ children }) {
       const coords = [result.coords][0];
 
       //send results to API as auto received
-      const response = await fetch("http://localhost:3000/auto", {
+      const response = await fetch("https://weather.thomasevans.org/auto", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -134,7 +134,7 @@ export function WeatherProvider({ children }) {
           dateFormat: dateFormat,
         };
 
-        const response = await fetch("http://localhost:3000/manual", {
+        const response = await fetch("https://weather.thomasevans.org/manual", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
