@@ -21,6 +21,7 @@ export default function SearchBar() {
         marginInline: changeLayout ? 0 : 15,
         marginBlock: changeLayout ? 0 : 10,
         userSelect: true,
+        Bottom: changeLayout ? 5 : 0,
       }}
     >
       <form
@@ -44,9 +45,9 @@ export default function SearchBar() {
           type="text"
           id="userLocation"
           style={{
-            width: "calc(100% - 10px)",
+            width: "calc(100% - 12px)",
             fontSize: changeLayout ? "clamp(14px, 4vw, 18px)" : 18,
-            padding: 4,
+            padding: 5,
             position: "relative",
             zIndex: changeLayout ? -1 : 1,
             border: changeLayout ? "1px outset black" : null,

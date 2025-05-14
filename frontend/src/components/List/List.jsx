@@ -77,7 +77,7 @@ export default function List() {
         position: "relative",
         width: "min(90vw, 450px)",
         marginRight: "max(calc(-90vw - 2px), -452px)",
-        right: showList ? "min(90vw, 450px)" : 0,
+        right: showList ? "min(90vw, 450px)" : "-1px",
         transition: "right 1s ease",
         flexGrow: 1,
         backgroundColor: "rgba(31,53,42,1)",
@@ -89,11 +89,14 @@ export default function List() {
       <button
         style={{
           width: 30,
-          marginLeft: "-30px",
+          marginLeft: showList ? "-30px" : "-32px",
+          boxSizing: "border-box",
           height: 80,
           alignSelf: "center",
           zIndex: 100,
-          borderRight: "none",
+          backgroundColor: showList ? "rgb(25,45,35)" : "rgb(32, 53, 42)",
+          borderRight: showList ? "0px inset black" : "2px inset black",
+          transition: "all 0.1s ease",
         }}
         onClick={() => {
           setShowList(!showList);

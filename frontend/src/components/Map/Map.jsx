@@ -35,7 +35,6 @@ function TempMarker({ data, i }) {
     fontSize: 13,
     color: "black",
     border: "2px solid rgba(0,0,0,0.2)",
-    
   };
   const contentValue = useHours
     ? data.hours[selectedHour][unitType]
@@ -168,8 +167,9 @@ function GoogleMap() {
     <Map
       mapId="mainMap"
       style={{
-        width: "min(100vw, 500px)",
+        width: "min(100vw, 1000px)",
         flexGrow: 1,
+        border: "1px inset black",
       }}
       colorScheme="DARK"
       defaultCenter={{ lat: userPoint.lat, lng: userPoint.lng }}

@@ -22,7 +22,7 @@ function App() {
       />
       <div
         style={{
-          width: "min(100vw, 500px)",
+          width: "min(100vw, 1000px)",
           height: "100%",
           display: "flex",
           flexDirection: "column",
@@ -82,16 +82,15 @@ function App() {
         </main>
         <footer
           style={{
-            width: "100%",
+            width: changeLayout ? "100%" : "min(100%, 500px)",
             height: changeLayout ? "auto" : 0,
             display: "flex",
             flexDirection: "column",
             zIndex: 50,
             boxShadow: changeLayout ? "0px -3px 3px rgba(0,0,0,0.05)" : null,
-            transition: "flex-grow 1s ease",
+            transition: "all 1s ease, width 0.2s ease-out",
             flexGrow: changeLayout ? 0 : 1,
             flexShrink: changeLayout ? 1 : 0,
-            paddingBottom: changeLayout ? 5 : 0,
           }}
         >
           <NavBar />
