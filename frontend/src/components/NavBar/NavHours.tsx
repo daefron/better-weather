@@ -1,4 +1,14 @@
-import Button from "../General/Button";
+import Button from "../General/Button.tsx";
+
+interface NavHoursProps {
+  amPm: "AM" | "PM";
+  setAmPm: (value: "AM" | "PM") => void;
+  selectedHour: number;
+  setSelectedHour: (hour: number) => void;
+  useHours: boolean;
+  changeLayout: boolean;
+}
+
 export default function NavHours({
   amPm,
   setAmPm,
@@ -6,11 +16,11 @@ export default function NavHours({
   setSelectedHour,
   useHours,
   changeLayout,
-}) {
-  if (!amPm) {
-    if (!changeLayout) return;
+}: NavHoursProps) {
+  if (!amPm && !changeLayout) {
+    return;
   }
-  let hours = [];
+  const hours: number[] = [];
   for (let i = 0; i < 24; i++) {
     if (i === 0) {
       hours.push(12);

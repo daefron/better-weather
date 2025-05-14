@@ -9,12 +9,25 @@ import { useEffect } from "react";
 
 import { useWeatherState } from "../../hooks/WeatherContext";
 
+interface WeatherData {
+  latitude: number;
+  longitude: number;
+  suburb: string;
+  hours: Record<number, Record<string, number>>;
+  dates: Record<number, Record<string, number>>;
+}
+
+interface TempMarkerProps {
+  data: WeatherData;
+  i: number;
+}
+
 const googleApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 if (!googleApiKey) {
   throw new Error("Google Maps Api key is missing.");
 }
 
-function TempMarker({ data, i }) {
+function TempMarker({ data, i }: TempMarkerProps) {
   const {
     selectedHour,
     unitType,
@@ -27,7 +40,7 @@ function TempMarker({ data, i }) {
     setShowList,
   } = useWeatherState();
 
-  const style = {
+  const style: React.CSSProperties = {
     display: "flex",
     gap: 5,
     borderRadius: 4,
@@ -41,10 +54,12 @@ function TempMarker({ data, i }) {
     : data.dates[Math.floor(selectedHour / 24)][unitType];
 
   const colorRatio = useHours
-    ? contentValue / userPoint.hours[selectedHour][unitType]
-    : contentValue / userPoint.dates[Math.floor(selectedHour / 24)][unitType];
+    ? contentValue / Number(userPoint.hours[selectedHour][unitType])
+    : contentValue / Number(userPoint.dates[Math.floor(selectedHour / 24)][unitType]);
 
-  let content, positiveValue, negativeValue;
+  let content: string;
+  let positiveValue: number;
+  let negativeValue: number;
   switch (unitType) {
     case "temp":
       if (selectedLocation === i) {
@@ -196,7 +211,7 @@ function GoogleMap() {
           }}
         ></div>
       </AdvancedMarker>
-      {mapData.map((data, i) => {
+      {mapData.map((data: any, i) => {
         return <TempMarker data={data} i={i} key={i + "markerKey"} />;
       })}
     </Map>

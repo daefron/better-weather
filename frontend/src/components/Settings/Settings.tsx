@@ -1,5 +1,6 @@
-import { useWeatherState } from "../../hooks/WeatherContext";
-import Button from "../General/Button";
+import { useWeatherState } from "../../hooks/WeatherContext.tsx";
+import Button from "../General/Button.tsx";
+
 export default function Settings() {
   const {
     radiusKMInput,
@@ -59,8 +60,7 @@ export default function Settings() {
                   style={{
                     width: "10%",
                   }}
-                  onClick={(e) => {
-                    e.preventDefault();
+                  onClick={() => {
                     setRadiusKMInput(option);
                   }}
                 />
@@ -93,8 +93,7 @@ export default function Settings() {
                   style={{
                     width: "10%",
                   }}
-                  onClick={(e) => {
-                    e.preventDefault();
+                  onClick={() => {
                     setRadiusDensity(option);
                   }}
                 />
@@ -118,7 +117,7 @@ export default function Settings() {
             >
               Temperature unit:
             </p>
-            {tempUnitOptions.map((option) => {
+            {tempUnitOptions.map((option: "C" | "F") => {
               return (
                 <Button
                   key={"tempOption" + option}
@@ -127,8 +126,7 @@ export default function Settings() {
                   style={{
                     width: "10%",
                   }}
-                  onClick={(e) => {
-                    e.preventDefault();
+                  onClick={() => {
                     setTempUnit(option);
                   }}
                 />
@@ -152,14 +150,13 @@ export default function Settings() {
             >
               Date format:
             </p>
-            {dateFormatOptions.map((option) => {
+            {dateFormatOptions.map((option: "DD/MM" | "MM/DD") => {
               return (
                 <Button
                   key={"dateFormatOption" + option}
                   active={dateFormat === option}
                   content={option}
-                  onClick={(e) => {
-                    e.preventDefault();
+                  onClick={() => {
                     setDateFormat(option);
                   }}
                 />

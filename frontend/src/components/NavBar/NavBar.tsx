@@ -2,6 +2,7 @@ import NavStats from "./NavStats";
 import NavDates from "./NavDates";
 import NavHours from "./NavHours";
 import { useWeatherState } from "../../hooks/WeatherContext";
+
 export default function NavBar() {
   const {
     userPoint,

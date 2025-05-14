@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import Button from "../General/Button";
-import { useWeatherState } from "../../hooks/WeatherContext";
+import { useWeatherState } from "../../hooks/WeatherContext.tsx";
 
 export default function List() {
   const {
@@ -29,7 +29,7 @@ export default function List() {
 
   sortedData.current = [...mapData]
     .map((place, i) => {
-      const dataSource = useHours
+      const dataSource: any = useHours
         ? place.hours[selectedHour]
         : place.dates[Math.floor(selectedHour / 24)];
       const url = new URL(
@@ -47,6 +47,7 @@ export default function List() {
         coords: { lat: place.latitude, lng: place.longitude },
         url: url,
         index: i,
+        chosenLocation: false,
       };
       if (!i) {
         item.chosenLocation = true;
@@ -126,12 +127,14 @@ export default function List() {
         }}
       >
         {sortedData.current.map((place, i) => {
-          const diffToChosen = (
-            place[unitType] -
-            (useHours
-              ? userPoint.hours[selectedHour][unitType]
-              : userPoint.dates[Math.floor(selectedHour / 24)][unitType])
-          ).toFixed(1);
+          const diffToChosen: number = Number(
+            (
+              place[unitType] -
+              (useHours
+                ? userPoint.hours[selectedHour][unitType]
+                : userPoint.dates[Math.floor(selectedHour / 24)][unitType])
+            ).toFixed(1)
+          );
           return (
             <div
               key={"suburbList" + i}
@@ -185,7 +188,7 @@ export default function List() {
                     }}
                   />
                 }
-                onClick={(e) => {
+                onClick={() => {
                   setViewArea(place.coords);
                   clickMarker(place);
                 }}

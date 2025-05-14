@@ -1,5 +1,17 @@
-import { useRef } from "react";
-import Button from "../General/Button";
+import Button from "../General/Button.tsx";
+
+interface NavStatsProps {
+  userPoint: any;
+  selectedHour: number;
+  amPm: "AM" | "PM";
+  useHours: boolean;
+  changeLayout: boolean;
+  unitType: "temp" | "rainChance" | "windMax";
+  setUnitType: (unitType: "temp" | "rainChance" | "windMax") => void;
+  tempUnit: "C" | "F";
+  dateFormat: "DD/MM" | "MM/DD";
+}
+
 export default function NavStats({
   userPoint,
   selectedHour,
@@ -10,17 +22,16 @@ export default function NavStats({
   setUnitType,
   tempUnit,
   dateFormat,
-}) {
-  const contentRef = useRef();
-  if (!contentRef.current) {
-    if (!changeLayout) return;
-  }
+}: NavStatsProps) {
+  if (!changeLayout) return null;
 
   const dateIndex = Math.floor(selectedHour / 24);
   const date = new Date(userPoint.dates[dateIndex].date);
+
   const weekdayContent = new Intl.DateTimeFormat("en-AU", {
     weekday: "short",
   }).format(date);
+
   const dateContent = new Intl.DateTimeFormat(
     dateFormat === "DD/MM" ? "en-AU" : "en-US",
     {
@@ -28,6 +39,7 @@ export default function NavStats({
       month: "numeric",
     }
   ).format(date);
+
   const timeContent = useHours
     ? selectedHour % 12 !== 0
       ? " - " + (selectedHour % 12) + " " + amPm
@@ -38,16 +50,10 @@ export default function NavStats({
   const valueSource = useHours
     ? userPoint.hours[selectedHour]
     : userPoint.dates[Math.floor(selectedHour / 24)];
-  const tempContent = "Temp - " + valueSource.temp + "°" + tempUnit;
-  const rainContent = "Rain - " + valueSource.rainChance + "%";
-  const windContent = "Wind - " + valueSource.windMax + "km/h";
+  const tempContent = `Temp - ${valueSource.temp}°${tempUnit}`;
+  const rainContent = `Rain - ${valueSource.rainChance}%`;
+  const windContent = `Wind - ${valueSource.windMax} km/h`;
 
-  contentRef.current = {
-    dateTime: dateTimeContent,
-    temp: tempContent,
-    rain: rainContent,
-    wind: windContent,
-  };
   return (
     <>
       <div
@@ -64,16 +70,15 @@ export default function NavStats({
           flexGrow: 1,
         }}
       >
-        <p style={{ paddingInline: "6px" }}>{contentRef.current.dateTime}</p>
+        <p style={{ paddingInline: "6px" }}>{dateTimeContent}</p>
       </div>
       <Button
         style={{
           height: "calc(100% + 12px)",
         }}
         active={unitType === "temp"}
-        content={contentRef.current.temp}
-        onClick={(e) => {
-          e.preventDefault();
+        content={tempContent}
+        onClick={() => {
           setUnitType("temp");
         }}
       />
@@ -82,9 +87,8 @@ export default function NavStats({
           height: "calc(100% + 12px)",
         }}
         active={unitType === "rainChance"}
-        content={contentRef.current.rain}
-        onClick={(e) => {
-          e.preventDefault();
+        content={rainContent}
+        onClick={() => {
           setUnitType("rainChance");
         }}
       />
@@ -93,9 +97,8 @@ export default function NavStats({
           height: "calc(100% + 12px)",
         }}
         active={unitType === "windMax"}
-        content={contentRef.current.wind}
-        onClick={(e) => {
-          e.preventDefault();
+        content={windContent}
+        onClick={() => {
           setUnitType("windMax");
         }}
       />

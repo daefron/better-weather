@@ -1,9 +1,31 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faCalendar } from "@fortawesome/free-solid-svg-icons";
 
-import Button from "../General/Button";
+import Button from "../General/Button.tsx";
 
 import { useRef } from "react";
+
+interface DateData {
+  date: string;
+  temp: number;
+  rainChance: number;
+  windMax: number;
+}
+
+interface MapDataItem {
+  dates: DateData[];
+}
+
+interface NavDatesProps {
+  mapData: any[];
+  unitType: "temp" | "rainChance" | "windMax";
+  selectedHour: number;
+  setSelectedHour: (selectedHour: number) => void;
+  setUseHours: (value: boolean) => void;
+  useHours: boolean;
+  changeLayout: boolean;
+  tempUnit: "C" | "F";
+}
 
 export default function NavDates({
   mapData,
@@ -14,11 +36,11 @@ export default function NavDates({
   useHours,
   changeLayout,
   tempUnit,
-}) {
-  const contentRef = useRef();
+}: NavDatesProps) {
+  const contentRef = useRef<MapDataItem[] | null>(null);
 
   if (!contentRef.current) {
-    if (!changeLayout) return;
+    if (!changeLayout) return null;
   }
   contentRef.current = mapData;
   return (
@@ -47,10 +69,9 @@ export default function NavDates({
       />
       {contentRef.current[0].dates.map((date, index) => {
         index += 1;
-        const options = { weekday: "short" };
-        const renderDate = new Intl.DateTimeFormat("en-US", options).format(
-          new Date(date.date)
-        );
+        const renderDate = new Intl.DateTimeFormat("en-US", {
+          weekday: "short",
+        }).format(new Date(date.date));
 
         let content;
         switch (unitType) {

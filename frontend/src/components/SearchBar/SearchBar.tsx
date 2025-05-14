@@ -1,7 +1,8 @@
 import { BarLoader } from "react-spinners";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faLocation } from "@fortawesome/free-solid-svg-icons";
+import { faLocation } from "@fortawesome/free-solid-svg-icons";
 import { useWeatherState } from "../../hooks/WeatherContext";
+
 export default function SearchBar() {
   const {
     changeLayout,
@@ -21,8 +22,8 @@ export default function SearchBar() {
         marginInline: changeLayout ? 0 : 15,
         marginTop: changeLayout ? 0 : 20,
         marginBottom: changeLayout ? 0 : 5,
-        userSelect: true,
-        Bottom: changeLayout ? 5 : 0,
+        userSelect: "all",
+        bottom: changeLayout ? 5 : 0,
       }}
     >
       <form

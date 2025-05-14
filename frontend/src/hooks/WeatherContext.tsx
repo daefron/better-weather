@@ -1,10 +1,97 @@
-import { createContext, useContext, useState, useRef, useMemo } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useRef,
+  useMemo,
+  ReactNode,
+  RefObject,
+} from "react";
 import { fetchWeather } from "../ApiCalls";
 import { parseData } from "../../../backend/WeatherParser";
 
-const WeatherContext = createContext();
+type WeatherPoint = {
+  index?: number;
+  suburb: string;
+  lat: number;
+  lng: number;
+  latitude?: number;
+  longitude?: number;
+  distance?: number;
+  dates: string[];
+  hours: Record<string, number | string>[];
+};
 
-export function WeatherProvider({ children }) {
+type SortedPoint = {
+  coords: Coords;
+  distance: number;
+  distanceRatio: number;
+  index: number;
+  rainChance: number;
+  suburb: string;
+  temo: string;
+  url: URL;
+  windMax: number;
+};
+
+type Coords = {
+  lat: number;
+  lng: number;
+};
+
+type WeatherContextType = {
+  radiusKMInput: number;
+  setRadiusKMInput: React.Dispatch<React.SetStateAction<number>>;
+  ringCount: number;
+  mapData: WeatherPoint[];
+  userPoint?: WeatherPoint;
+  loading: boolean;
+  errorMessage?: string;
+  selectedHour: number;
+  setSelectedHour: React.Dispatch<React.SetStateAction<number>>;
+  unitType: "temp" | "rainChance" | "windMax";
+  setUnitType: React.Dispatch<
+    React.SetStateAction<"temp" | "rainChance" | "windMax">
+  >;
+  inputRef: RefObject<HTMLInputElement>;
+  userSubmit: () => void;
+  getUserLocation: () => void;
+  showMap: boolean;
+  setShowMap: React.Dispatch<React.SetStateAction<boolean>>;
+  changeLayout: boolean;
+  setChangeLayout: React.Dispatch<React.SetStateAction<boolean>>;
+  normalizedRadius: number;
+  amPm: "AM" | "PM";
+  setAmPm: React.Dispatch<React.SetStateAction<"AM" | "PM">>;
+  showList: boolean;
+  setShowList: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedLocation?: number;
+  setSelectedLocation: React.Dispatch<React.SetStateAction<number | undefined>>;
+  useHours: boolean;
+  setUseHours: React.Dispatch<React.SetStateAction<boolean>>;
+  resetLayout: () => void;
+  shrinkNav: boolean;
+  setShrinkNav: React.Dispatch<React.SetStateAction<boolean>>;
+  radiusDensity: number;
+  setRadiusDensity: React.Dispatch<React.SetStateAction<number>>;
+  tempUnit: "C" | "F";
+  setTempUnit: React.Dispatch<React.SetStateAction<"C" | "F">>;
+  dateFormat: "DD/MM" | "MM/DD";
+  setDateFormat: React.Dispatch<React.SetStateAction<"DD/MM" | "MM/DD">>;
+  clickMarker: (place: { index: number }) => void;
+  clickListMap: (index: number) => void;
+  sortedData: React.RefObject<any[]>;
+  viewArea?: Coords;
+  setViewArea: React.Dispatch<React.SetStateAction<Coords | undefined>>;
+};
+
+const WeatherContext = createContext<WeatherContextType | undefined>(undefined);
+
+type ProviderProps = {
+  children: ReactNode;
+};
+
+export function WeatherProvider({ children }: ProviderProps) {
   const [radiusKMInput, setRadiusKMInput] = useState(50); //coordinate distance between circles in km
   const [radiusDensity, setRadiusDensity] = useState(2); //how often points are chosen on circle
   const [tempUnit, setTempUnit] = useState("C"); //sets celsius/fahrenheit
@@ -12,7 +99,9 @@ export function WeatherProvider({ children }) {
   const [selectedHour, setSelectedHour] = useState(10); //user-selected hour
   const [unitType, setUnitType] = useState("temp"); //toggles between temp/rain
   const [amPm, setAmPm] = useState("AM"); //toggles between AM/PM
-  const [selectedLocation, setSelectedLocation] = useState();
+  const [selectedLocation, setSelectedLocation] = useState<
+    number | undefined
+  >();
   const [useHours, setUseHours] = useState(false);
 
   const normalizedRadius = useMemo(() => radiusKMInput / 554, [radiusKMInput]); //changes user input into value for math
@@ -24,18 +113,18 @@ export function WeatherProvider({ children }) {
   const [changeLayout, setChangeLayout] = useState(false); //changes layout
   const [shrinkNav, setShrinkNav] = useState(true); //tells nav to grow/shrink before rerender
 
-  const inputCoordsRef = useRef(""); //parsed coordinates from user input
-  const [mapData, setMapData] = useState([]); //parsed data to be shown on map
-  const [userPoint, setUserPoint] = useState(); //parsed data of user input
-  const [viewArea, setViewArea] = useState();
-  const sortedData = useRef(); //data sorted for list
+  const inputCoordsRef = useRef<Coords | null>(null); //parsed coordinates from user input
+  const [mapData, setMapData] = useState<WeatherPoint[]>([]); //parsed data to be shown on map
+  const [userPoint, setUserPoint] = useState<WeatherPoint>(); //parsed data of user input
+  const [viewArea, setViewArea] = useState<Coords>();
+  const sortedData = useRef<WeatherPoint[]>([]); //data sorted for list
 
-  const inputRef = useRef(); //user input element ref
+  const inputRef = useRef<HTMLInputElement>(null); //user input element ref
 
-  const [errorMessage, setErrorMessage] = useState(); //error message to display
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(); //error message to display
 
-  const lastState = useRef();
-  const lastSearched = useRef(); //data from last search
+  const lastState = useRef<any>(null);
+  const lastSearched = useRef<any>(null); //data from last search
 
   function resetLayout() {
     setShowMap(false);
@@ -54,12 +143,12 @@ export function WeatherProvider({ children }) {
   }
 
   //used when user clicks on marker in list
-  function clickMarker(place) {
+  function clickMarker(place: SortedPoint) {
     setShowList(!showList);
     setSelectedLocation(place.index);
   }
 
-  function clickListMap(index) {
+  function clickListMap(index: number) {
     setShowList(true);
     const sortedIndex = sortedData.current.findIndex(
       (point) => point.index === index
@@ -75,7 +164,7 @@ export function WeatherProvider({ children }) {
   function getUserLocation() {
     setLoading(true);
     inputRef.current.value = "Finding your location...";
-    async function success(result) {
+    async function success(result: GeolocationPosition) {
       inputRef.current.blur();
       inputRef.current.disabled = true;
       const coords = [result.coords][0];
@@ -97,7 +186,7 @@ export function WeatherProvider({ children }) {
         }
 
         const data = await response.json();
-        let parsedData;
+        let parsedData: { suburb: string };
         try {
           parsedData = JSON.parse(data.result);
         } catch (parseError) {
@@ -177,7 +266,7 @@ export function WeatherProvider({ children }) {
 
         const data = await response.json();
 
-        let parsedData;
+        let parsedData: { timezone: any; locations: any };
         try {
           parsedData = JSON.parse(data.result);
         } catch (parseError) {
