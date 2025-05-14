@@ -19,7 +19,8 @@ export default function SearchBar() {
         display: "flex",
         flexDirection: changeLayout ? "row" : "column",
         marginInline: changeLayout ? 0 : 15,
-        marginBlock: changeLayout ? 0 : 10,
+        marginTop: changeLayout ? 0 : 20,
+        marginBottom: changeLayout ? 0 : 5,
         userSelect: true,
         Bottom: changeLayout ? 5 : 0,
       }}

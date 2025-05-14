@@ -40,12 +40,16 @@ function App() {
             alignItems: "flex-end",
             justifyContent: "center",
             zIndex: 50,
-            boxShadow: changeLayout ? "0px 5px 5px 0px rgba(0,0,0,0.3)" : null,
-            border: changeLayout ? "1px outset black" : null,
+            boxShadow: changeLayout
+              ? "0px 5px 5px 0px rgba(0,0,0,0.3)"
+              : "0px 0px 0px 0px rgba(0,0,0,0)",
+            border: "1px outset black",
+            borderTop: "none",
+            borderColor: changeLayout ? "black" : "transparent",
             boxSizing: "border-box",
             flexGrow: changeLayout ? 0 : 0.7,
             flexShrink: changeLayout ? 1 : 0,
-            transition: "all 1s ease, width 0.2s ease-out",
+            transition: "all 1s ease",
           }}
         >
           <h1
@@ -69,7 +73,7 @@ function App() {
             height: "0%",
             maxHeight: "90%",
             backgroundColor: "rgba(15,26,21,1)",
-            transition: "all 1s ease, width 0.2s ease-out",
+            transition: "all 1s ease, width 1s ease",
           }}
         >
           {showMap ? (
@@ -87,7 +91,7 @@ function App() {
             flexDirection: "column",
             zIndex: 50,
             boxShadow: changeLayout ? "0px -3px 3px rgba(0,0,0,0.05)" : null,
-            transition: "all 1s ease, width 0.2s ease-out",
+            transition: "all 1s ease, width 1s ease",
             flexGrow: changeLayout ? 0 : 1,
             flexShrink: changeLayout ? 1 : 0,
           }}
