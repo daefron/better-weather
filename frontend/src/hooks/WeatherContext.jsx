@@ -78,7 +78,7 @@ export function WeatherProvider({ children }) {
     async function success(result) {
       inputRef.current.blur();
       inputRef.current.disabled = true;
-      const coords = [result.coords];
+      const coords = [result.coords][0];
       try {
         const response = await fetch(
           "https://better-weather.onrender.com/auto",
@@ -167,8 +167,6 @@ export function WeatherProvider({ children }) {
               userInput: inputRef.current.value,
               radiusKMInput: radiusKMInput,
               radiusDensity: radiusDensity,
-              tempUnit: tempUnit,
-              dateFormat: dateFormat,
             }),
           }
         );

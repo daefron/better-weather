@@ -7,7 +7,7 @@ async function postManual(req, res) {
     const { userInput, radiusKMInput, radiusDensity } = req.body;
     console.log(`Getting request with location: ${userInput}`);
 
-    const coordinates = await fetchSuburb(userInput);
+    const coordinates = await fetchCoords(userInput);
     if (!coordinates) throw new Error("Coordinates not found.");
     const finalData = await dataProcessing(
       coordinates,
@@ -33,7 +33,7 @@ async function postAuto(req, res) {
     const { coords } = req.body;
     console.log(`Getting request with location: ${coords}`);
     const suburbData = await fetchSuburb([coords]);
-    if (!suburbData) throw new Error("No results found for this location");
+    if (!suburbData) throw new Error("No results returned from fetchSuburb in postAuto.");
     
     const suburb = suburbData[0].suburb;
     console.log(`Sent result for: ${coords}`);
