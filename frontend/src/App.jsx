@@ -34,7 +34,7 @@ function App() {
       >
         <header
           style={{
-            width: "100%",
+            width: changeLayout ? "min(100%, 1000px)" : "min(100%, 500px)",
             height: changeLayout ? "auto" : 0,
             display: "flex",
             alignItems: "flex-end",
@@ -43,16 +43,16 @@ function App() {
             boxShadow: changeLayout ? "0px 5px 5px 0px rgba(0,0,0,0.3)" : null,
             border: changeLayout ? "1px outset black" : null,
             boxSizing: "border-box",
-            transition: "flex-grow 1s ease",
             flexGrow: changeLayout ? 0 : 0.7,
             flexShrink: changeLayout ? 1 : 0,
+            transition: "all 1s ease, width 0.2s ease-out",
           }}
         >
           <h1
             style={{
               height: "fit-content",
               paddingBlock: changeLayout ? 10 : 0,
-              fontSize: changeLayout ? "clamp(20px, 7vw, 34px)" : null,
+              fontSize: "clamp(20px, 7vw, 34px)",
               textAlign: "center",
               flexGrow: 1,
               fontWeight: "normal",
@@ -64,13 +64,12 @@ function App() {
         <main
           style={{
             flexGrow: changeLayout ? 1 : 0,
-            transition: "flex-grow 1s ease",
-            width: "100%",
+            width: changeLayout ? "min(100%, 1000px)" : "min(100%, 500px)",
             display: "flex",
             height: "0%",
             maxHeight: "90%",
             backgroundColor: "rgba(15,26,21,1)",
-            transition: "all 1s ease",
+            transition: "all 1s ease, width 0.2s ease-out",
           }}
         >
           {showMap ? (
