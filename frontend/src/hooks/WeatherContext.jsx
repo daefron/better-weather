@@ -102,7 +102,7 @@ export function WeatherProvider({ children }) {
           parsedData = JSON.parse(data.result);
         } catch (parseError) {
           throw new Error(
-            "Failed to parse 'refult' JSON:" + parseError.message
+            "Failed to parse 'result' JSON:" + parseError.message
           );
         }
 
@@ -111,7 +111,7 @@ export function WeatherProvider({ children }) {
         userSubmit();
       } catch (error) {
         console.error("Initial fetch failed:", error);
-        setErrorMessage(error.message);
+        setErrorMessage("Failed to find location");
         setLoading(false);
 
         inputRef.current.value = "";
@@ -227,7 +227,7 @@ export function WeatherProvider({ children }) {
       }, 1000);
     } catch (error) {
       console.error("Initial fetch failed:", error);
-      setErrorMessage(error.message);
+      setErrorMessage("Failed to find data for location");
       setLoading(false);
       inputRef.current.focus();
       inputRef.current.disabled = false;
