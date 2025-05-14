@@ -50,7 +50,7 @@ export function WeatherProvider({ children }) {
     inputRef.current.disabled = false;
     inputRef.current.focus();
     lastSearched.current = null;
-    throw new Error("No results found for this location.");
+    setErrorMessage("No results found for this location.");
   }
 
   //used when user clicks on marker in list
@@ -125,7 +125,7 @@ export function WeatherProvider({ children }) {
     });
   }
 
-  function sameState() {
+  function isDuplicateSearch() {
     if (!lastState.current) return;
     if (inputRef.current.value !== lastState.current.inputRef) return;
     if (radiusKMInput !== lastState.current.radiusKMInput) return;
@@ -143,7 +143,7 @@ export function WeatherProvider({ children }) {
 
     try {
       //skips excess API calls if has same input as last search
-      if (!sameState()) {
+      if (!isDuplicateSearch()) {
         if (inputRef.current.value === "") {
           getUserLocation();
           return;
