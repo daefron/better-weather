@@ -16,7 +16,7 @@ function App() {
         style={{
           height: "100%",
           flexGrow: 1,
-          backgroundColor: "black",
+          backgroundColor: "rgb(32,53,42)",
           zIndex: 100,
         }}
       />
@@ -114,8 +114,8 @@ function App() {
         style={{
           height: "100%",
           flexGrow: 1,
-          backgroundColor: "black",
           zIndex: 100,
+          backgroundColor: "rgb(32,53,42)",
         }}
       />
     </div>
