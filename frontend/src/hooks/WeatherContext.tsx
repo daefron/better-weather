@@ -170,7 +170,7 @@ export function WeatherProvider({ children }: ProviderProps) {
       const coords = [result.coords][0];
       try {
         const response = await fetch(
-          "https://better-weather.onrender.com/auto",
+          "https://better-weather-h3gpcvdrhmgpa9gu.australiasoutheast-01.azurewebsites.net/auto",
           {
             method: "POST",
             headers: {
@@ -246,7 +246,7 @@ export function WeatherProvider({ children }: ProviderProps) {
         };
 
         const response = await fetch(
-          "https://better-weather.onrender.com/manual",
+          "https://better-weather-h3gpcvdrhmgpa9gu.australiasoutheast-01.azurewebsites.net/manual",
           {
             method: "POST",
             headers: {
