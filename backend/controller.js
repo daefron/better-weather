@@ -7,18 +7,17 @@ async function postManual(req, res) {
     const { userInput, radiusKMInput, radiusDensity } = req.body;
     console.log(`Getting request with location: ${userInput}`);
 
-    const coordinates = await fetchCoords(userInput);
-    if (!coordinates) throw new Error("Coordinates not found.");
-    const finalData = await dataProcessing(
-      coordinates,
+    const result = await dataProcessing(
+      userInput,
       radiusKMInput,
       radiusDensity
     );
+
     console.log(`Sent result for: ${userInput}`);
     return res.json({
       result: JSON.stringify({
-        timezone: finalData.timezone,
-        locations: finalData.locations,
+        timezone: result.timezone,
+        locations: result.locations,
       }),
     });
   } catch (error) {
@@ -32,14 +31,22 @@ async function postAuto(req, res) {
   try {
     const { coords } = req.body;
     console.log(`Getting request with location: ${coords}`);
+
     const suburbData = await fetchSuburb([coords]);
-    if (!suburbData) throw new Error("No results returned from fetchSuburb in postAuto.");
-    
-    const suburb = suburbData[0].suburb;
-    console.log(`Sent result for: ${coords}`);
+    if (!suburbData)
+      throw new Error("No results returned from fetchSuburb in postAuto.");
+
+    const result = await dataProcessing(
+      suburbData[0].suburb,
+      radiusKMInput,
+      radiusDensity
+    );
+
+    console.log(`Sent result for: ${userInput}`);
     return res.json({
       result: JSON.stringify({
-        suburb: suburb,
+        timezone: result.timezone,
+        locations: result.locations,
       }),
     });
   } catch (error) {
@@ -48,7 +55,10 @@ async function postAuto(req, res) {
   }
 }
 
-async function dataProcessing(coordinates, radiusKMInput, radiusDensity) {
+async function dataProcessing(suburb, radiusKMInput, radiusDensity) {
+  const coordinates = await fetchCoords(suburb);
+  if (!coordinates) throw new Error("Coordinates not found.");
+
   const timezone = await fetchTimezone(coordinates.geometry.location);
   if (!timezone) throw new Error("Failed to fetch timezone data");
 

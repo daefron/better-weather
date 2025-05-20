@@ -186,7 +186,7 @@ export function WeatherProvider({ children }: ProviderProps) {
         }
 
         const data = await response.json();
-        let parsedData: { suburb: string };
+        let parsedData: { timezone: string; suburb: string; locations: any[] };
         try {
           parsedData = JSON.parse(data.result);
         } catch (parseError) {
@@ -194,10 +194,9 @@ export function WeatherProvider({ children }: ProviderProps) {
             "Failed to parse 'result' JSON:" + parseError.message
           );
         }
-
         inputRef.current.value = parsedData.suburb;
 
-        userSubmit();
+        successToMap(parsedData);
       } catch (error) {
         console.error("Initial fetch failed:", error);
         setErrorMessage("Failed to find location");
@@ -229,6 +228,8 @@ export function WeatherProvider({ children }: ProviderProps) {
     if (loading) return;
     setErrorMessage("");
     setLoading(true);
+    inputRef.current.blur();
+    inputRef.current.disabled = true;
 
     try {
       //skips excess API calls if has same input as last search
@@ -274,44 +275,8 @@ export function WeatherProvider({ children }: ProviderProps) {
             "Failed to parse 'refult' JSON:" + parseError.message
           );
         }
-        const timezone = parsedData.timezone;
-        const locations = parsedData.locations;
-        const userLocation = locations[0];
-        inputCoordsRef.current = {
-          lat: userLocation.latitude,
-          lng: userLocation.longitude,
-        };
-
-        const weatherData = await fetchWeather(locations, timezone, tempUnit);
-        if (!weatherData) errorReset();
-
-        weatherData.forEach((location, i) => {
-          location.suburb = locations[i].suburb;
-        });
-
-        const lastData = parseData(weatherData);
-        if (!lastData[0]) errorReset();
-
-        setUserPoint({
-          lat: inputCoordsRef.current.lat,
-          lng: inputCoordsRef.current.lng,
-          suburb: inputRef.current.value,
-          dates: lastData[0].dates,
-          hours: lastData[0].hours,
-        });
-        setViewArea({
-          lat: inputCoordsRef.current.lat,
-          lng: inputCoordsRef.current.lng,
-        });
-        setMapData(lastData);
+        successToMap(parsedData);
       }
-
-      inputRef.current.blur();
-      setLoading(false);
-      setChangeLayout(true);
-      setTimeout(() => {
-        setShowMap(true);
-      }, 1000);
     } catch (error) {
       console.error("Initial fetch failed:", error);
       setErrorMessage("Failed to find data for location");
@@ -319,6 +284,48 @@ export function WeatherProvider({ children }: ProviderProps) {
       inputRef.current.focus();
       inputRef.current.disabled = false;
     }
+  }
+
+  async function successToMap(parsedData: {
+    timezone: string;
+    locations: any;
+  }) {
+    const timezone = parsedData.timezone;
+    const locations = parsedData.locations;
+    const userLocation = locations[0];
+    inputCoordsRef.current = {
+      lat: userLocation.latitude,
+      lng: userLocation.longitude,
+    };
+
+    const weatherData = await fetchWeather(locations, timezone, tempUnit);
+    if (!weatherData) errorReset();
+
+    weatherData.forEach((location, i) => {
+      location.suburb = locations[i].suburb;
+    });
+
+    const lastData = parseData(weatherData);
+    if (!lastData[0]) errorReset();
+
+    setUserPoint({
+      lat: inputCoordsRef.current.lat,
+      lng: inputCoordsRef.current.lng,
+      suburb: inputRef.current.value,
+      dates: lastData[0].dates,
+      hours: lastData[0].hours,
+    });
+    setViewArea({
+      lat: inputCoordsRef.current.lat,
+      lng: inputCoordsRef.current.lng,
+    });
+    setMapData(lastData);
+    inputRef.current.blur();
+    setLoading(false);
+    setChangeLayout(true);
+    setTimeout(() => {
+      setShowMap(true);
+    }, 1000);
   }
 
   return (
