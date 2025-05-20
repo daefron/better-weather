@@ -29,7 +29,7 @@ async function postManual(req, res) {
 //when user uses current location
 async function postAuto(req, res) {
   try {
-    const { coords } = req.body;
+    const { coords, radiusKMInput, radiusDensity } = req.body;
     console.log(`Getting request with location: ${coords}`);
 
     const suburbData = await fetchSuburb([coords]);
@@ -42,7 +42,7 @@ async function postAuto(req, res) {
       radiusDensity
     );
 
-    console.log(`Sent result for: ${userInput}`);
+    console.log(`Sent result for: ${coords}`);
     return res.json({
       result: JSON.stringify({
         timezone: result.timezone,

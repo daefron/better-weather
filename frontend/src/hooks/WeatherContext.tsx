@@ -178,6 +178,8 @@ export function WeatherProvider({ children }: ProviderProps) {
             },
             body: JSON.stringify({
               coords: [coords.latitude, coords.longitude],
+              radiusKMInput: radiusKMInput,
+              radiusDensity: radiusDensity,
             }),
           }
         );
