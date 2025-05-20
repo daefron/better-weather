@@ -302,6 +302,8 @@ export function WeatherProvider({ children }: ProviderProps) {
     const timezone = parsedData.timezone;
     const locations = parsedData.locations;
     const userLocation = locations[0];
+    inputRef.current.value = userLocation.suburb;
+    lastState.current.inputRef = userLocation.suburb;
     inputCoordsRef.current = {
       lat: userLocation.latitude,
       lng: userLocation.longitude,
