@@ -29,7 +29,7 @@ async function postManual(req, res) {
 //when user uses current location
 async function postAuto(req, res) {
   try {
-    const { coords } = req.body;
+    const { coords, radiusKMInput, radiusDensity } = req.body;
     console.log(`Getting request with location: ${coords}`);
 
     const suburbData = await fetchSuburb([coords]);
