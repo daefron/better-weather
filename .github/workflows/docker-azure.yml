@@ -42,7 +42,7 @@ jobs:
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP}} \
             --container-image-name daefron/better-weather:latest \
             --container-registry-url https://index.docker.io \
-            --container-regsitry-user ${{ secrets.DOCKER_HUB_USERNAME }} \
+            --container-registry-user ${{ secrets.DOCKER_HUB_USERNAME }} \
             --container-registry-password ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Restart Azure Web App
