@@ -45,6 +45,7 @@ async function postAuto(req, res) {
     console.log(`Sent result for: ${coords}`);
     return res.json({
       result: JSON.stringify({
+        suburb: suburbData[0].suburb,
         timezone: result.timezone,
         locations: result.locations,
       }),
