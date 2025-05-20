@@ -132,6 +132,7 @@ export function WeatherProvider({ children }: ProviderProps) {
     setChangeLayout(false);
     setSelectedHour(10);
     setUseHours(false);
+    inputRef.current.focus();
     inputRef.current.disabled = false;
   }
 
@@ -240,14 +241,6 @@ export function WeatherProvider({ children }: ProviderProps) {
           getUserLocation();
           return;
         }
-        lastState.current = {
-          inputRef: inputRef.current.value,
-          radiusKMInput: radiusKMInput,
-          radiusDensity: radiusDensity,
-          tempUnit: tempUnit,
-          dateFormat: dateFormat,
-        };
-
         const response = await fetch(
           "https://better-weather-h3gpcvdrhmgpa9gu.australiasoutheast-01.azurewebsites.net/manual",
           {
@@ -302,8 +295,15 @@ export function WeatherProvider({ children }: ProviderProps) {
     const timezone = parsedData.timezone;
     const locations = parsedData.locations;
     const userLocation = locations[0];
+
     inputRef.current.value = userLocation.suburb;
-    lastState.current.inputRef = userLocation.suburb;
+    lastState.current = {
+      inputRef: inputRef.current.value,
+      radiusKMInput: radiusKMInput,
+      radiusDensity: radiusDensity,
+      tempUnit: tempUnit,
+      dateFormat: dateFormat,
+    };
     inputCoordsRef.current = {
       lat: userLocation.latitude,
       lng: userLocation.longitude,
