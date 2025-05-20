@@ -23,7 +23,7 @@ jobs:
         run: |
           docker build -t daefron/better-weather:latest .
           docker push daefron/better-weather:latest
-  
+
   deploy-image-to-azure:
     needs: build-and-push-to-docker
     runs-on: ubuntu-latest
@@ -40,10 +40,10 @@ jobs:
           az webapp config container set \
             --name better-weather \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP}} \
-            --docker-custom-image-name daefron/better-weather:latest \
-            --docker-registry-server-url https://index.docker.io \
-            --docker-registry-server-user ${{ secrets.DOCKER_HUB_USERNAME }} \
-            --docker-registry-server-password ${{ secrets.DOCKER_HUB_PASSWORD }}
+            --container-image-name daefron/better-weather:latest \
+            --container-registry-url https://index.docker.io \
+            --container-regsitry-user ${{ secrets.DOCKER_HUB_USERNAME }} \
+            --container-registry-password ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Restart Azure Web App
         run: |
