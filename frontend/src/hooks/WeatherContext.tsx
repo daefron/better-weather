@@ -276,6 +276,13 @@ export function WeatherProvider({ children }: ProviderProps) {
           );
         }
         successToMap(parsedData);
+      } else {
+        inputRef.current.blur();
+        setLoading(false);
+        setChangeLayout(true);
+        setTimeout(() => {
+          setShowMap(true);
+        }, 1000);
       }
     } catch (error) {
       console.error("Initial fetch failed:", error);
